@@ -382,6 +382,14 @@
                     <h3>📹 教学视频模块</h3>
                     <p>专业培训视频，提升应急处置技能</p>
                 </div>
+                <div class="module-card" onclick="openAnalysis('fire')">
+                    <h3>🔥 火灾应急处置AI分析</h3>
+                    <p>智能分析火灾应急处置能力，提供个性化改进建议</p>
+                </div>
+                <div class="module-card" onclick="openAnalysis('signal')">
+                    <h3>🚦 信号设备故障AI分析</h3>
+                    <p>专业分析信号设备故障处置技能，优化操作流程</p>
+                </div>
             </div>
             
             <div class="features-section">
@@ -530,6 +538,18 @@
         function openVideo(videoId) {
             // 跳转到视频播放页面
             window.location.href = `video.html?id=${videoId}`;
+        }
+
+        function openAnalysis(analysisType) {
+            // 根据分析类型跳转到对应的AI分析页面
+            const analysisPages = {
+                'fire': 'ai-analysis.html',
+                'signal': 'signal-fault-analysis.html'
+            };
+            
+            if (analysisPages[analysisType]) {
+                window.location.href = analysisPages[analysisType];
+            }
         }
 
         // 页面加载动画
