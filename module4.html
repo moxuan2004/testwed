@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模块四：全自动运行线路应急处置 - 城市轨道交通应急处置综合评价系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .task-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .task-card:hover::before {
+            left: 100%;
+        }
+
+        .task-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .task-card h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .task-card p {
+            font-size: 1.1em;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .task-info {
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .task-btn {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .task-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .task1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .task2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .task3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .task4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+
+        .task1 .task-btn { background: linear-gradient(45deg, #667eea, #764ba2); }
+        .task2 .task-btn { background: linear-gradient(45deg, #f093fb, #f5576c); }
+        .task3 .task-btn { background: linear-gradient(45deg, #4facfe, #00f2fe); }
+        .task4 .task-btn { background: linear-gradient(45deg, #43e97b, #38f9d7); }
+
+        .overview-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .overview-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .overview-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .overview-item {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border-left: 5px solid #667eea;
+        }
+
+        .overview-item h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .overview-item p {
+            color: #6c757d;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .tasks-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .task-card {
+                padding: 20px;
+            }
+        }
+
+        .icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">← 返回主页</a>
+        
+        <div class="header">
+            <h1>🎯 模块四：全自动运行线路应急处置</h1>
+            <p>全自动运行线路应急处置能力评估，包含四个专项任务</p>
+        </div>
+
+        <div class="overview-section">
+            <div class="overview-title">🎯 全自动运行线路应急处置模块概览</div>
+            <div class="overview-content">
+                <div class="overview-item">
+                    <h4>📋 评估范围</h4>
+                    <p>涵盖火灾应急、人员疏散、设备抢修、信息协调四大核心应急处置场景</p>
+                </div>
+                <div class="overview-item">
+                    <h4>👥 参与小组</h4>
+                    <p>任务一、四各4个小组；任务二3个小组；任务三7个小组参与评估</p>
+                </div>
+                <div class="overview-item">
+                    <h4>⭐ 评分标准</h4>
+                    <p>多维度评价体系，包含技能水平、协作能力、应急响应等综合指标</p>
+                </div>
+                <div class="overview-item">
+                    <h4>📊 数据管理</h4>
+                    <p>支持实时评分、数据导出、报告生成等完整的评估数据管理功能</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tasks-grid">
+            <div class="task-card task1" onclick="location.href='task2.html'">
+                <span class="icon">🚧</span>
+                <h3>任务一：外物侵限下列车故障救援应急处置</h3>
+                <div class="task-info">4个小组参与</div>
+                <p>评估外物侵限情况下列车故障救援的组织协调能力、救援技能、安全防护等关键技能</p>
+                <a href="task2.html" class="task-btn">进入任务一评分</a>
+            </div>
+
+            <div class="task-card task2" onclick="location.href='task2.html'">
+                  <span class="icon">🔥</span>
+                 <h3>任务二：火灾下站线联动应急处置</h3>
+                <div class="task-info">3个小组参与</div>
+                <p>评估列车区间火灾情况下站线联动的快速响应、灭火救援、人员疏散等专业技术水平</p>
+                <a href="task3.html" class="task-btn">进入任务二评分</a>
+            </div>
+
+            <div class="task-card task3" onclick="location.href='task4.html'">
+                <span class="icon">🚦</span>
+                <h3>任务三：信号设备故障综合应急处置</h3>
+                <div class="task-info">7个小组参与</div>
+                <p>评估多信号设备故障情况下的行车组织、信号处理、运营调度等综合管理能力</p>
+                <a href="task4.html" class="task-btn">进入任务三评分</a>
+            </div>
+
+            <div class="task-card task4" onclick="location.href='task1.html'">
+                <span class="icon">🏥</span>
+                <h3>任务四：多设备故障时乘客突发疾病应急处置</h3>
+                <div class="task-info">4个小组参与</div>
+                <p>评估在多设备故障情况下处理乘客突发疾病的应急响应能力、医疗救护技能、现场协调等综合处置水平</p>
+                <a href="task1.html" class="task-btn">进入任务四评分</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.task-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+
+        // 卡片点击效果
+        document.querySelectorAll('.task-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (e.target.tagName !== 'A') {
+                    const link = this.querySelector('.task-btn');
+                    if (link) {
+                        window.location.href = link.href;
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

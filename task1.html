@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任务四：多设备故障时乘客突发疾病应急处置 - 城市轨道交通应急处置综合评价系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .scoring-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .scoring-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(45deg, #e17055, #d63031);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .scoring-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .scoring-table th {
+            background: linear-gradient(45deg, #2d3436, #636e72);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .scoring-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .scoring-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .scoring-table tr:hover {
+            background-color: #ffe8e8;
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+
+        .score-input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .score-input:focus {
+            border-color: #e17055;
+            box-shadow: 0 0 10px rgba(225, 112, 85, 0.3);
+            outline: none;
+        }
+
+        .group-1 { background-color: #ffebee !important; }
+        .group-2 { background-color: #e8f5e8 !important; }
+        .group-3 { background-color: #e3f2fd !important; }
+        .group-4 { background-color: #fff3e0 !important; }
+
+        .calculate-btn {
+            background: linear-gradient(45deg, #e17055, #d63031);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-display {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(45deg, #e17055, #d63031);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: none;
+        }
+
+        .individual-section {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .individual-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .individual-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .wang-title {
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            color: white;
+        }
+
+        .dong-title {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+        }
+
+        .individual-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .individual-table th {
+            background: linear-gradient(45deg, #636e72, #2d3436);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .individual-table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .individual-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .function-buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .function-buttons button {
+            background: linear-gradient(45deg, #fd79a8, #e84393);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .function-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .individual-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .scoring-table, .individual-table {
+                font-size: 0.9em;
+            }
+            
+            .score-input {
+                width: 60px;
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="module4.html" class="back-btn">← 返回模块四</a>
+        
+        <div class="header">
+            <h1>🏥 任务四：多设备故障时乘客突发疾病应急处置</h1>
+            <p>评估设备故障与乘客突发疾病复合情况下的应急响应能力和处置水平</p>
+        </div>
+
+        <div class="scoring-section">
+            <div class="scoring-title">🏥 小组评分表</div>
+            <table class="scoring-table">
+                <thead>
+                    <tr>
+                        <th>评价项目</th>
+                        <th>第一小组</th>
+                        <th>第二小组</th>
+                        <th>第三小组</th>
+                        <th>第四小组</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>任务一外物侵限下列车故障救援应急处置</strong></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>任务二列车区间火灾下站线联动应急处置</strong></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>任务三多信号设备故障综合应急处置</strong></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>任务四多设备故障时乘客突发疾病应急处置</strong></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <button class="calculate-btn" onclick="calculateGroupScore()">计算小组总分</button>
+            <div id="groupResult" class="result-display"></div>
+            
+            <!-- 柱状图容器 -->
+            <div id="chartContainer" style="display: none; margin-top: 30px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
+                <h3 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">📊 各任务评分对比图</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; justify-items: center;">
+                    <div style="text-align: center;">
+                        <h4 style="color: #e74c3c; margin-bottom: 10px;">任务一外物侵限下列车故障救援应急处置</h4>
+                        <canvas id="chart1" width="500" height="600"></canvas>
+                    </div>
+                    <div style="text-align: center;">
+                        <h4 style="color: #3498db; margin-bottom: 10px;">任务二列车区间火灾下站线联动应急处置</h4>
+                        <canvas id="chart2" width="500" height="600"></canvas>
+                    </div>
+                    <div style="text-align: center;">
+                        <h4 style="color: #2ecc71; margin-bottom: 10px;">任务三多信号设备故障综合应急处置</h4>
+                        <canvas id="chart3" width="500" height="600"></canvas>
+                    </div>
+                    <div style="text-align: center;">
+                        <h4 style="color: #f39c12; margin-bottom: 10px;">任务四多设备故障时乘客突发疾病应急处置</h4>
+                        <canvas id="chart4" width="500" height="600"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 详细成绩表展示区域 -->
+        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); margin-bottom: 30px;">
+            <h3 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">📊 全体学员详细成绩表</h3>
+            <p style="text-align: center; color: #7f8c8d; margin-bottom: 20px;">点击学员姓名查看个人雷达图分析 | <a href="all-students-radar.html" style="color: #e74c3c; text-decoration: none; font-weight: bold;" onmouseover="this.style.color='#3498db'" onmouseout="this.style.color='#e74c3c'">🎯 查看全体学员雷达图</a></p>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                <table id="allStudentsTable" style="width: 100%; border-collapse: collapse; background: white;">
+                    <thead>
+                        <tr style="background: #34495e; color: white;">
+                            <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">姓名</th>
+                            <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务一外物侵限下列车故障救援应急处置</th>
+                <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务二列车区间火灾下站线联动应急处置</th>
+                <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务三多信号设备故障综合应急处置</th>
+                <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务四多设备故障时乘客突发疾病应急处置</th>
+                            <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">综合分</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allStudentsTableBody">
+                        <!-- 预设学生数据 -->
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="calculate-btn" onclick="generateAllStudentsCharts()">生成全体学员折线图</button>
+            </div>
+        </div>
+
+        <!-- 个人评分数据输入区域 -->
+        <div class="individual-section">
+            <div class="individual-card">
+                <div class="individual-title wang-title">👨‍💼 个人评分数据输入</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h4>陆俊羽评分</h4>
+                        <table class="individual-table">
+                            <thead>
+                                <tr>
+                                    <th>任务</th>
+                                    <th>得分</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>任务一外物侵限下列车故障救援应急处置</strong></td>
+                                    <td><input type="number" class="score-input wang-score" data-task="1" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>任务二列车区间火灾下站线联动应急处置</strong></td>
+                                    <td><input type="number" class="score-input wang-score" data-task="2" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>任务三多信号设备故障综合应急处置</strong></td>
+                                    <td><input type="number" class="score-input wang-score" data-task="3" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>任务四多设备故障时乘客突发疾病应急处置</strong></td>
+                                    <td><input type="number" class="score-input wang-score" data-task="4" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <h4>董壮评分</h4>
+                        <table class="individual-table">
+                            <thead>
+                                <tr>
+                                    <th>任务</th>
+                                    <th>得分</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>任务一外物侵限下列车故障救援应急处置</strong></td>
+                                    <td><input type="number" class="score-input dong-score" data-task="1" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>任务二列车区间火灾下站线联动应急处置</strong></td>
+                                    <td><input type="number" class="score-input dong-score" data-task="2" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>任务三多信号设备故障综合应急处置</strong></td>
+                                    <td><input type="number" class="score-input dong-score" data-task="3" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>任务四多设备故障时乘客突发疾病应急处置</strong></td>
+                                    <td><input type="number" class="score-input dong-score" data-task="4" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="calculate-btn" onclick="generateIndividualCharts()">生成个人评分图表</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 个人评分图表展示区域 -->
+        <div id="individualChartsContainer" style="display: none; margin-top: 30px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
+            <h3 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">📈 个人评分图表分析</h3>
+            
+            <!-- 线图区域 -->
+            <div style="display: grid; grid-template-columns: 1fr; gap: 30px; margin-bottom: 30px; justify-items: center;">
+                <div style="text-align: center;">
+                    <h4 style="color: #e74c3c; margin-bottom: 15px; font-size: 1.3em;">任务四</h4>
+                    <canvas id="taskChart1" width="1000" height="800"></canvas>
+                </div>
+                <div style="text-align: center;">
+                    <h4 style="color: #3498db; margin-bottom: 15px; font-size: 1.3em;">任务二</h4>
+                    <canvas id="taskChart2" width="1000" height="800"></canvas>
+                </div>
+                <div style="text-align: center;">
+                    <h4 style="color: #2ecc71; margin-bottom: 15px; font-size: 1.3em;">任务三</h4>
+                    <canvas id="taskChart3" width="1000" height="800"></canvas>
+                </div>
+                <div style="text-align: center;">
+                    <h4 style="color: #f39c12; margin-bottom: 15px; font-size: 1.3em;">任务四</h4>
+                    <canvas id="taskChart4" width="1000" height="800"></canvas>
+                </div>
+                <div style="text-align: center;">
+                    <h4 style="color: #9b59b6; margin-bottom: 15px; font-size: 1.3em;">综合分</h4>
+                    <canvas id="taskChart5" width="1000" height="800"></canvas>
+                </div>
+            </div>
+            
+            <!-- 成绩表格 -->
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                <h4 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">📊 详细成绩表</h4>
+                <table id="scoresTable" style="width: 100%; border-collapse: collapse; background: white;">
+                    <thead>
+                        <tr style="background: #34495e; color: white;">
+                            <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">姓名</th>
+                            <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务一外物侵限下列车故障救援应急处置</th>
+                <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务二列车区间火灾下站线联动应急处置</th>
+                <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务三多信号设备故障综合应急处置</th>
+                <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务四多设备故障时乘客突发疾病应急处置</th>
+                            <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">综合分</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scoresTableBody">
+                        <!-- 动态生成内容 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="function-buttons">
+            <button onclick="exportData()">📊 导出评分数据</button>
+            <button onclick="printReport()">🖨️ 打印评分报告</button>
+            <button onclick="resetData()">🔄 重置所有数据</button>
+        </div>
+    </div>
+
+    <script>
+        function calculateGroupScore() {
+            const groupInputs = document.querySelectorAll('.group-score');
+            const groupTotals = [0, 0, 0, 0];
+            
+            // 计算每组总分
+            groupInputs.forEach((input, index) => {
+                const groupIndex = index % 4;
+                const score = parseFloat(input.value) || 0;
+                groupTotals[groupIndex] += score;
+            });
+            
+            // 生成结果HTML
+            let resultHTML = '<h3>🏆 小组评分结果</h3><div class="score-summary">';
+            const groupNames = ['第一小组', '第二小组', '第三小组', '第四小组'];
+            const groupClasses = ['group-1', 'group-2', 'group-3', 'group-4'];
+            
+            groupTotals.forEach((total, index) => {
+                resultHTML += `<div class="score-item ${groupClasses[index]}">${groupNames[index]}：${total}分</div>`;
+            });
+            
+            const averageScore = (groupTotals.reduce((a, b) => a + b, 0) / 4).toFixed(1);
+            resultHTML += `</div><div class="average-score">平均分：${averageScore}分</div>`;
+            
+            document.getElementById('groupResult').innerHTML = resultHTML;
+            document.getElementById('groupResult').style.display = 'block';
+            
+            // 显示柱状图
+            drawChart(groupTotals);
+        }
+        
+        function drawChart(scores) {
+            const chartContainer = document.getElementById('chartContainer');
+            
+            // 显示图表容器
+            chartContainer.style.display = 'block';
+            
+            // 获取每个任务的分数（每行3个分数对应3个任务）
+            const groupInputs = document.querySelectorAll('.group-score');
+            const scenarioScores = [[], [], []]; // 三个任务的分数
+            
+            groupInputs.forEach((input, index) => {
+                const scenarioIndex = Math.floor(index / 4); // 每4个输入框为一个任务
+                const groupIndex = index % 4; // 第几个小组
+                const score = parseFloat(input.value) || 0;
+                if (!scenarioScores[scenarioIndex]) scenarioScores[scenarioIndex] = [];
+                scenarioScores[scenarioIndex][groupIndex] = score;
+            });
+            
+            // 绘制四个柱状图
+            const chartIds = ['chart1', 'chart2', 'chart3', 'chart4'];
+            const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12'];
+            const scenarioNames = [
+                '任务一外物侵限下列车故障救援应急处置',
+                '任务二列车区间火灾下站线联动应急处置', 
+                '任务三多信号设备故障综合应急处置',
+                '任务四多设备故障时乘客突发疾病应急处置'
+            ];
+            
+            chartIds.forEach((chartId, chartIndex) => {
+                const canvas = document.getElementById(chartId);
+                const ctx = canvas.getContext('2d');
+                
+                // 清空画布
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                const scores = scenarioScores[chartIndex] || [0, 0, 0, 0];
+                const maxScore = Math.max(...scores, 100);
+                
+                // 图表配置
+                const padding = 125;
+                const chartWidth = canvas.width - 2 * padding;
+                const chartHeight = canvas.height - 2 * padding - 60; // 为组名留出更多空间
+                const barWidth = chartWidth / 6;
+                
+                // 绘制坐标轴
+                ctx.strokeStyle = '#34495e';
+                ctx.lineWidth = 6;
+                ctx.beginPath();
+                ctx.moveTo(padding, padding);
+                ctx.lineTo(padding, padding + chartHeight);
+                ctx.lineTo(padding + chartWidth, padding + chartHeight);
+                ctx.stroke();
+                
+                // 绘制Y轴刻度
+                ctx.fillStyle = '#34495e';
+                ctx.font = '30px Arial';
+                ctx.textAlign = 'right';
+                for (let i = 0; i <= 5; i++) {
+                    const y = padding + chartHeight - (i * chartHeight / 5);
+                    const value = (maxScore * i / 5).toFixed(0);
+                    ctx.fillText(value, padding - 20, y + 10);
+                    
+                    if (i > 0) {
+                        ctx.strokeStyle = '#ecf0f1';
+                        ctx.lineWidth = 4;
+                        ctx.beginPath();
+                        ctx.moveTo(padding, y);
+                        ctx.lineTo(padding + chartWidth, y);
+                        ctx.stroke();
+                    }
+                }
+                
+                // 绘制柱状图
+                const groupColors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12'];
+                const groupNames = ['组1', '组2', '组3', '组4'];
+                
+                scores.forEach((score, index) => {
+                    const x = padding + (index + 0.5) * (chartWidth / 4) - barWidth / 2;
+                    const barHeight = (score / maxScore) * chartHeight;
+                    const y = padding + chartHeight - barHeight;
+                    
+                    // 绘制柱子
+                    ctx.fillStyle = groupColors[index];
+                    ctx.fillRect(x, y, barWidth, barHeight);
+                    
+                    // 绘制柱子边框
+                    ctx.strokeStyle = '#2c3e50';
+                    ctx.lineWidth = 4;
+                    ctx.strokeRect(x, y, barWidth, barHeight);
+                    
+                    // 绘制分数标签
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.font = 'bold 38px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(score.toString(), x + barWidth / 2, y - 20);
+                    
+                    // 绘制组名
+                    ctx.font = '32px Arial';
+                    ctx.fillText(groupNames[index], x + barWidth / 2, padding + chartHeight + 55);
+                });
+            });
+        }
+
+        function generateIndividualCharts() {
+            // 收集数据
+            const luScores = [];
+            const dongScores = [];
+            
+            // 获取陆俊羽的分数
+            document.querySelectorAll('.wang-score').forEach(input => {
+                luScores.push(parseFloat(input.value) || 0);
+            });
+            
+            // 获取董壮的分数
+            document.querySelectorAll('.dong-score').forEach(input => {
+                dongScores.push(parseFloat(input.value) || 0);
+            });
+            
+            // 计算综合分
+            const luTotal = luScores.reduce((a, b) => a + b, 0);
+            const dongTotal = dongScores.reduce((a, b) => a + b, 0);
+            
+            // 显示图表容器
+            document.getElementById('individualChartsContainer').style.display = 'block';
+            
+            // 绘制五个图表
+            for (let i = 1; i <= 5; i++) {
+                drawTaskChart(i, luScores, dongScores, luTotal, dongTotal);
+            }
+            
+            // 生成成绩表格
+            generateScoresTable(luScores, dongScores, luTotal, dongTotal);
+        }
+        
+        function drawTaskChart(taskIndex, wangScores, dongScores, wangTotal, dongTotal) {
+            const canvas = document.getElementById(`taskChart${taskIndex}`);
+            const ctx = canvas.getContext('2d');
+            
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 图表配置
+            const padding = 125;
+            const bottomPadding = 160; // 为个人评分图表留出底部空间
+            const chartWidth = canvas.width - 2 * padding;
+            const chartHeight = canvas.height - padding - bottomPadding;
+            
+            // 获取当前任务的数据
+            let data;
+            if (taskIndex <= 4) {
+                data = [wangScores[taskIndex - 1], dongScores[taskIndex - 1]];
+            } else {
+                data = [wangTotal, dongTotal];
+            }
+            
+            const maxScore = Math.max(...data, 100);
+            const names = ['陆俊羽', '董壮'];
+            
+            // 绘制坐标轴
+            ctx.strokeStyle = '#34495e';
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, padding + chartHeight);
+            ctx.lineTo(padding + chartWidth, padding + chartHeight);
+            ctx.stroke();
+            
+            // 绘制Y轴刻度
+            ctx.fillStyle = '#34495e';
+            ctx.font = '30px Arial';
+            ctx.textAlign = 'right';
+            for (let i = 0; i <= 5; i++) {
+                const y = padding + chartHeight - (i * chartHeight / 5);
+                const value = (maxScore * i / 5).toFixed(0);
+                ctx.fillText(value, padding - 20, y + 10);
+                
+                if (i > 0) {
+                    ctx.strokeStyle = '#ecf0f1';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(padding, y);
+                    ctx.lineTo(padding + chartWidth, y);
+                    ctx.stroke();
+                }
+            }
+            
+            // 绘制线图
+            const pointRadius = 20;
+            const lineColors = ['#3498db', '#e74c3c'];
+            
+            // 绘制连接线
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 10;
+            ctx.beginPath();
+            
+            data.forEach((score, index) => {
+                const x = padding + (index + 1) * (chartWidth / 3);
+                const y = padding + chartHeight - (score / maxScore) * chartHeight;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            ctx.stroke();
+            
+            // 绘制数据点和标签
+            data.forEach((score, index) => {
+                const x = padding + (index + 1) * (chartWidth / 3);
+                const y = padding + chartHeight - (score / maxScore) * chartHeight;
+                
+                // 绘制数据点
+                ctx.fillStyle = lineColors[index];
+                ctx.beginPath();
+                ctx.arc(x, y, pointRadius, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // 绘制数据点边框
+                ctx.strokeStyle = '#2c3e50';
+                ctx.lineWidth = 6;
+                ctx.stroke();
+                
+                // 绘制分数标签
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = 'bold 38px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(score.toString(), x, y - 45);
+                
+                // 绘制人员姓名
+                ctx.font = '32px Arial';
+                ctx.fillText(names[index], x, padding + chartHeight + 40);
+            });
+        }
+        
+        // 全体学员数据（固定数据）
+        const allStudentsData = [
+            { name: '蔡苏源', scores: [95, 80, 95, 99], total: 369 },
+            { name: '钱诗雯', scores: [96, 88, 97, 95], total: 376 },
+            { name: '董壮', scores: [94, 89, 96, 97], total: 376 },
+            { name: '耿豪', scores: [94, 94, 98, 98], total: 384 },
+            { name: '曹梦颖', scores: [93, 90, 98, 97], total: 378 },
+            { name: '陈国丹', scores: [95, 92, 97, 96], total: 380 },
+            { name: '陈娜', scores: [92, 89, 98, 97], total: 376 },
+            { name: '韩钟贵', scores: [96, 89, 97, 96], total: 378 },
+            { name: '程思佳', scores: [95, 87, 95, 98], total: 375 },
+            { name: '胡名旺', scores: [95, 93, 98, 97], total: 383 },
+            { name: '程雨瑶', scores: [94, 90, 96, 98], total: 378 },
+            { name: '李捷', scores: [93, 92, 98, 96], total: 379 },
+            { name: '丁梦语', scores: [92, 91, 96, 99], total: 378 },
+            { name: '付青青', scores: [95, 90, 96, 98], total: 379 },
+            { name: '李显阳', scores: [96, 91, 98, 97], total: 382 },
+            { name: '陆俊羽', scores: [94, 88, 98, 96], total: 376 },
+            { name: '李小凡', scores: [93, 87, 98, 97], total: 375 },
+            { name: '年浩', scores: [95, 84, 96, 95], total: 370 },
+            { name: '李卓璇', scores: [96, 86, 97, 98], total: 377 },
+            { name: '蒲发清', scores: [97, 90, 96, 97], total: 380 },
+            { name: '刘欣悦', scores: [94, 85, 98, 96], total: 373 },
+            { name: '刘阳华', scores: [95, 82, 97, 97], total: 371 },
+            { name: '沈长青', scores: [93, 89, 99, 95], total: 376 },
+            { name: '王树宇', scores: [93, 90, 95, 97], total: 375 },
+            { name: '吴良军', scores: [94, 93, 95, 98], total: 380 },
+            { name: '吕科慧', scores: [94, 93, 96, 96], total: 379 },
+            { name: '徐华剑', scores: [96, 92, 98, 95], total: 381 },
+            { name: '潘馨', scores: [96, 95, 100, 98], total: 389 }
+        ];
+
+        function generateAllStudentsTable() {
+            const tableBody = document.getElementById('allStudentsTableBody');
+            
+            // 清空表格
+            tableBody.innerHTML = '';
+            
+            // 生成表格行
+            allStudentsData.forEach(student => {
+                const row = document.createElement('tr');
+                
+                // 高亮董壮的行
+                if (student.name === '董壮') {
+                    row.style.backgroundColor = '#fff3cd';
+                    row.style.fontWeight = 'bold';
+                }
+                
+                row.innerHTML = `
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;"><a href="student-radar.html?student=${encodeURIComponent(student.name)}" style="color: #3498db; text-decoration: none; font-weight: bold;" onmouseover="this.style.color='#e74c3c'" onmouseout="this.style.color='#3498db'">${student.name}</a></td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${student.scores[0]}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${student.scores[1]}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${student.scores[2]}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${student.scores[3]}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: bold; color: #e74c3c;">${student.total}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        function generateAllStudentsCharts() {
+            // 显示图表容器
+            document.getElementById('individualChartsContainer').style.display = 'block';
+            
+            // 绘制五个图表（包含所有学生）
+            for (let i = 1; i <= 5; i++) {
+                drawAllStudentsTaskChart(i);
+            }
+            
+            // 更新成绩表格标题
+            const chartTitle = document.querySelector('#individualChartsContainer h3');
+            chartTitle.textContent = '📈 全体学员评分图表分析';
+        }
+        
+        function drawAllStudentsTaskChart(taskIndex) {
+            const canvas = document.getElementById(`taskChart${taskIndex}`);
+            const ctx = canvas.getContext('2d');
+            
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 图表配置
+            const padding = 125;
+            const bottomPadding = 250; // 为全体学员折线图留出更多底部空间
+            const chartWidth = canvas.width - 2 * padding;
+            const chartHeight = canvas.height - padding - bottomPadding;
+            
+            // 获取当前任务的数据
+            let taskData = [];
+            if (taskIndex <= 4) {
+                taskData = allStudentsData.map(student => ({
+                    name: student.name,
+                    score: student.scores[taskIndex - 1]
+                }));
+            } else {
+                taskData = allStudentsData.map(student => ({
+                    name: student.name,
+                    score: student.total
+                }));
+            }
+            
+            const maxScore = Math.max(...taskData.map(d => d.score), 100);
+            const minScore = Math.min(...taskData.map(d => d.score));
+            
+            // 绘制坐标轴
+            ctx.strokeStyle = '#34495e';
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, padding + chartHeight);
+            ctx.lineTo(padding + chartWidth, padding + chartHeight);
+            ctx.stroke();
+            
+            // 绘制Y轴刻度
+            ctx.fillStyle = '#34495e';
+            ctx.font = '30px Arial';
+            ctx.textAlign = 'right';
+            for (let i = 0; i <= 5; i++) {
+                const y = padding + chartHeight - (i * chartHeight / 5);
+                const value = (minScore + (maxScore - minScore) * i / 5).toFixed(0);
+                ctx.fillText(value, padding - 20, y + 10);
+                
+                if (i > 0) {
+                    ctx.strokeStyle = '#ecf0f1';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(padding, y);
+                    ctx.lineTo(padding + chartWidth, y);
+                    ctx.stroke();
+                }
+            }
+            
+            // 绘制折线图
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 8;
+            ctx.beginPath();
+            
+            taskData.forEach((data, index) => {
+                const x = padding + (index / (taskData.length - 1)) * chartWidth;
+                const y = padding + chartHeight - ((data.score - minScore) / (maxScore - minScore)) * chartHeight;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            ctx.stroke();
+            
+            // 绘制数据点和标签
+            taskData.forEach((data, index) => {
+                const x = padding + (index / (taskData.length - 1)) * chartWidth;
+                const y = padding + chartHeight - ((data.score - minScore) / (maxScore - minScore)) * chartHeight;
+                
+                // 绘制数据点
+                if (data.name === '陆俊羽' || data.name === '董壮') {
+                    // 高亮陆俊羽和董壮的点
+                    ctx.fillStyle = '#e74c3c';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 25, 0, 2 * Math.PI);
+                    ctx.fill();
+                    
+                    // 显示分数在点上方
+                    ctx.fillStyle = '#e74c3c';
+                    ctx.font = 'bold 38px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(data.score.toString(), x, y - 45);
+                } else {
+                    ctx.fillStyle = '#3498db';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 12, 0, 2 * Math.PI);
+                    ctx.fill();
+                    
+                    // 显示分数在点上方
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.font = '30px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(data.score.toString(), x, y - 30);
+                }
+                
+                // 在X轴下方显示所有人的姓名
+                ctx.save();
+                ctx.translate(x, padding + chartHeight + 50);
+                ctx.rotate(-Math.PI / 3); // 旋转60度，更陡峭的角度避免重叠
+                ctx.fillStyle = data.name === '陆俊羽' || data.name === '董壮' ? '#e74c3c' : '#2c3e50';
+                ctx.font = data.name === '陆俊羽' || data.name === '董壮' ? 'bold 25px Arial' : '22px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText(data.name, 0, 0);
+                ctx.restore();
+            });
+        }
+
+        function generateScoresTable(luScores, dongScores, luTotal, dongTotal) {
+            const tableBody = document.getElementById('scoresTableBody');
+            
+            // 更新陆俊羽和董壮的数据
+            const studentsData = allStudentsData.map(student => {
+                if (student.name === '陆俊羽') {
+                    return { name: student.name, scores: luScores, total: luTotal };
+                } else if (student.name === '董壮') {
+                    return { name: student.name, scores: dongScores, total: dongTotal };
+                }
+                return student;
+            });
+            
+            // 清空表格
+            tableBody.innerHTML = '';
+            
+            // 生成表格行
+            studentsData.forEach(student => {
+                const row = document.createElement('tr');
+                
+                // 高亮董壮的行
+                if (student.name === '董壮') {
+                    row.style.backgroundColor = '#fff3cd';
+                    row.style.fontWeight = 'bold';
+                }
+                
+                row.innerHTML = `
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${student.name}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${student.scores[0]}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${student.scores[1]}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${student.scores[2]}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${student.scores[3]}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: bold; color: #e74c3c;">${student.total}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+        
+        function calculateWangScore() {
+            // 保留原有功能以兼容性
+            generateIndividualCharts();
+        }
+        
+        function calculateDongScore() {
+            // 保留原有功能以兼容性
+            generateIndividualCharts();
+        }
+
+        function exportData() {
+            const data = {
+                task: '任务四：多设备故障时乘客突发疾病应急处置',
+                timestamp: new Date().toLocaleString(),
+                groupScores: [],
+                individualScores: {
+                    wang: [],
+                    dong: []
+                }
+            };
+            
+            // 收集小组评分数据
+            const groupRows = document.querySelectorAll('.scoring-table tbody tr');
+            groupRows.forEach(row => {
+                const rowData = {
+                    item: row.cells[0].textContent,
+                    scores: []
+                };
+                
+                for (let i = 1; i <= 4; i++) {
+                    const input = row.cells[i].querySelector('.group-score');
+                    rowData.scores.push(input.value || 0);
+                }
+                
+                data.groupScores.push(rowData);
+            });
+            
+            // 收集陆俊羽个人评分数据
+            const wangRows = document.querySelectorAll('.individual-card:first-child .individual-table tbody tr');
+            wangRows.forEach(row => {
+                data.individualScores.wang.push({
+                    item: row.cells[0].textContent,
+                    score: row.cells[1].querySelector('.wang-score').value || 0
+                });
+            });
+            
+            // 收集董壮个人评分数据
+            const dongRows = document.querySelectorAll('.individual-card:last-child .individual-table tbody tr');
+            dongRows.forEach(row => {
+                data.individualScores.dong.push({
+                    item: row.cells[0].textContent,
+                    score: row.cells[1].querySelector('.dong-score').value || 0
+                });
+            });
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '任务四评分数据_' + new Date().toISOString().slice(0, 10) + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function printReport() {
+            window.print();
+        }
+
+        function resetData() {
+            if (confirm('确定要重置所有评分数据吗？此操作不可恢复！')) {
+                document.querySelectorAll('.score-input').forEach(input => {
+                    input.value = '';
+                });
+                document.querySelectorAll('.result-display').forEach(result => {
+                    result.style.display = 'none';
+                });
+                
+                // 清除localStorage中的分数数据
+                localStorage.removeItem('task1_scores');
+                alert('所有分数已重置！');
+            }
+        }
+
+        // 保存分数到localStorage
+        function saveScores() {
+            const scores = {};
+            document.querySelectorAll('.score-input').forEach((input, index) => {
+                if (input.value) {
+                    scores[index] = input.value;
+                }
+            });
+            localStorage.setItem('task1_scores', JSON.stringify(scores));
+        }
+
+        // 从localStorage恢复分数
+        function loadScores() {
+            const savedScores = localStorage.getItem('task1_scores');
+            if (savedScores) {
+                const scores = JSON.parse(savedScores);
+                const inputs = document.querySelectorAll('.score-input');
+                Object.keys(scores).forEach(index => {
+                    if (inputs[index]) {
+                        inputs[index].value = scores[index];
+                    }
+                });
+            }
+        }
+
+        // 输入验证和自动保存
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('score-input')) {
+                const value = parseFloat(e.target.value);
+                const max = parseFloat(e.target.getAttribute('max')) || 100;
+                const min = parseFloat(e.target.getAttribute('min')) || 0;
+                
+                if (value > max) e.target.value = max;
+                if (value < min) e.target.value = min;
+                
+                // 自动保存分数
+                saveScores();
+            }
+        });
+
+        // 页面加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.scoring-section, .individual-card');
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    section.style.transition = 'all 0.5s ease';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+            
+            // 自动生成全体学员成绩表
+            generateAllStudentsTable();
+            
+            // 恢复保存的分数
+            loadScores();
+        });
+
+        // 页面卸载前保存分数
+        window.addEventListener('beforeunload', function() {
+            saveScores();
+        });
+    </script>
+</body>
+</html>

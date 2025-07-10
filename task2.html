@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任务一：外物侵限下列车故障救援应急处置</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .scoring-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .scoring-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .scoring-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .scoring-table th {
+            background: linear-gradient(45deg, #e84393, #d63031);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .scoring-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .group-1 {
+            background-color: #e3f2fd !important;
+        }
+
+        .group-2 {
+            background-color: #f3e5f5 !important;
+        }
+
+        .group-3 {
+            background-color: #e8f5e8 !important;
+        }
+
+        .group-4 {
+            background-color: #fff3e0 !important;
+        }
+
+        .project-name {
+            cursor: pointer;
+            color: #2196F3;
+            text-decoration: underline;
+        }
+
+        .project-name:hover {
+            color: #1976D2;
+            font-weight: bold;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: inline-block;
+            width: 48%;
+            vertical-align: top;
+            margin-right: 2%;
+        }
+        
+        .chart-container:nth-child(2n) {
+            margin-right: 0;
+        }
+        
+        #chartsContainer {
+            text-align: left;
+        }
+
+        .chart-title {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: 80px;
+        }
+
+        .scoring-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .scoring-table tr:hover {
+            background-color: #fce4ec;
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+
+        .score-input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .score-input:focus {
+            border-color: #f093fb;
+            box-shadow: 0 0 10px rgba(240, 147, 251, 0.3);
+            outline: none;
+        }
+
+        .group-1 { background-color: #fff0f5 !important; }
+        .group-2 { background-color: #f0fff0 !important; }
+        .group-3 { background-color: #f0f8ff !important; }
+
+        .calculate-btn {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-display {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: none;
+        }
+
+        .individual-section {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .individual-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .individual-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .wang-title {
+            background: linear-gradient(45deg, #a29bfe, #6c5ce7);
+            color: white;
+        }
+
+        .dong-title {
+            background: linear-gradient(45deg, #fd79a8, #e84393);
+            color: white;
+        }
+
+        .individual-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .individual-table th {
+            background: linear-gradient(45deg, #636e72, #2d3436);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .individual-table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .individual-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .function-buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .function-buttons button {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .function-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .individual-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .scoring-table, .individual-table {
+                font-size: 0.9em;
+            }
+            
+            .score-input {
+                width: 60px;
+                padding: 6px;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <a href="module4.html" class="back-btn">← 返回模块四</a>
+        
+        <div class="header">
+            <h1>任务一：外物侵限下列车故障救援应急处置</h1>
+            <p>评估大规模人员疏散的组织协调能力和执行效果</p>
+        </div>
+
+        <div class="scoring-section">
+            <div class="scoring-title">🚶‍♂️ 小组评分表</div>
+            <table class="scoring-table">
+                <thead>
+                    <tr>
+                        <th rowspan="2">评价项目</th>
+                        <th colspan="3">第一小组</th>
+                        <th colspan="3">第二小组</th>
+                        <th colspan="3">第三小组</th>
+                        <th colspan="3">第四小组</th>
+                    </tr>
+                    <tr>
+                        <th>1号电脑</th>
+                        <th>2号电脑</th>
+                        <th>3号电脑</th>
+                        <th>4号电脑</th>
+                        <th>5号电脑</th>
+                        <th>6号电脑</th>
+                        <th>7号电脑</th>
+                        <th>8号电脑</th>
+                        <th>9号电脑</th>
+                        <th>10号电脑</th>
+                        <th>11号电脑</th>
+                        <th>12号电脑</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="row-清客">
+                        <td><strong><span class="project-name" onclick="toggleScores('清客')">清客</span></strong></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                    </tr>
+                    <tr id="row-连挂">
+                        <td><strong><span class="project-name" onclick="toggleScores('连挂')">连挂</span></strong></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                    </tr>
+                    <tr id="row-大小交路调整">
+                        <td><strong><span class="project-name" onclick="toggleScores('大小交路调整')">大小交路调整</span></strong></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <button class="calculate-btn" onclick="calculateGroupScore()">计算小组总分</button>
+            <div id="groupResult" class="result-display"></div>
+            
+            <div id="chartsContainer" style="display:none;">
+                <div class="chart-container">
+                    <div class="chart-title">清客项目折线图</div>
+                    <canvas id="chart-清客"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">连挂项目折线图</div>
+                    <canvas id="chart-连挂"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">大小交路调整项目折线图</div>
+                    <canvas id="chart-大小交路调整"></canvas>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="function-buttons">
+            <button onclick="exportData()">📊 导出评分数据</button>
+            <button onclick="printReport()">🖨️ 打印评分报告</button>
+            <button onclick="resetScores()">🔄 重置分数</button>
+        </div>
+    </div>
+
+    <script>
+        let charts = {};
+        
+        function toggleScores(projectName) {
+            const inputs = document.querySelectorAll(`input[data-project="${projectName}"]`);
+            const isVisible = inputs[0].style.display !== 'none';
+            
+            inputs.forEach(input => {
+                input.style.display = isVisible ? 'none' : 'block';
+            });
+        }
+        
+        function calculateGroupScore() {
+            const inputs = document.querySelectorAll('.group-score');
+            const groupTotals = [0, 0, 0, 0];
+            const groupCounts = [0, 0, 0, 0];
+            const projectData = {
+                '清客': [[], [], [], []],
+                '连挂': [[], [], [], []],
+                '大小交路调整': [[], [], [], []]
+            };
+            
+            inputs.forEach(input => {
+                const value = parseFloat(input.value);
+                if (!isNaN(value)) {
+                    const cell = input.closest('td');
+                    const project = input.getAttribute('data-project');
+                    let groupIndex = -1;
+                    
+                    if (cell.classList.contains('group-1')) {
+                        groupTotals[0] += value;
+                        groupCounts[0]++;
+                        groupIndex = 0;
+                    } else if (cell.classList.contains('group-2')) {
+                        groupTotals[1] += value;
+                        groupCounts[1]++;
+                        groupIndex = 1;
+                    } else if (cell.classList.contains('group-3')) {
+                        groupTotals[2] += value;
+                        groupCounts[2]++;
+                        groupIndex = 2;
+                    } else if (cell.classList.contains('group-4')) {
+                        groupTotals[3] += value;
+                        groupCounts[3]++;
+                        groupIndex = 3;
+                    }
+                    
+                    if (groupIndex !== -1 && project && projectData[project]) {
+                        projectData[project][groupIndex].push(value);
+                    }
+                }
+            });
+            
+            let resultHTML = '<h3>🏆 小组评分结果</h3><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">';
+            
+            for (let i = 0; i < 4; i++) {
+                const groupAvg = groupCounts[i] > 0 ? (groupTotals[i] / groupCounts[i]).toFixed(2) : 0;
+                resultHTML += `
+                    <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;">
+                        <strong>第${i+1}小组</strong><br>
+                        总分: ${groupTotals[i]}<br>
+                        平均: ${groupAvg}
+                    </div>
+                `;
+            }
+            
+            resultHTML += '</div>';
+            
+            document.getElementById('groupResult').innerHTML = resultHTML;
+            document.getElementById('groupResult').style.display = 'block';
+            
+            // 生成折线图
+            generateCharts(projectData);
+            document.getElementById('chartsContainer').style.display = 'block';
+        }
+        
+        function generateCharts(projectData) {
+            const projects = ['清客', '连挂', '大小交路调整'];
+            const computerLabels = ['1号电脑', '2号电脑', '3号电脑', '4号电脑', '5号电脑', '6号电脑', 
+                                   '7号电脑', '8号电脑', '9号电脑', '10号电脑', '11号电脑', '12号电脑'];
+            
+            projects.forEach((project, index) => {
+                const ctx = document.getElementById(`chart-${project}`).getContext('2d');
+                
+                // 销毁已存在的图表
+                if (charts[project]) {
+                    charts[project].destroy();
+                }
+                
+                // 收集所有12台电脑的数据
+                const allComputerData = [];
+                for (let groupIndex = 0; groupIndex < 4; groupIndex++) {
+                    const groupData = projectData[project][groupIndex];
+                    for (let computerIndex = 0; computerIndex < 3; computerIndex++) {
+                        const score = groupData[computerIndex] || null;
+                        allComputerData.push(score);
+                    }
+                }
+                
+                const dataset = {
+                    label: `${project}项目分数`,
+                    data: allComputerData,
+                    borderColor: '#FF6384',
+                    backgroundColor: '#FF638420',
+                    fill: false,
+                    tension: 0.1,
+                    pointBackgroundColor: '#FF6384',
+                    pointBorderColor: '#FF6384',
+                    pointRadius: 5
+                };
+                
+                charts[project] = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: computerLabels,
+                        datasets: [dataset]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                stepSize: 2.5,
+                                title: {
+                                    display: true,
+                                    text: '分数'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: '电脑编号'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            title: {
+                                display: true,
+                                text: `${project}项目各电脑得分趋势`
+                            }
+                        }
+                    }
+                });
+            });
+        }
+
+
+
+        function exportData() {
+            const data = {
+                task: '任务一：外物侵限下列车故障救援应急处置',
+                timestamp: new Date().toLocaleString(),
+                groupScores: []
+            };
+            
+            // 收集小组评分数据
+            const groupRows = document.querySelectorAll('.scoring-table tbody tr');
+            groupRows.forEach(row => {
+                const rowData = {
+                    item: row.cells[0].textContent,
+                    scores: []
+                };
+                
+                for (let i = 1; i <= 3; i++) {
+                    const input = row.cells[i].querySelector('.group-score');
+                    rowData.scores.push(input.value || 0);
+                }
+                
+                data.groupScores.push(rowData);
+            });
+            
+
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '任务一评分数据_' + new Date().toISOString().slice(0, 10) + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function printReport() {
+            window.print();
+        }
+
+        function resetScores() {
+            if (confirm('确定要重置所有分数吗？此操作不可恢复！')) {
+                document.querySelectorAll('.score-input').forEach(input => {
+                    input.value = '';
+                });
+                document.querySelectorAll('.result-display').forEach(result => {
+                    result.style.display = 'none';
+                    result.innerHTML = '';
+                });
+                // 清除图表容器
+                document.getElementById('chartsContainer').style.display = 'none';
+                // 销毁所有图表
+                Object.keys(charts).forEach(key => {
+                    if (charts[key]) {
+                        charts[key].destroy();
+                        delete charts[key];
+                    }
+                });
+                // 清除localStorage中的分数数据
+                localStorage.removeItem('task2_scores');
+                alert('所有分数已重置！');
+            }
+        }
+        
+        // 保存分数到localStorage
+        function saveScores() {
+            const scores = {};
+            document.querySelectorAll('.score-input').forEach((input, index) => {
+                if (input.value) {
+                    scores[`input_${index}`] = {
+                        value: input.value,
+                        className: input.className,
+                        dataProject: input.getAttribute('data-project')
+                    };
+                }
+            });
+            localStorage.setItem('task2_scores', JSON.stringify(scores));
+        }
+        
+        // 从localStorage恢复分数
+        function loadScores() {
+            const savedScores = localStorage.getItem('task2_scores');
+            if (savedScores) {
+                const scores = JSON.parse(savedScores);
+                const inputs = document.querySelectorAll('.score-input');
+                
+                inputs.forEach((input, index) => {
+                    const key = `input_${index}`;
+                    if (scores[key] && 
+                        input.className === scores[key].className && 
+                        input.getAttribute('data-project') === scores[key].dataProject) {
+                        input.value = scores[key].value;
+                    }
+                });
+            }
+        }
+
+        // 输入验证和自动保存
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('score-input')) {
+                const value = parseFloat(e.target.value);
+                const max = parseFloat(e.target.getAttribute('max')) || 100;
+                const min = parseFloat(e.target.getAttribute('min')) || 0;
+                
+                if (value > max) e.target.value = max;
+                if (value < min) e.target.value = min;
+                
+                // 自动保存分数
+                saveScores();
+            }
+        });
+
+        // 页面加载动画和恢复分数
+        document.addEventListener('DOMContentLoaded', function() {
+            // 恢复保存的分数
+            loadScores();
+            
+            const sections = document.querySelectorAll('.scoring-section, .individual-card');
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    section.style.transition = 'all 0.5s ease';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+        
+        // 页面卸载前保存分数
+        window.addEventListener('beforeunload', function() {
+            saveScores();
+        });
+    </script>
+</body>
+</html>

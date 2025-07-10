@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>就业方向分析</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.0.0/dist/echarts-wordcloud.min.js"></script>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        #wordcloud-chart {
+            width: 100%;
+            height: 500px;
+            margin: 20px 0;
+        }
+        .direction-list {
+            margin-top: 30px;
+        }
+        .direction-list h2 {
+            text-align: left;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .direction-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        .direction-list li {
+            background-color: #ecf0f1;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+        }
+        .direction-list li:hover {
+            transform: translateX(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .direction-list h3 {
+            margin: 0 0 10px 0;
+            color: #2980b9;
+        }
+        .direction-list p {
+            margin: 0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>轨道交通运营安全与应急管理就业方向</h1>
+        <div id="wordcloud-chart"></div>
+        <div class="direction-list">
+            <h2>主要就业方向详解</h2>
+            <ul>
+                <li>
+                    <h3>行车调度员</h3>
+                    <p><strong>核心能力:</strong> 精通信号系统，具备多设备故障下的综合应急处置能力，能够快速做出准确决策，保障行车安全。</p>
+                </li>
+                <li>
+                    <h3>车站值班员 / 站长</h3>
+                    <p><strong>核心能力:</strong> 具备全面的车站运营管理知识，擅长处理乘客突发状况，熟悉车站各类设备的应急预案。</p>
+                </li>
+                <li>
+                    <h3>应急救援与处置专员</h3>
+                    <p><strong>核心能力:</strong> 在外物侵限、火灾等突发事件中表现出色，具备强大的心理素质和现场处置能力。</p>
+                </li>
+                <li>
+                    <h3>安全管理与培训师</h3>
+                    <p><strong>核心能力:</strong> 理论知识扎实，应急处理经验丰富，能够制定安全规程、开展员工培训，提升整个团队的安全意识和技能水平。</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        var chart = echarts.init(document.getElementById('wordcloud-chart'));
+
+        var option = {
+            tooltip: {},
+            series: [ {
+                type: 'wordCloud',
+                gridSize: 2,
+                sizeRange: [20, 80],
+                rotationRange: [-90, 90],
+                shape: 'pentagon',
+                width: '100%',
+                height: '100%',
+                drawOutOfBound: true,
+                textStyle: {
+                    color: function () {
+                        return 'rgb(' + [
+                            Math.round(Math.random() * 160),
+                            Math.round(Math.random() * 160),
+                            Math.round(Math.random() * 160)
+                        ].join(',') + ')';
+                    }
+                },
+                emphasis: {
+                    textStyle: {
+                        shadowBlur: 10,
+                        shadowColor: '#333'
+                    }
+                },
+                data: [
+                    { name: '行车调度', value: 100 },
+                    { name: '应急管理', value: 95 },
+                    { name: '车站管理', value: 90 },
+                    { name: '安全监督', value: 85 },
+                    { name: '应急救援', value: 80 },
+                    { name: '信号系统', value: 75 },
+                    { name: '乘客服务', value: 70 },
+                    { name: '设备维护', value: 65 },
+                    { name: '安全培训', value: 60 },
+                    { name: '风险评估', value: 55 },
+                    { name: '消防应急', value: 50 },
+                    { name: '故障诊断', value: 45 }
+                ]
+            } ]
+        };
+
+        chart.setOption(option);
+    </script>
+</body>
+</html>

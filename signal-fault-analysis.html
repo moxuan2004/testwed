@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚦 信号设备故障AI分析系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid #4facfe;
+        }
+
+        .input-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .score-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .score-item label {
+            display: block;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 8px;
+        }
+
+        .score-item input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .score-item input:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .analyze-btn {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        .analyze-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .analysis-section {
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 2px solid #e9ecef;
+            display: none;
+        }
+
+        .analysis-section.show {
+            display: block;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .analysis-title {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .weakness-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .weakness-card h3 {
+            color: #c0392b;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .weakness-card h3::before {
+            content: "⚠️";
+            margin-right: 10px;
+        }
+
+        .strength-card {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #28a745;
+        }
+
+        .strength-card h3 {
+            color: #155724;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .strength-card h3::before {
+            content: "✅";
+            margin-right: 10px;
+        }
+
+        .recommendation-card {
+            background: linear-gradient(135deg, #e2e3ff 0%, #c7d2fe 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4facfe;
+        }
+
+        .recommendation-card h3 {
+            color: #4c63d2;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .recommendation-card h3::before {
+            content: "💡";
+            margin-right: 10px;
+        }
+
+        .score-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .score-badge {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .score-badge .label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .score-badge .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4facfe;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .fault-type {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #f39c12;
+        }
+
+        .fault-type h4 {
+            color: #d68910;
+            margin-bottom: 8px;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            
+            .score-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.history.back()">← 返回</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🚦 信号设备故障AI分析系统</h1>
+            <p>智能诊断信号设备故障，分析操作技能薄弱环节，提供专业维修建议</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="input-section">
+                <h2>📊 故障诊断数据输入</h2>
+                <div class="score-grid">
+                    <div class="score-item">
+                        <label for="signal-diagnosis">信号故障诊断分数</label>
+                        <input type="number" id="signal-diagnosis" min="0" max="100" placeholder="请输入诊断准确率 (0-100)">
+                    </div>
+                    <div class="score-item">
+                        <label for="equipment-operation">设备操作技能分数</label>
+                        <input type="number" id="equipment-operation" min="0" max="100" placeholder="请输入操作技能分数 (0-100)">
+                    </div>
+                    <div class="score-item">
+                        <label for="troubleshooting-speed">故障排除速度分数</label>
+                        <input type="number" id="troubleshooting-speed" min="0" max="100" placeholder="请输入排除速度分数 (0-100)">
+                    </div>
+                    <div class="score-item">
+                        <label for="safety-compliance">安全规范遵守分数</label>
+                        <input type="number" id="safety-compliance" min="0" max="100" placeholder="请输入安全规范分数 (0-100)">
+                    </div>
+                    <div class="score-item">
+                        <label for="communication-coordination">沟通协调能力分数</label>
+                        <input type="number" id="communication-coordination" min="0" max="100" placeholder="请输入沟通协调分数 (0-100)">
+                    </div>
+                    <div class="score-item">
+                        <label for="documentation-accuracy">记录文档准确性</label>
+                        <input type="number" id="documentation-accuracy" min="0" max="100" placeholder="请输入文档准确性 (0-100)">
+                    </div>
+                    <div class="score-item">
+                        <label for="circuit-analysis">电路分析能力分数</label>
+                        <input type="number" id="circuit-analysis" min="0" max="100" placeholder="请输入电路分析分数 (0-100)">
+                    </div>
+                    <div class="score-item">
+                        <label for="preventive-maintenance">预防性维护分数</label>
+                        <input type="number" id="preventive-maintenance" min="0" max="100" placeholder="请输入预防维护分数 (0-100)">
+                    </div>
+                    <div class="score-item">
+                        <label for="manual-switch">手摇道岔操作分数</label>
+                        <input type="number" id="manual-switch" min="0" max="100" placeholder="请输入手摇道岔操作分数 (0-100)">
+                    </div>
+                    <div class="score-item">
+                        <label for="phone-block">电话闭塞法分数</label>
+                        <input type="number" id="phone-block" min="0" max="100" placeholder="请输入电话闭塞法分数 (0-100)">
+                    </div>
+                </div>
+                <button class="analyze-btn" onclick="analyzeSignalFault()">🤖 开始AI故障分析</button>
+            </div>
+            
+            <div id="analysis-result" class="analysis-section">
+                <div id="loading" class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>AI正在分析信号设备故障数据，请稍候...</p>
+                </div>
+                
+                <div id="analysis-content" style="display: none;">
+                    <h2 class="analysis-title">📋 信号设备故障AI分析报告</h2>
+                    
+                    <div class="score-display" id="score-summary">
+                        <!-- 分数汇总将在这里显示 -->
+                    </div>
+                    
+                    <div id="fault-types">
+                        <!-- 故障类型分析将在这里显示 -->
+                    </div>
+                    
+                    <div id="weaknesses">
+                        <!-- 薄弱环节将在这里显示 -->
+                    </div>
+                    
+                    <div id="strengths">
+                        <!-- 优势项目将在这里显示 -->
+                    </div>
+                    
+                    <div id="recommendations">
+                        <!-- 改进建议将在这里显示 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function analyzeSignalFault() {
+            // 获取输入值
+            const scores = {
+                signalDiagnosis: parseFloat(document.getElementById('signal-diagnosis').value) || 0,
+                equipmentOperation: parseFloat(document.getElementById('equipment-operation').value) || 0,
+                troubleshootingSpeed: parseFloat(document.getElementById('troubleshooting-speed').value) || 0,
+                safetyCompliance: parseFloat(document.getElementById('safety-compliance').value) || 0,
+                communicationCoordination: parseFloat(document.getElementById('communication-coordination').value) || 0,
+                documentationAccuracy: parseFloat(document.getElementById('documentation-accuracy').value) || 0,
+                circuitAnalysis: parseFloat(document.getElementById('circuit-analysis').value) || 0,
+                preventiveMaintenance: parseFloat(document.getElementById('preventive-maintenance').value) || 0,
+                manualSwitch: parseFloat(document.getElementById('manual-switch').value) || 0,
+                phoneBlock: parseFloat(document.getElementById('phone-block').value) || 0
+            };
+            
+            // 验证输入
+            const hasValidInput = Object.values(scores).some(score => score > 0);
+            if (!hasValidInput) {
+                alert('请至少输入一个有效分数！');
+                return;
+            }
+            
+            // 显示分析区域和加载状态
+            const analysisSection = document.getElementById('analysis-result');
+            const loading = document.getElementById('loading');
+            const content = document.getElementById('analysis-content');
+            
+            analysisSection.classList.add('show');
+            loading.style.display = 'block';
+            content.style.display = 'none';
+            
+            // 模拟AI分析过程
+            setTimeout(() => {
+                generateSignalAnalysis(scores);
+                loading.style.display = 'none';
+                content.style.display = 'block';
+            }, 2500);
+        }
+        
+        function generateSignalAnalysis(scores) {
+            // 计算平均分和总体表现
+            const validScores = Object.values(scores).filter(score => score > 0);
+            const averageScore = validScores.reduce((sum, score) => sum + score, 0) / validScores.length;
+            
+            // 生成分数汇总
+            generateScoreSummary(scores, averageScore);
+            
+            // 分析故障类型
+            generateFaultTypeAnalysis(scores);
+            
+            // 分析薄弱环节
+            generateWeaknessAnalysis(scores);
+            
+            // 分析优势项目
+            generateStrengthAnalysis(scores);
+            
+            // 生成改进建议
+            generateRecommendations(scores);
+        }
+        
+        function generateScoreSummary(scores, average) {
+            const summaryDiv = document.getElementById('score-summary');
+            summaryDiv.innerHTML = `
+                <div class="score-badge">
+                    <div class="label">综合能力</div>
+                    <div class="value">${average.toFixed(1)}</div>
+                </div>
+                <div class="score-badge">
+                    <div class="label">故障诊断</div>
+                    <div class="value">${scores.signalDiagnosis || 'N/A'}</div>
+                </div>
+                <div class="score-badge">
+                    <div class="label">设备操作</div>
+                    <div class="value">${scores.equipmentOperation || 'N/A'}</div>
+                </div>
+                <div class="score-badge">
+                    <div class="label">排除速度</div>
+                    <div class="value">${scores.troubleshootingSpeed || 'N/A'}</div>
+                </div>
+                <div class="score-badge">
+                    <div class="label">安全规范</div>
+                    <div class="value">${scores.safetyCompliance || 'N/A'}</div>
+                </div>
+                <div class="score-badge">
+                    <div class="label">电路分析</div>
+                    <div class="value">${scores.circuitAnalysis || 'N/A'}</div>
+                </div>
+                <div class="score-badge">
+                    <div class="label">手摇道岔</div>
+                    <div class="value">${scores.manualSwitch || 'N/A'}</div>
+                </div>
+                <div class="score-badge">
+                    <div class="label">电话闭塞</div>
+                    <div class="value">${scores.phoneBlock || 'N/A'}</div>
+                </div>
+            `;
+        }
+        
+        function generateFaultTypeAnalysis(scores) {
+            const faultDiv = document.getElementById('fault-types');
+            let faultTypes = [];
+            
+            // 根据分数判断可能的故障类型和处理能力
+            if (scores.signalDiagnosis > 0 && scores.signalDiagnosis < 70) {
+                faultTypes.push({
+                    type: '信号机故障诊断能力不足',
+                    description: '对信号机红灯、绿灯、黄灯故障的判断和分析能力较弱，需要加强理论学习和实践训练。'
+                });
+            }
+            
+            if (scores.circuitAnalysis > 0 && scores.circuitAnalysis < 75) {
+                faultTypes.push({
+                    type: '电路分析技能薄弱',
+                    description: '对信号电路的分析和故障定位能力不足，特别是在复杂电路故障排查方面存在困难。'
+                });
+            }
+            
+            if (scores.equipmentOperation > 0 && scores.equipmentOperation < 70) {
+                faultTypes.push({
+                    type: '设备操作技能待提升',
+                    description: '对信号设备的操作不够熟练，包括继电器、转辙机、轨道电路等设备的操作和调试。'
+                });
+            }
+            
+            if (scores.troubleshootingSpeed > 0 && scores.troubleshootingSpeed < 75) {
+                faultTypes.push({
+                    type: '故障排除效率偏低',
+                    description: '在处理紧急信号故障时，排除速度较慢，影响列车运行效率和安全。'
+                });
+            }
+            
+            if (scores.manualSwitch > 0 && scores.manualSwitch < 70) {
+                faultTypes.push({
+                    type: '手摇道岔操作技能不足',
+                    description: '对手摇道岔的操作不够熟练，包括道岔转换、锁闭确认、安全防护等关键环节存在不足。'
+                });
+            }
+            
+            if (scores.phoneBlock > 0 && scores.phoneBlock < 70) {
+                faultTypes.push({
+                    type: '电话闭塞法执行不规范',
+                    description: '在电话闭塞法的执行过程中存在不规范操作，包括通话程序、记录填写、安全确认等方面需要改进。'
+                });
+            }
+            
+            if (faultTypes.length === 0) {
+                faultTypes.push({
+                    type: '整体技能水平良好',
+                    description: '在信号设备故障处理方面表现稳定，具备基本的故障诊断和处理能力。'
+                });
+            }
+            
+            faultDiv.innerHTML = '<h3 style="color: #2c3e50; margin-bottom: 15px;">🔍 故障处理能力分析</h3>' + 
+                faultTypes.map(fault => `
+                    <div class="fault-type">
+                        <h4>${fault.type}</h4>
+                        <p>${fault.description}</p>
+                    </div>
+                `).join('');
+        }
+        
+        function generateWeaknessAnalysis(scores) {
+            const weaknessDiv = document.getElementById('weaknesses');
+            let weaknesses = [];
+            
+            // 信号诊断分析
+            if (scores.signalDiagnosis > 0 && scores.signalDiagnosis < 70) {
+                weaknesses.push({
+                    title: '信号故障诊断技能不足',
+                    content: `诊断准确率仅为${scores.signalDiagnosis}%，在信号机故障、轨道电路故障、转辙机故障等方面的判断能力需要提升。建议加强理论学习和实际案例分析。`
+                });
+            }
+            
+            // 设备操作分析
+            if (scores.equipmentOperation > 0 && scores.equipmentOperation < 75) {
+                weaknesses.push({
+                    title: '设备操作技能薄弱',
+                    content: `设备操作分数为${scores.equipmentOperation}分，对信号设备的操作不够熟练。主要问题包括：继电器测试不规范、转辙机调整不准确、测试仪器使用不当等。`
+                });
+            }
+            
+            // 电路分析分析
+            if (scores.circuitAnalysis > 0 && scores.circuitAnalysis < 75) {
+                weaknesses.push({
+                    title: '电路分析能力有待加强',
+                    content: `电路分析分数为${scores.circuitAnalysis}分，对复杂信号电路的理解和故障定位能力不足。需要加强电路原理学习和实际测量技能。`
+                });
+            }
+            
+            // 安全规范分析
+            if (scores.safetyCompliance > 0 && scores.safetyCompliance < 80) {
+                weaknesses.push({
+                    title: '安全规范执行不够严格',
+                    content: `安全规范分数为${scores.safetyCompliance}分，在信号设备维修过程中的安全意识和规范执行需要加强。`
+                });
+            }
+            
+            // 沟通协调分析
+            if (scores.communicationCoordination > 0 && scores.communicationCoordination < 75) {
+                weaknesses.push({
+                    title: '沟通协调能力需要提升',
+                    content: '在信号故障处理过程中，与调度、司机、其他维修人员的沟通协调能力不足，影响故障处理效率。'
+                });
+            }
+            
+            // 手摇道岔分析
+            if (scores.manualSwitch > 0 && scores.manualSwitch < 70) {
+                weaknesses.push({
+                    title: '手摇道岔操作技能薄弱',
+                    content: `手摇道岔操作分数为${scores.manualSwitch}分，在道岔手动操作、锁闭确认、安全防护等方面存在不足。需要加强实际操作训练和安全规程学习。`
+                });
+            }
+            
+            // 电话闭塞法分析
+            if (scores.phoneBlock > 0 && scores.phoneBlock < 70) {
+                weaknesses.push({
+                    title: '电话闭塞法执行不规范',
+                    content: `电话闭塞法分数为${scores.phoneBlock}分，在通话程序、记录填写、安全确认等环节执行不够规范。需要强化标准化作业流程训练。`
+                });
+            }
+            
+            if (weaknesses.length === 0) {
+                weaknesses.push({
+                    title: '暂未发现明显薄弱环节',
+                    content: '根据当前输入的分数，在信号设备故障处理方面表现良好，建议继续保持并进一步提升专业技能。'
+                });
+            }
+            
+            weaknessDiv.innerHTML = weaknesses.map(weakness => `
+                <div class="weakness-card">
+                    <h3>${weakness.title}</h3>
+                    <p>${weakness.content}</p>
+                </div>
+            `).join('');
+        }
+        
+        function generateStrengthAnalysis(scores) {
+            const strengthDiv = document.getElementById('strengths');
+            let strengths = [];
+            
+            // 分析优势项目
+            if (scores.signalDiagnosis >= 85) {
+                strengths.push({
+                    title: '信号故障诊断能力优秀',
+                    content: `故障诊断准确率达到${scores.signalDiagnosis}%，对各类信号设备故障的判断准确，理论基础扎实。`
+                });
+            }
+            
+            if (scores.equipmentOperation >= 85) {
+                strengths.push({
+                    title: '设备操作技能精湛',
+                    content: `设备操作分数达到${scores.equipmentOperation}分，对信号设备的操作熟练，技能水平高。`
+                });
+            }
+            
+            if (scores.troubleshootingSpeed >= 85) {
+                strengths.push({
+                    title: '故障排除效率高',
+                    content: '能够快速定位和解决信号设备故障，大大缩短故障处理时间，保障列车运行安全。'
+                });
+            }
+            
+            if (scores.safetyCompliance >= 90) {
+                strengths.push({
+                    title: '安全意识强',
+                    content: '严格遵守安全操作规程，安全意识强，是其他维修人员学习的榜样。'
+                });
+            }
+            
+            if (scores.circuitAnalysis >= 85) {
+                strengths.push({
+                    title: '电路分析能力突出',
+                    content: '对复杂信号电路有深入理解，能够准确分析和定位电路故障。'
+                });
+            }
+            
+            if (scores.preventiveMaintenance >= 85) {
+                strengths.push({
+                    title: '预防性维护意识强',
+                    content: '具备良好的预防性维护意识，能够有效预防设备故障的发生。'
+                });
+            }
+            
+            if (scores.manualSwitch >= 85) {
+                strengths.push({
+                    title: '手摇道岔操作技能精湛',
+                    content: `手摇道岔操作分数达到${scores.manualSwitch}分，对道岔手动操作、锁闭确认、安全防护等环节掌握熟练，操作规范标准。`
+                });
+            }
+            
+            if (scores.phoneBlock >= 85) {
+                strengths.push({
+                    title: '电话闭塞法执行规范',
+                    content: `电话闭塞法分数达到${scores.phoneBlock}分，严格按照标准程序执行，通话清晰准确，记录规范完整，安全意识强。`
+                });
+            }
+            
+            if (strengths.length === 0) {
+                strengths.push({
+                    title: '基础技能扎实',
+                    content: '虽然没有特别突出的优势项目，但整体表现稳定，基础技能掌握良好。'
+                });
+            }
+            
+            strengthDiv.innerHTML = strengths.map(strength => `
+                <div class="strength-card">
+                    <h3>${strength.title}</h3>
+                    <p>${strength.content}</p>
+                </div>
+            `).join('');
+        }
+        
+        function generateRecommendations(scores) {
+            const recommendationDiv = document.getElementById('recommendations');
+            let recommendations = [];
+            
+            // 针对薄弱环节的建议
+            if (scores.signalDiagnosis > 0 && scores.signalDiagnosis < 70) {
+                recommendations.push({
+                    title: '信号故障诊断技能提升方案',
+                    content: '1. 系统学习信号设备工作原理和故障机理\n2. 加强实际故障案例分析和讨论\n3. 定期参加信号设备故障模拟演练\n4. 建立故障诊断知识库，积累经验\n5. 与经验丰富的信号工交流学习'
+                });
+            }
+            
+            if (scores.equipmentOperation > 0 && scores.equipmentOperation < 75) {
+                recommendations.push({
+                    title: '设备操作技能强化训练',
+                    content: '1. 加强继电器、转辙机等设备的操作训练\n2. 熟练掌握各种测试仪器的使用方法\n3. 练习标准化操作流程和安全规程\n4. 参加设备厂家的技术培训\n5. 建立操作技能考核机制'
+                });
+            }
+            
+            if (scores.circuitAnalysis > 0 && scores.circuitAnalysis < 75) {
+                recommendations.push({
+                    title: '电路分析能力提升建议',
+                    content: '1. 深入学习信号电路原理和设计思路\n2. 加强电路图识读和分析能力\n3. 练习使用万用表、示波器等测试设备\n4. 学习电路故障定位的系统方法\n5. 参与复杂故障的分析和处理'
+                });
+            }
+            
+            if (scores.manualSwitch > 0 && scores.manualSwitch < 70) {
+                recommendations.push({
+                    title: '手摇道岔操作技能提升方案',
+                    content: '1. 系统学习道岔结构原理和操作规程\n2. 加强手摇道岔实际操作训练\n3. 熟练掌握道岔锁闭确认和安全防护措施\n4. 学习道岔故障应急处置方法\n5. 定期进行道岔操作技能考核和评估'
+                });
+            }
+            
+            if (scores.phoneBlock > 0 && scores.phoneBlock < 70) {
+                recommendations.push({
+                    title: '电话闭塞法规范化执行建议',
+                    content: '1. 熟练掌握电话闭塞法标准作业程序\n2. 加强通话用语规范化训练\n3. 提高记录填写的准确性和完整性\n4. 强化安全确认和复核意识\n5. 参加电话闭塞法模拟演练和考核'
+                });
+            }
+            
+            // 通用建议
+            recommendations.push({
+                title: '综合能力提升建议',
+                content: '1. 建立个人技能档案，定期评估和改进\n2. 参加专业技术培训和认证考试\n3. 加强与调度、司机等相关人员的沟通\n4. 学习新技术和新设备的维修方法\n5. 培养团队协作和应急处置能力\n6. 建立预防性维护的工作习惯'
+            });
+            
+            recommendationDiv.innerHTML = recommendations.map(rec => `
+                <div class="recommendation-card">
+                    <h3>${rec.title}</h3>
+                    <p style="white-space: pre-line;">${rec.content}</p>
+                </div>
+            `).join('');
+        }
+        
+        // 输入验证
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', function() {
+                const value = parseFloat(this.value);
+                if (value < 0) this.value = 0;
+                if (value > 100) this.value = 100;
+            });
+        });
+    </script>
+</body>
+</html>

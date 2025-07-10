@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 火灾应急处置AI分析系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .input-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .score-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .score-item label {
+            display: block;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 8px;
+        }
+
+        .score-item input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .score-item input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .analyze-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .analyze-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .analysis-section {
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 2px solid #e9ecef;
+            display: none;
+        }
+
+        .analysis-section.show {
+            display: block;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .analysis-title {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .weakness-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .weakness-card h3 {
+            color: #c0392b;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .weakness-card h3::before {
+            content: "⚠️";
+            margin-right: 10px;
+        }
+
+        .strength-card {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #28a745;
+        }
+
+        .strength-card h3 {
+            color: #155724;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .strength-card h3::before {
+            content: "✅";
+            margin-right: 10px;
+        }
+
+        .recommendation-card {
+            background: linear-gradient(135deg, #e2e3ff 0%, #c7d2fe 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .recommendation-card h3 {
+            color: #4c63d2;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .recommendation-card h3::before {
+            content: "💡";
+            margin-right: 10px;
+        }
+
+        .score-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .score-badge {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .score-badge .label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .score-badge .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            
+            .score-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.history.back()">← 返回</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🔥 火灾应急处置AI分析系统</h1>
+            <p>智能分析学生操作表现，识别薄弱环节，提供针对性改进建议</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="input-section">
+                <h2>📊 分数输入</h2>
+                <div class="score-grid">
+                    <div class="score-item">
+                        <label for="extinguisher-operation">灭火器操作分数</label>
+                        <input type="number" id="extinguisher-operation" min="0" max="100" placeholder="请输入操作分数 (0-100)">
+                    </div>
+                    <div class="score-item">
+                        <label for="extinguisher-voice">灭火器语音分数</label>
+                        <input type="number" id="extinguisher-voice" min="0" max="100" placeholder="请输入语音分数 (0-100)">
+                    </div>
+                    <div class="score-item">
+                        <label for="ventilation-operation">隧道排烟通风操作分数</label>
+                        <input type="number" id="ventilation-operation" min="0" max="100" placeholder="请输入操作分数 (0-100)">
+                    </div>
+                    <div class="score-item">
+                        <label for="ventilation-voice">隧道排烟通风语音分数</label>
+                        <input type="number" id="ventilation-voice" min="0" max="100" placeholder="请输入语音分数 (0-100)">
+                    </div>
+                    <div class="score-item">
+                        <label for="fan-direction">风机转向正确率</label>
+                        <input type="number" id="fan-direction" min="0" max="100" placeholder="请输入正确率 (0-100)">
+                    </div>
+                    <div class="score-item">
+                        <label for="emergency-response">应急响应速度分数</label>
+                        <input type="number" id="emergency-response" min="0" max="100" placeholder="请输入响应速度分数 (0-100)">
+                    </div>
+                </div>
+                <button class="analyze-btn" onclick="analyzePerformance()">🤖 开始AI分析</button>
+            </div>
+            
+            <div id="analysis-result" class="analysis-section">
+                <div id="loading" class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>AI正在分析中，请稍候...</p>
+                </div>
+                
+                <div id="analysis-content" style="display: none;">
+                    <h2 class="analysis-title">📋 AI分析报告</h2>
+                    
+                    <div class="score-display" id="score-summary">
+                        <!-- 分数汇总将在这里显示 -->
+                    </div>
+                    
+                    <div id="weaknesses">
+                        <!-- 薄弱环节将在这里显示 -->
+                    </div>
+                    
+                    <div id="strengths">
+                        <!-- 优势项目将在这里显示 -->
+                    </div>
+                    
+                    <div id="recommendations">
+                        <!-- 改进建议将在这里显示 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function analyzePerformance() {
+            // 获取输入值
+            const scores = {
+                extinguisherOperation: parseFloat(document.getElementById('extinguisher-operation').value) || 0,
+                extinguisherVoice: parseFloat(document.getElementById('extinguisher-voice').value) || 0,
+                ventilationOperation: parseFloat(document.getElementById('ventilation-operation').value) || 0,
+                ventilationVoice: parseFloat(document.getElementById('ventilation-voice').value) || 0,
+                fanDirection: parseFloat(document.getElementById('fan-direction').value) || 0,
+                emergencyResponse: parseFloat(document.getElementById('emergency-response').value) || 0
+            };
+            
+            // 验证输入
+            const hasValidInput = Object.values(scores).some(score => score > 0);
+            if (!hasValidInput) {
+                alert('请至少输入一个有效分数！');
+                return;
+            }
+            
+            // 显示分析区域和加载状态
+            const analysisSection = document.getElementById('analysis-result');
+            const loading = document.getElementById('loading');
+            const content = document.getElementById('analysis-content');
+            
+            analysisSection.classList.add('show');
+            loading.style.display = 'block';
+            content.style.display = 'none';
+            
+            // 模拟AI分析过程
+            setTimeout(() => {
+                generateAnalysis(scores);
+                loading.style.display = 'none';
+                content.style.display = 'block';
+            }, 2000);
+        }
+        
+        function generateAnalysis(scores) {
+            // 计算平均分和总体表现
+            const validScores = Object.values(scores).filter(score => score > 0);
+            const averageScore = validScores.reduce((sum, score) => sum + score, 0) / validScores.length;
+            
+            // 生成分数汇总
+            generateScoreSummary(scores, averageScore);
+            
+            // 分析薄弱环节
+            generateWeaknessAnalysis(scores);
+            
+            // 分析优势项目
+            generateStrengthAnalysis(scores);
+            
+            // 生成改进建议
+            generateRecommendations(scores);
+        }
+        
+        function generateScoreSummary(scores, average) {
+            const summaryDiv = document.getElementById('score-summary');
+            summaryDiv.innerHTML = `
+                <div class="score-badge">
+                    <div class="label">平均分数</div>
+                    <div class="value">${average.toFixed(1)}</div>
+                </div>
+                <div class="score-badge">
+                    <div class="label">灭火器操作</div>
+                    <div class="value">${scores.extinguisherOperation || 'N/A'}</div>
+                </div>
+                <div class="score-badge">
+                    <div class="label">通风系统操作</div>
+                    <div class="value">${scores.ventilationOperation || 'N/A'}</div>
+                </div>
+                <div class="score-badge">
+                    <div class="label">风机转向正确率</div>
+                    <div class="value">${scores.fanDirection || 'N/A'}%</div>
+                </div>
+            `;
+        }
+        
+        function generateWeaknessAnalysis(scores) {
+            const weaknessDiv = document.getElementById('weaknesses');
+            let weaknesses = [];
+            
+            // 灭火器操作分析
+            if (scores.extinguisherOperation > 0 && scores.extinguisherOperation < 70) {
+                weaknesses.push({
+                    title: '灭火器操作技能薄弱',
+                    content: `操作分数仅为${scores.extinguisherOperation}分，低于标准要求。主要问题可能包括：操作步骤不熟练、安全距离把握不当、灭火剂使用方法错误、操作时间过长等。`
+                });
+            }
+            
+            // 风机转向分析
+            if (scores.fanDirection > 0 && scores.fanDirection < 80) {
+                weaknesses.push({
+                    title: '隧道排烟通风系统操作错误率高',
+                    content: `风机转向正确率仅为${scores.fanDirection}%，存在较多操作错误。主要问题包括：对风机转向原理理解不足、应急情况下判断失误、操作面板不熟悉、缺乏系统性训练等。`
+                });
+            }
+            
+            // 语音沟通分析
+            if ((scores.extinguisherVoice > 0 && scores.extinguisherVoice < 75) || 
+                (scores.ventilationVoice > 0 && scores.ventilationVoice < 75)) {
+                weaknesses.push({
+                    title: '应急沟通能力需要提升',
+                    content: '语音沟通分数偏低，在紧急情况下的信息传递和指令下达存在问题。需要加强应急沟通技巧训练。'
+                });
+            }
+            
+            // 应急响应分析
+            if (scores.emergencyResponse > 0 && scores.emergencyResponse < 75) {
+                weaknesses.push({
+                    title: '应急响应速度有待改善',
+                    content: `应急响应分数为${scores.emergencyResponse}分，反应速度和决策能力需要提升。建议加强应急预案熟悉度和实战演练。`
+                });
+            }
+            
+            if (weaknesses.length === 0) {
+                weaknesses.push({
+                    title: '暂未发现明显薄弱环节',
+                    content: '根据当前输入的分数，学生在各项技能方面表现良好，建议继续保持并进一步提升。'
+                });
+            }
+            
+            weaknessDiv.innerHTML = weaknesses.map(weakness => `
+                <div class="weakness-card">
+                    <h3>${weakness.title}</h3>
+                    <p>${weakness.content}</p>
+                </div>
+            `).join('');
+        }
+        
+        function generateStrengthAnalysis(scores) {
+            const strengthDiv = document.getElementById('strengths');
+            let strengths = [];
+            
+            // 分析优势项目
+            if (scores.extinguisherOperation >= 85) {
+                strengths.push({
+                    title: '灭火器操作技能优秀',
+                    content: `操作分数达到${scores.extinguisherOperation}分，表现优异。操作流程熟练，安全意识强，值得其他学员学习。`
+                });
+            }
+            
+            if (scores.fanDirection >= 90) {
+                strengths.push({
+                    title: '通风系统操作精准',
+                    content: `风机转向正确率高达${scores.fanDirection}%，对系统原理理解透彻，操作准确性极高。`
+                });
+            }
+            
+            if (scores.emergencyResponse >= 85) {
+                strengths.push({
+                    title: '应急响应能力突出',
+                    content: '在紧急情况下能够快速做出正确判断和响应，具备良好的心理素质和专业技能。'
+                });
+            }
+            
+            if ((scores.extinguisherVoice >= 85) || (scores.ventilationVoice >= 85)) {
+                strengths.push({
+                    title: '沟通协调能力强',
+                    content: '语音沟通清晰准确，能够有效传递信息和协调团队行动。'
+                });
+            }
+            
+            if (strengths.length === 0) {
+                strengths.push({
+                    title: '基础技能扎实',
+                    content: '虽然没有特别突出的优势项目，但整体表现稳定，基础技能掌握良好。'
+                });
+            }
+            
+            strengthDiv.innerHTML = strengths.map(strength => `
+                <div class="strength-card">
+                    <h3>${strength.title}</h3>
+                    <p>${strength.content}</p>
+                </div>
+            `).join('');
+        }
+        
+        function generateRecommendations(scores) {
+            const recommendationDiv = document.getElementById('recommendations');
+            let recommendations = [];
+            
+            // 针对薄弱环节的建议
+            if (scores.extinguisherOperation > 0 && scores.extinguisherOperation < 70) {
+                recommendations.push({
+                    title: '灭火器操作技能提升建议',
+                    content: '1. 加强理论学习，熟悉不同类型灭火器的使用方法\n2. 增加实操训练频次，重点练习操作流程\n3. 模拟真实火灾场景进行演练\n4. 学习正确的安全距离和灭火技巧'
+                });
+            }
+            
+            if (scores.fanDirection > 0 && scores.fanDirection < 80) {
+                recommendations.push({
+                    title: '通风系统操作改进方案',
+                    content: '1. 深入学习隧道通风系统工作原理\n2. 熟悉不同火灾场景下的风机控制策略\n3. 加强操作面板使用培训\n4. 进行故障排除和应急处置演练\n5. 建立操作检查清单，减少人为错误'
+                });
+            }
+            
+            // 通用建议
+            recommendations.push({
+                title: '综合能力提升建议',
+                content: '1. 定期参加应急演练，提高实战经验\n2. 加强团队协作和沟通技能训练\n3. 学习最新的消防安全技术和规范\n4. 建立个人技能档案，跟踪进步情况\n5. 与经验丰富的同事交流学习'
+            });
+            
+            recommendationDiv.innerHTML = recommendations.map(rec => `
+                <div class="recommendation-card">
+                    <h3>${rec.title}</h3>
+                    <p style="white-space: pre-line;">${rec.content}</p>
+                </div>
+            `).join('');
+        }
+        
+        // 输入验证
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', function() {
+                const value = parseFloat(this.value);
+                if (value < 0) this.value = 0;
+                if (value > 100) this.value = 100;
+            });
+        });
+    </script>
+</body>
+</html>

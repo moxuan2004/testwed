@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学员能力图谱索引</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .student-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .student-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .student-card a {
+            display: block;
+            padding: 25px;
+            text-decoration: none;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .student-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .student-score {
+            font-size: 2em;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+
+        .view-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .student-card:hover .view-btn {
+            background: linear-gradient(135deg, #764ba2, #667eea);
+            transform: scale(1.05);
+        }
+
+        .score-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .students-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="task1.html" class="back-btn">← 返回成绩表</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🎯 学员能力图谱中心</h1>
+            <p>点击卡片查看学员的详细能力分析</p>
+        </div>
+
+        <div class="students-grid" id="studentsGrid">
+            <!-- 学员卡片将通过JavaScript动态生成 -->
+        </div>
+    </div>
+
+    <script>
+        // 学员数据
+        const studentsData = [
+            { name: '蔡苏源', scores: [95, 80, 95, 99], total: 369 },
+            { name: '钱诗雯', scores: [96, 88, 97, 95], total: 376 },
+            { name: '董壮', scores: [94, 89, 96, 97], total: 376 },
+            { name: '耿豪', scores: [94, 94, 98, 98], total: 384 },
+            { name: '曹梦颖', scores: [93, 90, 98, 97], total: 378 },
+            { name: '陈国丹', scores: [95, 92, 97, 96], total: 380 },
+            { name: '陈娜', scores: [92, 89, 98, 97], total: 376 },
+            { name: '韩钟贵', scores: [96, 89, 97, 96], total: 378 },
+            { name: '程思佳', scores: [95, 87, 95, 98], total: 375 },
+            { name: '胡名旺', scores: [95, 93, 98, 97], total: 383 },
+            { name: '程雨瑶', scores: [94, 90, 96, 98], total: 378 },
+            { name: '李捷', scores: [93, 92, 98, 96], total: 379 },
+            { name: '丁梦语', scores: [92, 91, 96, 99], total: 378 },
+            { name: '付青青', scores: [95, 90, 96, 98], total: 379 },
+            { name: '李显阳', scores: [96, 91, 98, 97], total: 382 },
+            { name: '陆俊羽', scores: [94, 88, 98, 96], total: 376 },
+            { name: '李小凡', scores: [93, 87, 98, 97], total: 375 },
+            { name: '年浩', scores: [95, 84, 96, 95], total: 370 },
+            { name: '李卓璇', scores: [96, 86, 97, 98], total: 377 },
+            { name: '蒲发清', scores: [97, 90, 96, 97], total: 380 },
+            { name: '刘欣悦', scores: [94, 85, 98, 96], total: 373 },
+            { name: '刘阳华', scores: [95, 82, 97, 97], total: 371 },
+            { name: '沈长青', scores: [93, 89, 99, 95], total: 376 },
+            { name: '王树宇', scores: [93, 90, 95, 97], total: 375 },
+            { name: '吴良军', scores: [94, 93, 95, 98], total: 380 },
+            { name: '吕科慧', scores: [94, 93, 96, 96], total: 379 },
+            { name: '徐华剑', scores: [96, 92, 98, 95], total: 381 },
+            { name: '潘馨', scores: [96, 95, 100, 98], total: 389 }
+        ];
+
+        // 按总分排序（从高到低）
+        studentsData.sort((a, b) => b.total - a.total);
+
+        // 生成学员卡片
+        function generateStudentCards() {
+            const grid = document.getElementById('studentsGrid');
+            
+            studentsData.forEach((student, index) => {
+                const card = document.createElement('div');
+                card.className = 'student-card';
+                
+                const avgScore = (student.scores.reduce((a, b) => a + b, 0) / student.scores.length).toFixed(1);
+                
+                card.innerHTML = `
+                    <a href="ability-map-${student.name}.html">
+                        <div class="student-name">${student.name}</div>
+                        <div class="student-score">${student.total}</div>
+                        <div class="view-btn">查看能力图谱</div>
+                        <div class="score-badge">${index + 1}</div>
+                    </a>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // 页面加载时生成卡片
+        document.addEventListener('DOMContentLoaded', function() {
+            generateStudentCards();
+        });
+    </script>
+</body>
+</html>

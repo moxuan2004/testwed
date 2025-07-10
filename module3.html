@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模块三：乘客事务类应急处置 - 城市轨道交通应急处置综合评价系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .scoring-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .scoring-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(45deg, #00cec9, #55a3ff);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .scoring-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .scoring-table th {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .scoring-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .scoring-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .scoring-table tr:hover {
+            background-color: #e8f8f5;
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+
+        .score-input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .score-input:focus {
+            border-color: #00cec9;
+            box-shadow: 0 0 10px rgba(0, 206, 201, 0.3);
+            outline: none;
+        }
+
+        .group-1 { background-color: #e8f5e8 !important; }
+        .group-2 { background-color: #e8f4fd !important; }
+        .group-3 { background-color: #fff8e1 !important; }
+        .group-4 { background-color: #fce4ec !important; }
+        .group-5 { background-color: #f3e5f5 !important; }
+        .group-6 { background-color: #e0f2f1 !important; }
+
+        .calculate-btn {
+            background: linear-gradient(45deg, #00cec9, #55a3ff);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-display {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(45deg, #00cec9, #55a3ff);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: none;
+        }
+
+        .function-buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .function-buttons button {
+            background: linear-gradient(45deg, #a29bfe, #6c5ce7);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .function-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .scoring-table {
+                font-size: 0.9em;
+            }
+            
+            .score-input {
+                width: 60px;
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">← 返回主页</a>
+        
+        <div class="header">
+            <h1>👥 模块三：乘客事务类应急处置</h1>
+            <p>评估在乘客相关突发事件中的应急处置能力和服务水平</p>
+        </div>
+
+        <div class="scoring-section">
+            <div class="scoring-title">👥 乘客事务类应急处置评分表</div>
+            <table class="scoring-table">
+                <thead>
+                    <tr>
+                        <th>评价项目</th>
+                        <th>第一小组</th>
+                        <th>第二小组</th>
+                        <th>第三小组</th>
+                        <th>第四小组</th>
+                        <th>第五小组</th>
+                        <th>第六小组</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>乘客疏散组织</strong></td>
+                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>应急广播使用</strong></td>
+                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>现场秩序维护</strong></td>
+                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>乘客安抚沟通</strong></td>
+                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>医疗急救配合</strong></td>
+                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>信息传递准确性</strong></td>
+                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>应急设备使用</strong></td>
+                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>团队协调配合</strong></td>
+                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <button class="calculate-btn" onclick="calculateScore()">计算模块三总分</button>
+            <div id="result" class="result-display"></div>
+        </div>
+
+        <div class="function-buttons">
+            <button onclick="exportData()">📊 导出评分数据</button>
+            <button onclick="printReport()">🖨️ 打印评分报告</button>
+            <button onclick="resetData()">🔄 重置所有数据</button>
+        </div>
+    </div>
+
+    <script>
+        function calculateScore() {
+            const inputs = document.querySelectorAll('.score-input');
+            let total = 0;
+            let count = 0;
+            let groupTotals = [0, 0, 0, 0, 0, 0];
+            let groupCounts = [0, 0, 0, 0, 0, 0];
+            
+            inputs.forEach((input, index) => {
+                const value = parseFloat(input.value);
+                if (!isNaN(value)) {
+                    total += value;
+                    count++;
+                    
+                    const groupIndex = index % 6;
+                    groupTotals[groupIndex] += value;
+                    groupCounts[groupIndex]++;
+                }
+            });
+            
+            const average = count > 0 ? (total / count).toFixed(2) : 0;
+            
+            let resultHTML = `
+                <h3>👥 模块三评分结果</h3>
+                <p><strong>总分：${total} 分</strong></p>
+                <p><strong>平均分：${average} 分</strong></p>
+                <p><strong>参评项目：${count} 项</strong></p>
+                <div style="margin-top: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px;">
+            `;
+            
+            for (let i = 0; i < 6; i++) {
+                const groupAvg = groupCounts[i] > 0 ? (groupTotals[i] / groupCounts[i]).toFixed(2) : 0;
+                resultHTML += `
+                    <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;">
+                        <strong>第${i+1}小组</strong><br>
+                        总分: ${groupTotals[i]}<br>
+                        平均: ${groupAvg}
+                    </div>
+                `;
+            }
+            
+            resultHTML += '</div>';
+            
+            document.getElementById('result').innerHTML = resultHTML;
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function exportData() {
+            const data = {
+                module: '模块三：乘客事务类应急处置',
+                timestamp: new Date().toLocaleString(),
+                scores: []
+            };
+            
+            const inputs = document.querySelectorAll('.score-input');
+            const rows = document.querySelectorAll('.scoring-table tbody tr');
+            
+            rows.forEach((row, rowIndex) => {
+                const rowData = {
+                    item: row.cells[0].textContent,
+                    scores: []
+                };
+                
+                for (let i = 1; i <= 6; i++) {
+                    const input = row.cells[i].querySelector('.score-input');
+                    rowData.scores.push(input.value || 0);
+                }
+                
+                data.scores.push(rowData);
+            });
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '模块三评分数据_' + new Date().toISOString().slice(0, 10) + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function printReport() {
+            window.print();
+        }
+
+        function resetData() {
+            if (confirm('确定要重置所有评分数据吗？')) {
+                document.querySelectorAll('.score-input').forEach(input => {
+                    input.value = '';
+                });
+                document.getElementById('result').style.display = 'none';
+            }
+        }
+
+        // 输入验证
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('score-input')) {
+                const value = parseFloat(e.target.value);
+                const max = parseFloat(e.target.getAttribute('max')) || 100;
+                const min = parseFloat(e.target.getAttribute('min')) || 0;
+                
+                if (value > max) e.target.value = max;
+                if (value < min) e.target.value = min;
+            }
+        });
+
+        // 页面加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const table = document.querySelector('.scoring-table');
+            table.style.opacity = '0';
+            table.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                table.style.transition = 'all 0.5s ease';
+                table.style.opacity = '1';
+                table.style.transform = 'translateY(0)';
+            }, 300);
+        });
+    </script>
+</body>
+</html>

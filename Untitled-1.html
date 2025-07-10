@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>城市轨道交通应急处置综合评价系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+
+        .main-sections {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .rescue-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .modules-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .module-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .module-btn:nth-child(1) { background: linear-gradient(45deg, #FF6B6B, #FF8E53); }
+        .module-btn:nth-child(2) { background: linear-gradient(45deg, #4ECDC4, #44A08D); }
+        .module-btn:nth-child(3) { background: linear-gradient(45deg, #45B7D1, #96C93D); }
+        .module-btn:nth-child(4) { background: linear-gradient(45deg, #F093FB, #F5576C); }
+
+        .module-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .module-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .module-content {
+            display: none;
+        }
+
+        .module-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tasks-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .task-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .task-btn:nth-child(1) { background: linear-gradient(45deg, #667eea, #764ba2); }
+        .task-btn:nth-child(2) { background: linear-gradient(45deg, #f093fb, #f5576c); }
+        .task-btn:nth-child(3) { background: linear-gradient(45deg, #4facfe, #00f2fe); }
+        .task-btn:nth-child(4) { background: linear-gradient(45deg, #43e97b, #38f9d7); }
+
+        .task-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .task-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .scoring-container {
+            display: none;
+        }
+
+        .scoring-container.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .scoring-section {
+            margin-bottom: 30px;
+        }
+
+        .scoring-title {
+            font-size: 1.3em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .scoring-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .scoring-table th {
+            background: linear-gradient(45deg, #2d3436, #636e72);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .scoring-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .scoring-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .scoring-table tr:hover {
+            background-color: #e3f2fd;
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+
+        .score-input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .score-input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+            outline: none;
+        }
+
+        .group-1 { background-color: #ffebee; }
+        .group-2 { background-color: #e8f5e8; }
+        .group-3 { background-color: #e3f2fd; }
+        .group-4 { background-color: #fff3e0; }
+        .group-5 { background-color: #f3e5f5; }
+        .group-6 { background-color: #e0f2f1; }
+        .group-7 { background-color: #fce4ec; }
+
+        .individual-scoring {
+            margin-top: 20px;
+        }
+
+        .individual-title {
+            font-size: 1.2em;
+            color: #e74c3c;
+            margin-bottom: 10px;
+            padding: 8px;
+            background: linear-gradient(45deg, #fd79a8, #e84393);
+            color: white;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .video-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .video-item {
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .video-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(45deg, #0984e3, #74b9ff);
+        }
+
+        .video-player {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .video-player video {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-upload {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 2px dashed #ddd;
+        }
+
+        .video-upload input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-display {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(45deg, #a29bfe, #6c5ce7);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .main-sections {
+                grid-template-columns: 1fr;
+            }
+            
+            .modules-nav {
+                flex-direction: column;
+            }
+            
+            .tasks-nav {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚇 城市轨道交通应急处置综合评价系统</h1>
+            <p>专业的应急处置能力评估与培训平台</p>
+        </div>
+
+        <div class="main-sections">
+            <!-- 救援小组评分部分 -->
+            <div class="rescue-section">
+                <h2 class="section-title">📊 救援小组评分系统</h2>
+                
+                <div class="modules-nav">
+                    <button class="module-btn active" onclick="showModule(1)">模块一：环境变化类应急处置</button>
+                    <button class="module-btn" onclick="showModule(2)">模块二：设备故障类应急处置</button>
+                    <button class="module-btn" onclick="showModule(3)">模块三：乘客事务类应急处置</button>
+                    <button class="module-btn" onclick="showModule(4)">模块四：综合应急处置</button>
+                </div>
+
+                <!-- 模块一到三的内容 -->
+                <div id="module1" class="module-content active">
+                    <div class="scoring-section">
+                        <div class="scoring-title">🌡️ 环境变化类应急处置评分</div>
+                        <table class="scoring-table">
+                            <thead>
+                                <tr>
+                                    <th>评价项目</th>
+                                    <th>第一小组</th>
+                                    <th>第二小组</th>
+                                    <th>第三小组</th>
+                                    <th>第四小组</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>应急响应速度</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>环境评估准确性</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>处置方案合理性</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>团队协作能力</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>安全防护措施</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="calculate-btn" onclick="calculateModuleScore(1)">计算模块一总分</button>
+                        <div id="module1-result" class="result-display" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div id="module2" class="module-content">
+                    <div class="scoring-section">
+                        <div class="scoring-title">⚙️ 设备故障类应急处置评分</div>
+                        <table class="scoring-table">
+                            <thead>
+                                <tr>
+                                    <th>评价项目</th>
+                                    <th>第一小组</th>
+                                    <th>第二小组</th>
+                                    <th>第三小组</th>
+                                    <th>第四小组</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>故障诊断能力</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>维修技术水平</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>应急预案执行</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>设备恢复效率</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>工具使用熟练度</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="calculate-btn" onclick="calculateModuleScore(2)">计算模块二总分</button>
+                        <div id="module2-result" class="result-display" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div id="module3" class="module-content">
+                    <div class="scoring-section">
+                        <div class="scoring-title">👥 乘客事务类应急处置评分</div>
+                        <table class="scoring-table">
+                            <thead>
+                                <tr>
+                                    <th>评价项目</th>
+                                    <th>第一小组</th>
+                                    <th>第二小组</th>
+                                    <th>第三小组</th>
+                                    <th>第四小组</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>乘客疏导能力</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>沟通协调技巧</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>应急医疗处理</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>秩序维护能力</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>信息传达准确性</strong></td>
+                                    <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="calculate-btn" onclick="calculateModuleScore(3)">计算模块三总分</button>
+                        <div id="module3-result" class="result-display" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- 模块四：综合应急处置 -->
+                <div id="module4" class="module-content">
+                    <div class="tasks-nav">
+                        <button class="task-btn active" onclick="showTask(1)">任务一：外物侵限下列车故障救援</button>
+                        <button class="task-btn" onclick="showTask(2)">任务二：列车区间火灾下站线联动</button>
+                        <button class="task-btn" onclick="showTask(3)">任务三：多设备故障时乘客突发疾病</button>
+                        <button class="task-btn" onclick="showTask(4)">任务四：CBTC故障与ATO失效下行车组织</button>
+                    </div>
+
+                    <!-- 任务一：4个小组 -->
+                    <div id="task1" class="scoring-container active">
+                        <div class="scoring-section">
+                            <div class="scoring-title">🚨 任务一：外物侵限下列车故障救援应急处置</div>
+                            <table class="scoring-table">
+                                <thead>
+                                    <tr>
+                                        <th>评价项目</th>
+                                        <th>第一小组</th>
+                                        <th>第二小组</th>
+                                        <th>第三小组</th>
+                                        <th>第四小组</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>现场勘查能力</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>风险评估准确性</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>救援方案制定</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>执行效率</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>安全防护措施</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>协调配合能力</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="individual-scoring">
+                                <div class="individual-title">👤 个人评分</div>
+                                <table class="scoring-table">
+                                    <thead>
+                                        <tr>
+                                            <th>评价项目</th>
+                                            <th>王树宇</th>
+                                            <th>董壮</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>个人技能水平</strong></td>
+                                            <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                            <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>应急反应能力</strong></td>
+                                            <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                            <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>团队协作表现</strong></td>
+                                            <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                            <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>创新解决方案</strong></td>
+                                            <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                            <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <button class="calculate-btn" onclick="calculateTaskScore(1)">计算任务一总分</button>
+                            <div id="task1-result" class="result-display" style="display: none;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 任务二：3个小组 -->
+                    <div id="task2" class="scoring-container">
+                        <div class="scoring-section">
+                            <div class="scoring-title">🔥 任务二：列车区间火灾下站线联动应急处置</div>
+                            <table class="scoring-table">
+                                <thead>
+                                    <tr>
+                                        <th>评价项目</th>
+                                        <th>第一小组</th>
+                                        <th>第二小组</th>
+                                        <th>第三小组</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>火情判断能力</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>疏散组织能力</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>消防设备使用</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>站线联动协调</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>应急通信保障</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>现场指挥能力</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="individual-scoring">
+                                <div class="individual-title">👤 个人评分</div>
+                                <table class="scoring-table">
+                                    <thead>
+                                        <tr>
+                                            <th>评价项目</th>
+                                            <th>王树宇</th>
+                                            <th>董壮</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>消防技能掌握</strong></td>
+                                            <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                            <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>危机处理能力</strong></td>
+                                            <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                            <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>指挥协调能力</strong></td>
+                                            <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                            <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>心理素质表现</strong></td>
+                                            <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                            <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <button class="calculate-btn" onclick="calculateTaskScore(2)">计算任务二总分</button>
+                            <div id="task2-result" class="result-display" style="display: none;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 任务三：4个小组 -->
+                    <div id="task3" class="scoring-container">
+                        <div class="scoring-section">
+                            <div class="scoring-title">🏥 任务三：多设备故障时乘客突发疾病应急处置</div>
+                            <table class="scoring-table">
+                                <thead>
+                                    <tr>
+                                        <th>评价项目</th>
+                                        <th>第一小组</th>
+                                        <th>第二小组</th>
+                                        <th>第三小组</th>
+                                        <th>第四小组</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>医疗急救技能</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>设备故障处理</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>多任务协调能力</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>优先级判断</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>乘客安抚能力</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>资源调配能力</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="individual-scoring">
+                                <div class="individual-title">👤 个人评分</div>
+                                <table class="scoring-table">
+                                    <thead>
+                                        <tr>
+                                            <th>评价项目</th>
+                                            <th>王树宇</th>
+                                            <th>董壮</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>急救技能水平</strong></td>
+                                            <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                            <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>压力承受能力</strong></td>
+                                            <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                            <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>决策判断能力</strong></td>
+                                            <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                            <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>沟通协调能力</strong></td>
+                                            <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                            <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <button class="calculate-btn" onclick="calculateTaskScore(3)">计算任务三总分</button>
+                            <div id="task3-result" class="result-display" style="display: none;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 任务四：7个小组 -->
+                    <div id="task4" class="scoring-container">
+                        <div class="scoring-section">
+                            <div class="scoring-title">🚄 任务四：CBTC故障与ATO失效下行车组织应急处置</div>
+                            <table class="scoring-table">
+                                <thead>
+                                    <tr>
+                                        <th>评价项目</th>
+                                        <th>第一小组</th>
+                                        <th>第二小组</th>
+                                        <th>第三小组</th>
+                                        <th>第四小组</th>
+                                        <th>第五小组</th>
+                                        <th>第六小组</th>
+                                        <th>第七小组</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>信号系统诊断</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-7"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>行车组织调整</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-7"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>人工驾驶切换</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-7"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>调度指挥能力</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-7"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>安全防护措施</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-7"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>系统恢复能力</strong></td>
+                                        <td class="group-1"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-2"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-3"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-4"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-5"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-6"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                        <td class="group-7"><input type="number" class="score-input" min="0" max="100" placeholder="分数"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="individual-scoring">
+                                <div class="individual-title">👤 个人评分</div>
+                                <table class="scoring-table">
+                                    <thead>
+                                        <tr>
+                                            <th>评价项目</th>
+                                            <th>王树宇</th>
+                                            <th>董壮</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody

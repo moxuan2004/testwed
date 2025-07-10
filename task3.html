@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任务二：火灾下站线联动应急处置</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .scoring-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .scoring-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .scoring-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .scoring-table th {
+            background: linear-gradient(45deg, #5f27cd, #341f97);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .scoring-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .scoring-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .scoring-table tr:hover {
+            background-color: #e8f4fd;
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+
+        .task-subheader {
+            background-color: #e9ecef;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .score-input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .score-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+            outline: none;
+        }
+
+        .group-1 { background-color: #fff5f5 !important; }
+        .group-2 { background-color: #f0fff4 !important; }
+        .group-3 { background-color: #f5f5ff !important; }
+
+        .calculate-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-display {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: none;
+        }
+
+        .individual-section {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .individual-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .individual-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .wang-title {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            color: #2c3e50;
+        }
+
+        .dong-title {
+            background: linear-gradient(45deg, #a8edea, #fed6e3);
+            color: #2c3e50;
+        }
+
+        .individual-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .individual-table th {
+            background: linear-gradient(45deg, #636e72, #2d3436);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .individual-table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .individual-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .function-buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .function-buttons button {
+            background: linear-gradient(45deg, #fd79a8, #fdcb6e);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .function-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .save-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(46, 204, 113, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .save-status.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .save-status.error {
+            background: rgba(231, 76, 60, 0.9);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .individual-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .scoring-table, .individual-table {
+                font-size: 0.9em;
+            }
+            
+            .score-input {
+                width: 60px;
+                padding: 6px;
+            }
+        }
+        </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="saveStatus" class="save-status">💾 数据已自动保存</div>
+    <div class="container">
+        <a href="module4.html" class="back-btn">← 返回模块四</a>
+        
+        <div class="header">
+            <h1>任务二：火灾下站线联动应急处置</h1>
+            <p>评估列车区间火灾情况下站线联动的快速响应、灭火救援、人员疏散等专业技术水平</p>
+        </div>
+
+        <div class="scoring-section">
+            <div class="scoring-title">🔧 小组评分表</div>
+            <table class="scoring-table">
+                <thead>
+                    <tr>
+                        <th>评价项目</th>
+                        <th>第一小组</th>
+                        <th>第二小组</th>
+                        <th>第三小组</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="task-subheader">
+                        <td colspan="4"><strong>站厅火灾应急处置</strong></td>
+                    </tr>
+                    <tr>
+                        <td>基础理论</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>风险预判</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>响应速度</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>设备操作技能</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>信息沟通传递</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>团队协作</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>心理素质</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>服务意识</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr class="task-subheader">
+                        <td colspan="4"><strong>站台火灾应急处置</strong></td>
+                    </tr>
+                    <tr>
+                        <td>基础理论</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>风险预判</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>响应速度</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>设备操作技能</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>信息沟通传递</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>团队协作</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>心理素质</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>服务意识</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr class="task-subheader">
+                        <td colspan="4"><strong>隧道区间火灾应急处置</strong></td>
+                    </tr>
+                    <tr>
+                        <td>基础理论</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>风险预判</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>响应速度</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>设备操作技能</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>信息沟通传递</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>团队协作</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>心理素质</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                    <tr>
+                        <td>服务意识</td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <button class="calculate-btn" onclick="calculateGroupScore()">计算小组总分</button>
+            <div id="groupResult" class="result-display"></div>
+        </div>
+
+        <div class="individual-section">
+            <div class="individual-card">
+                <div class="individual-title wang-title">👨‍💼 王树宇个人评分</div>
+                <table class="individual-table">
+                    <thead>
+                        <tr>
+                            <th>评价项目</th>
+                            <th>得分</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="task-subheader">
+                            <td colspan="2"><strong>站厅火灾应急处置</strong></td>
+                        </tr>
+                        <tr>
+                            <td>基础理论</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>风险预判</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>响应速度</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>设备操作技能</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>信息沟通传递</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>团队协作</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>心理素质</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>服务意识</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr class="task-subheader">
+                            <td colspan="2"><strong>站台火灾应急处置</strong></td>
+                        </tr>
+                        <tr>
+                            <td>基础理论</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>风险预判</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>响应速度</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>设备操作技能</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>信息沟通传递</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>团队协作</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>心理素质</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>服务意识</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr class="task-subheader">
+                            <td colspan="2"><strong>隧道区间火灾应急处置</strong></td>
+                        </tr>
+                        <tr>
+                            <td>基础理论</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>风险预判</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>响应速度</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>设备操作技能</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>信息沟通传递</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>团队协作</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>心理素质</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>服务意识</td>
+                            <td><input type="number" class="score-input wang-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="calculate-btn" onclick="calculateWangScore()">计算王树宇总分</button>
+                <div id="wangResult" class="result-display"></div>
+                <canvas id="wangChart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="individual-card">
+                <div class="individual-title dong-title">👨‍🔧 董壮个人评分</div>
+                <table class="individual-table">
+                    <thead>
+                        <tr>
+                            <th>评价项目</th>
+                            <th>得分</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="task-subheader">
+                            <td colspan="2"><strong>站厅火灾应急处置</strong></td>
+                        </tr>
+                        <tr>
+                            <td>基础理论</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>风险预判</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>响应速度</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>设备操作技能</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>信息沟通传递</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>团队协作</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>心理素质</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>服务意识</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr class="task-subheader">
+                            <td colspan="2"><strong>站台火灾应急处置</strong></td>
+                        </tr>
+                        <tr>
+                            <td>基础理论</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>风险预判</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>响应速度</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>设备操作技能</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>信息沟通传递</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>团队协作</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>心理素质</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>服务意识</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr class="task-subheader">
+                            <td colspan="2"><strong>隧道区间火灾应急处置</strong></td>
+                        </tr>
+                        <tr>
+                            <td>基础理论</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>风险预判</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>响应速度</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>设备操作技能</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>信息沟通传递</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>团队协作</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>心理素质</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                        <tr>
+                            <td>服务意识</td>
+                            <td><input type="number" class="score-input dong-score" min="0" max="100" placeholder="分数"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="calculate-btn" onclick="calculateDongScore()">计算董壮总分</button>
+                <div id="dongResult" class="result-display"></div>
+                <canvas id="dongChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <div class="function-buttons">
+            <button onclick="exportData()">📊 导出评分数据</button>
+            <button onclick="printReport()">🖨️ 打印评分报告</button>
+            <button onclick="resetData()">🔄 重置所有数据</button>
+        </div>
+    </div>
+
+    <script>
+        function calculateGroupScore() {
+            const inputs = document.querySelectorAll('.group-score');
+            let total = 0;
+            let count = 0;
+            let groupTotals = [0, 0, 0];
+            let groupCounts = [0, 0, 0];
+            
+            inputs.forEach((input, index) => {
+                const value = parseFloat(input.value);
+                if (!isNaN(value)) {
+                    total += value;
+                    count++;
+                    
+                    const groupIndex = index % 3;
+                    groupTotals[groupIndex] += value;
+                    groupCounts[groupIndex]++;
+                }
+            });
+            
+            const average = count > 0 ? (total / count).toFixed(2) : 0;
+            
+            let resultHTML = `
+                <h3>🔧 小组评分结果</h3>
+                <p><strong>总分：${total} 分</strong></p>
+                <p><strong>平均分：${average} 分</strong></p>
+                <p><strong>参评项目：${count} 项</strong></p>
+                <div style="margin-top: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+            `;
+            
+            for (let i = 0; i < 3; i++) {
+                const groupAvg = groupCounts[i] > 0 ? (groupTotals[i] / groupCounts[i]).toFixed(2) : 0;
+                resultHTML += `
+                    <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;">
+                        <strong>第${i+1}小组</strong><br>
+                        总分: ${groupTotals[i]}<br>
+                        平均: ${groupAvg}
+                    </div>
+                `;
+            }
+            
+            resultHTML += `</div>
+                <div style="margin-top: 30px;">
+                    <h4 style="text-align: center; margin-bottom: 20px; color: white;">📊 各小组雷达图分析</h4>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 20px;">
+                            <h5 style="text-align: center; margin-bottom: 15px; color: #e74c3c;">第一小组</h5>
+                            <canvas id="group1RadarChart" width="300" height="300"></canvas>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 20px;">
+                            <h5 style="text-align: center; margin-bottom: 15px; color: #3498db;">第二小组</h5>
+                            <canvas id="group2RadarChart" width="300" height="300"></canvas>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 20px;">
+                            <h5 style="text-align: center; margin-bottom: 15px; color: #f39c12;">第三小组</h5>
+                            <canvas id="group3RadarChart" width="300" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>`;
+            
+            document.getElementById('groupResult').innerHTML = resultHTML;
+            document.getElementById('groupResult').style.display = 'block';
+
+            // 生成雷达图数据
+            const groupScores = [[], [], []];
+            const labels = [];
+            
+            // 收集每个评价项目的分数
+            const groupInputs = document.querySelectorAll('.group-score');
+            const itemsPerGroup = groupInputs.length / 3;
+            
+            for (let i = 0; i < itemsPerGroup; i++) {
+                const group1Score = parseFloat(groupInputs[i * 3].value) || 0;
+                const group2Score = parseFloat(groupInputs[i * 3 + 1].value) || 0;
+                const group3Score = parseFloat(groupInputs[i * 3 + 2].value) || 0;
+                
+                groupScores[0].push(group1Score);
+                groupScores[1].push(group2Score);
+                groupScores[2].push(group3Score);
+                
+                // 获取标签
+                const row = groupInputs[i * 3].closest('tr');
+                let label = row.cells[0].textContent;
+                labels.push(label);
+            }
+
+            // 创建三个雷达图
+            const groupNames = ['第一小组', '第二小组', '第三小组'];
+            const groupColors = [
+                { bg: 'rgba(231, 76, 60, 0.2)', border: 'rgba(231, 76, 60, 1)' },
+                { bg: 'rgba(52, 152, 219, 0.2)', border: 'rgba(52, 152, 219, 1)' },
+                { bg: 'rgba(243, 156, 18, 0.2)', border: 'rgba(243, 156, 18, 1)' }
+            ];
+
+            // 销毁之前的图表
+            if (window.group1RadarChart instanceof Chart) window.group1RadarChart.destroy();
+            if (window.group2RadarChart instanceof Chart) window.group2RadarChart.destroy();
+            if (window.group3RadarChart instanceof Chart) window.group3RadarChart.destroy();
+
+            // 延迟创建雷达图，确保DOM元素已经渲染
+            setTimeout(() => {
+                for (let i = 0; i < 3; i++) {
+                    const ctx = document.getElementById(`group${i + 1}RadarChart`)?.getContext('2d');
+                    if (ctx) {
+                        window[`group${i + 1}RadarChart`] = new Chart(ctx, {
+                            type: 'radar',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: groupNames[i],
+                                    data: groupScores[i],
+                                    backgroundColor: groupColors[i].bg,
+                                    borderColor: groupColors[i].border,
+                                    borderWidth: 2,
+                                    pointBackgroundColor: groupColors[i].border,
+                                    pointBorderColor: '#fff',
+                                    pointHoverBackgroundColor: '#fff',
+                                    pointHoverBorderColor: groupColors[i].border
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                scales: {
+                                    r: {
+                                        beginAtZero: true,
+                                        max: 100,
+                                        ticks: {
+                                            stepSize: 20
+                                        },
+                                        grid: {
+                                            color: 'rgba(0, 0, 0, 0.1)'
+                                        },
+                                        angleLines: {
+                                            color: 'rgba(0, 0, 0, 0.1)'
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }, 100);
+        }
+
+        function calculateWangScore() {
+            const inputs = document.querySelectorAll('.wang-score');
+            let total = 0;
+            let count = 0;
+            
+            inputs.forEach(input => {
+                const value = parseFloat(input.value);
+                if (!isNaN(value)) {
+                    total += value;
+                    count++;
+                }
+            });
+            
+            const average = count > 0 ? (total / count).toFixed(2) : 0;
+            
+            document.getElementById('wangResult').innerHTML = `
+                <h3>👨‍💼 王树宇个人评分结果</h3>
+                <p><strong>总分：${total} 分</strong></p>
+                <p><strong>平均分：${average} 分</strong></p>
+                <p><strong>参评项目：${count} 项</strong></p>
+            `;
+            document.getElementById('wangResult').style.display = 'block';
+
+            // 生成图表
+            const wangCtx = document.getElementById('wangChart').getContext('2d');
+            const wangScores = Array.from(document.querySelectorAll('.wang-score')).map(input => parseFloat(input.value) || 0);
+            const wangLabels = Array.from(document.querySelectorAll('.wang-score')).map(input => {
+                let label = input.closest('tr').cells[0].textContent;
+                let currentRow = input.closest('tr');
+                let subheaderRow = currentRow.previousElementSibling;
+                while(subheaderRow && !subheaderRow.classList.contains('task-subheader')) {
+                    subheaderRow = subheaderRow.previousElementSibling;
+                }
+                let subheader = subheaderRow ? subheaderRow.cells[0].textContent : '';
+                return `${subheader} - ${label}`;
+            });
+
+            if (window.wangChart instanceof Chart) {
+                window.wangChart.destroy();
+            }
+            window.wangChart = new Chart(wangCtx, {
+                type: 'line',
+                data: {
+                    labels: wangLabels,
+                    datasets: [{
+                        label: '王树宇个人得分',
+                        data: wangScores,
+                        backgroundColor: 'rgba(255, 154, 158, 0.2)',
+                        borderColor: 'rgba(255, 154, 158, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function calculateDongScore() {
+            const inputs = document.querySelectorAll('.dong-score');
+            let total = 0;
+            let count = 0;
+            
+            inputs.forEach(input => {
+                const value = parseFloat(input.value);
+                if (!isNaN(value)) {
+                    total += value;
+                    count++;
+                }
+            });
+            
+            const average = count > 0 ? (total / count).toFixed(2) : 0;
+            
+            document.getElementById('dongResult').innerHTML = `
+                <h3>👨‍🔧 董壮个人评分结果</h3>
+                <p><strong>总分：${total} 分</strong></p>
+                <p><strong>平均分：${average} 分</strong></p>
+                <p><strong>参评项目：${count} 项</strong></p>
+            `;
+            document.getElementById('dongResult').style.display = 'block';
+
+            // 生成图表
+            const dongCtx = document.getElementById('dongChart').getContext('2d');
+            const dongScores = Array.from(document.querySelectorAll('.dong-score')).map(input => parseFloat(input.value) || 0);
+            const dongLabels = Array.from(document.querySelectorAll('.dong-score')).map(input => {
+                let label = input.closest('tr').cells[0].textContent;
+                let currentRow = input.closest('tr');
+                let subheaderRow = currentRow.previousElementSibling;
+                while(subheaderRow && !subheaderRow.classList.contains('task-subheader')) {
+                    subheaderRow = subheaderRow.previousElementSibling;
+                }
+                let subheader = subheaderRow ? subheaderRow.cells[0].textContent : '';
+                return `${subheader} - ${label}`;
+            });
+
+            if (window.dongChart instanceof Chart) {
+                window.dongChart.destroy();
+            }
+            window.dongChart = new Chart(dongCtx, {
+                type: 'line',
+                data: {
+                    labels: dongLabels,
+                    datasets: [{
+                        label: '董壮个人得分',
+                        data: dongScores,
+                        backgroundColor: 'rgba(168, 237, 234, 0.2)',
+                        borderColor: 'rgba(168, 237, 234, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function exportData() {
+            const data = {
+                task: '任务二：火灾下站线联动应急处置',
+                timestamp: new Date().toLocaleString(),
+                groupScores: [],
+                individualScores: {
+                    wang: [],
+                    dong: []
+                }
+            };
+            
+            // 收集小组评分数据
+            const groupRows = document.querySelectorAll('.scoring-table tbody tr');
+            groupRows.forEach(row => {
+                const rowData = {
+                    item: row.cells[0].textContent,
+                    scores: []
+                };
+                
+                for (let i = 1; i <= 3; i++) {
+                    const input = row.cells[i].querySelector('.group-score');
+                    rowData.scores.push(input.value || 0);
+                }
+                
+                data.groupScores.push(rowData);
+            });
+            
+            // 收集王树宇个人评分数据
+            const wangRows = document.querySelectorAll('.individual-card:first-child .individual-table tbody tr');
+            wangRows.forEach(row => {
+                data.individualScores.wang.push({
+                    item: row.cells[0].textContent,
+                    score: row.cells[1].querySelector('.wang-score').value || 0
+                });
+            });
+            
+            // 收集董壮个人评分数据
+            const dongRows = document.querySelectorAll('.individual-card:last-child .individual-table tbody tr');
+            dongRows.forEach(row => {
+                data.individualScores.dong.push({
+                    item: row.cells[0].textContent,
+                    score: row.cells[1].querySelector('.dong-score').value || 0
+                });
+            });
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '任务二_火灾下站线联动应急处置_评分数据_' + new Date().toISOString().slice(0, 10) + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function printReport() {
+            window.print();
+        }
+
+        function resetData() {
+            if (confirm('确定要重置所有评分数据吗？这将清除所有已保存的分数！')) {
+                document.querySelectorAll('.score-input').forEach(input => {
+                    input.value = '';
+                });
+                document.querySelectorAll('.result-display').forEach(result => {
+                    result.style.display = 'none';
+                });
+                // 清除本地存储的数据
+                localStorage.removeItem('task3_scores_专业二');
+                showSaveStatus('🗑️ 所有数据已重置并清除！', false);
+            }
+        }
+
+        // 输入验证
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('score-input')) {
+                const value = parseFloat(e.target.value);
+                const max = parseFloat(e.target.getAttribute('max')) || 100;
+                const min = parseFloat(e.target.getAttribute('min')) || 0;
+                
+                if (value > max) e.target.value = max;
+                if (value < min) e.target.value = min;
+            }
+        });
+
+        // 数据保存和加载功能
+        function saveData() {
+            try {
+                const data = {
+                    groupScores: [],
+                    wangScores: [],
+                    dongScores: [],
+                    timestamp: new Date().toISOString()
+                };
+                
+                // 保存小组评分数据
+                document.querySelectorAll('.group-score').forEach((input, index) => {
+                    data.groupScores[index] = input.value;
+                });
+                
+                // 保存王树宇个人评分数据
+                document.querySelectorAll('.wang-score').forEach((input, index) => {
+                    data.wangScores[index] = input.value;
+                });
+                
+                // 保存董壮个人评分数据
+                document.querySelectorAll('.dong-score').forEach((input, index) => {
+                    data.dongScores[index] = input.value;
+                });
+                
+                localStorage.setItem('task3_scores_专业二', JSON.stringify(data));
+                showSaveStatus('💾 数据已自动保存', false);
+            } catch (e) {
+                console.error('保存数据时出错：', e);
+                showSaveStatus('❌ 保存失败', true);
+            }
+        }
+        
+        function showSaveStatus(message, isError = false) {
+            const statusElement = document.getElementById('saveStatus');
+            statusElement.textContent = message;
+            statusElement.className = 'save-status show' + (isError ? ' error' : '');
+            
+            // 3秒后隐藏状态提示
+            setTimeout(() => {
+                statusElement.classList.remove('show');
+            }, 3000);
+        }
+        
+        function loadData() {
+            const savedData = localStorage.getItem('task3_scores_专业二');
+            if (savedData) {
+                try {
+                    const data = JSON.parse(savedData);
+                    
+                    // 恢复小组评分数据
+                    if (data.groupScores) {
+                        document.querySelectorAll('.group-score').forEach((input, index) => {
+                            if (data.groupScores[index]) {
+                                input.value = data.groupScores[index];
+                            }
+                        });
+                    }
+                    
+                    // 恢复王树宇个人评分数据
+                    if (data.wangScores) {
+                        document.querySelectorAll('.wang-score').forEach((input, index) => {
+                            if (data.wangScores[index]) {
+                                input.value = data.wangScores[index];
+                            }
+                        });
+                    }
+                    
+                    // 恢复董壮个人评分数据
+                    if (data.dongScores) {
+                        document.querySelectorAll('.dong-score').forEach((input, index) => {
+                            if (data.dongScores[index]) {
+                                input.value = data.dongScores[index];
+                            }
+                        });
+                    }
+                    
+                    console.log('数据已从本地存储恢复，保存时间：', data.timestamp);
+                } catch (e) {
+                    console.error('恢复数据时出错：', e);
+                }
+            }
+        }
+        
+        // 自动保存功能
+        function setupAutoSave() {
+            document.querySelectorAll('.score-input').forEach(input => {
+                input.addEventListener('input', function() {
+                    // 延迟保存，避免频繁操作
+                    clearTimeout(window.saveTimeout);
+                    window.saveTimeout = setTimeout(saveData, 500);
+                });
+            });
+        }
+
+        // 页面加载动画和数据恢复
+        document.addEventListener('DOMContentLoaded', function() {
+            // 先加载保存的数据
+            loadData();
+            
+            // 设置自动保存
+            setupAutoSave();
+            
+            // 页面加载动画
+            const sections = document.querySelectorAll('.scoring-section, .individual-card');
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    section.style.transition = 'all 0.5s ease';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>

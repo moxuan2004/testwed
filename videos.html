@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教学视频模块 - 城市轨道交通应急处置综合评价系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .upload-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 30px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #e9ecef;
+        }
+
+        .upload-area.dragover {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        .upload-text {
+            font-size: 1.2em;
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-title {
+            font-size: 1.5em;
+            color: white;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .fire-safety { background: linear-gradient(45deg, #ff6b6b, #ee5a24); }
+        .equipment-maintenance { background: linear-gradient(45deg, #4834d4, #686de0); }
+        .passenger-service { background: linear-gradient(45deg, #00d2d3, #01a3a4); }
+        .emergency-response { background: linear-gradient(45deg, #ff9ff3, #f368e0); }
+        .safety-training { background: linear-gradient(45deg, #feca57, #ff9f43); }
+
+        .video-list {
+            list-style: none;
+        }
+
+        .video-item {
+            background: #f8f9fa;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .video-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .video-item.uploaded {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+
+        .video-item.uploaded:hover {
+            background: #c3e6cb;
+        }
+
+        .video-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .video-description {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+
+        .video-status {
+            float: right;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .status-default {
+            background: #e9ecef;
+            color: #6c757d;
+        }
+
+        .status-uploaded {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .video-player {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .player-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #c82333;
+            transform: scale(1.1);
+        }
+
+        .video-element {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .player-title {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            color: #2c3e50;
+        }
+
+        .no-video-message {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+            font-size: 1.1em;
+        }
+
+        .statistics-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .statistics-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .video-categories {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .player-container {
+                max-width: 95%;
+                max-height: 95%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">← 返回主页</a>
+        
+        <div class="header">
+            <h1>📹 教学视频模块</h1>
+            <p>城市轨道交通应急处置培训视频资源库</p>
+        </div>
+
+        <div class="upload-section">
+            <div class="upload-title">📤 本地视频上传</div>
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-text">拖拽视频文件到此处或点击选择文件</div>
+                <button class="upload-btn" onclick="document.getElementById('videoInput').click()">选择视频文件</button>
+                <input type="file" id="videoInput" class="upload-input" accept="video/*" multiple>
+            </div>
+        </div>
+
+        <div class="video-categories">
+            <div class="category-card">
+                <div class="category-title fire-safety">🔥 消防安全培训</div>
+                <ul class="video-list" id="fireVideos">
+                    <li class="video-item" data-category="fire" data-title="火灾应急疏散程序">
+                        <div class="video-title">火灾应急疏散程序</div>
+                        <div class="video-description">详细介绍地铁火灾时的疏散流程和注意事项</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="fire" data-title="消防设备使用方法">
+                        <div class="video-title">消防设备使用方法</div>
+                        <div class="video-description">灭火器、消防栓等设备的正确使用方法</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="fire" data-title="烟雾处理与通风">
+                        <div class="video-title">烟雾处理与通风</div>
+                        <div class="video-description">火灾烟雾的处理方法和通风系统操作</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="fire" data-title="火灾现场救援">
+                        <div class="video-title">火灾现场救援</div>
+                        <div class="video-description">火灾现场的人员救援和医疗急救</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="category-card">
+                <div class="category-title equipment-maintenance">🔧 设备维护培训</div>
+                <ul class="video-list" id="equipmentVideos">
+                    <li class="video-item" data-category="equipment" data-title="信号系统维护">
+                        <div class="video-title">信号系统维护</div>
+                        <div class="video-description">地铁信号系统的日常维护和故障排除</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="equipment" data-title="电力系统检修">
+                        <div class="video-title">电力系统检修</div>
+                        <div class="video-description">供电系统的检修流程和安全操作</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="equipment" data-title="通风空调维护">
+                        <div class="video-title">通风空调维护</div>
+                        <div class="video-description">地铁通风空调系统的维护保养</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="equipment" data-title="电梯扶梯维修">
+                        <div class="video-title">电梯扶梯维修</div>
+                        <div class="video-description">电梯扶梯的故障诊断和维修技术</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="category-card">
+                <div class="category-title passenger-service">👥 客运服务培训</div>
+                <ul class="video-list" id="passengerVideos">
+                    <li class="video-item" data-category="passenger" data-title="客流疏导技巧">
+                        <div class="video-title">客流疏导技巧</div>
+                        <div class="video-description">高峰期客流疏导的方法和技巧</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="passenger" data-title="特殊乘客服务">
+                        <div class="video-title">特殊乘客服务</div>
+                        <div class="video-description">老人、儿童、残疾人等特殊乘客的服务</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="passenger" data-title="突发事件处理">
+                        <div class="video-title">突发事件处理</div>
+                        <div class="video-description">乘客突发疾病、纠纷等事件的处理</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="passenger" data-title="服务礼仪规范">
+                        <div class="video-title">服务礼仪规范</div>
+                        <div class="video-description">地铁服务人员的礼仪规范和沟通技巧</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="category-card">
+                <div class="category-title emergency-response">🚨 应急响应培训</div>
+                <ul class="video-list" id="emergencyVideos">
+                    <li class="video-item" data-category="emergency" data-title="应急预案演练">
+                        <div class="video-title">应急预案演练</div>
+                        <div class="video-description">各类应急预案的演练流程和要点</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="emergency" data-title="指挥调度协调">
+                        <div class="video-title">指挥调度协调</div>
+                        <div class="video-description">应急状态下的指挥调度和协调配合</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="emergency" data-title="信息传递机制">
+                        <div class="video-title">信息传递机制</div>
+                        <div class="video-description">应急信息的收集、传递和发布机制</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="emergency" data-title="外部协调配合">
+                        <div class="video-title">外部协调配合</div>
+                        <div class="video-description">与公安、消防、医疗等外部单位的协调</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="category-card">
+                <div class="category-title safety-training">⚠️ 安全培训教育</div>
+                <ul class="video-list" id="safetyVideos">
+                    <li class="video-item" data-category="safety" data-title="安全操作规程">
+                        <div class="video-title">安全操作规程</div>
+                        <div class="video-description">各岗位的安全操作规程和注意事项</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="safety" data-title="个人防护装备">
+                        <div class="video-title">个人防护装备</div>
+                        <div class="video-description">个人防护装备的使用和维护</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="safety" data-title="危险源识别">
+                        <div class="video-title">危险源识别</div>
+                        <div class="video-description">工作环境中危险源的识别和防范</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                    <li class="video-item" data-category="safety" data-title="安全意识培养">
+                        <div class="video-title">安全意识培养</div>
+                        <div class="video-description">安全意识的培养和安全文化建设</div>
+                        <span class="video-status status-default">待上传</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="statistics-section">
+            <div class="statistics-title">📊 视频库统计</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalVideos">20</div>
+                    <div class="stat-label">视频总数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="uploadedVideos">0</div>
+                    <div class="stat-label">已上传</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="pendingVideos">20</div>
+                    <div class="stat-label">待上传</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="categories">5</div>
+                    <div class="stat-label">培训分类</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 视频播放器 -->
+    <div class="video-player" id="videoPlayer">
+        <div class="player-container">
+            <button class="close-btn" onclick="closeVideo()">×</button>
+            <div class="player-title" id="playerTitle">视频标题</div>
+            <video class="video-element" id="videoElement" controls>
+                您的浏览器不支持视频播放。
+            </video>
+            <div class="no-video-message" id="noVideoMessage" style="display: none;">
+                该视频尚未上传，请先上传视频文件。
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let uploadedVideos = new Map();
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEventListeners();
+            updateStatistics();
+        });
+
+        function initializeEventListeners() {
+            // 文件上传
+            const videoInput = document.getElementById('videoInput');
+            const uploadArea = document.getElementById('uploadArea');
+
+            videoInput.addEventListener('change', handleFileSelect);
+            
+            // 拖拽上传
+            uploadArea.addEventListener('dragover', handleDragOver);
+            uploadArea.addEventListener('dragleave', handleDragLeave);
+            uploadArea.addEventListener('drop', handleDrop);
+
+            // 视频项点击
+            document.querySelectorAll('.video-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const title = this.dataset.title;
+                    playVideo(title);
+                });
+            });
+        }
+
+        function handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+            processFiles(files);
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(event) {
+            event.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('dragover');
+            
+            const files = Array.from(event.dataTransfer.files).filter(file => 
+                file.type.startsWith('video/')
+            );
+            
+            if (files.length > 0) {
+                processFiles(files);
+            } else {
+                alert('请选择视频文件！');
+            }
+        }
+
+        function processFiles(files) {
+            files.forEach(file => {
+                if (file.type.startsWith('video/')) {
+                    const fileName = file.name.replace(/\.[^/.]+$/, ""); // 移除扩展名
+                    const url = URL.createObjectURL(file);
+                    
+                    // 查找匹配的视频项
+                    const videoItems = document.querySelectorAll('.video-item');
+                    let matched = false;
+                    
+                    videoItems.forEach(item => {
+                        const title = item.dataset.title;
+                        if (fileName.includes(title) || title.includes(fileName)) {
+                            uploadedVideos.set(title, {
+                                url: url,
+                                file: file
+                            });
+                            
+                            // 更新UI
+                            item.classList.add('uploaded');
+                            const statusSpan = item.querySelector('.video-status');
+                            statusSpan.textContent = '已上传';
+                            statusSpan.className = 'video-status status-uploaded';
+                            
+                            matched = true;
+                        }
+                    });
+                    
+                    if (!matched) {
+                        // 如果没有匹配的项，可以创建新的视频项或提示用户
+                        console.log(`未找到匹配的视频项: ${fileName}`);
+                    }
+                }
+            });
+            
+            updateStatistics();
+            
+            // 清空文件输入
+            document.getElementById('videoInput').value = '';
+        }
+
+        function playVideo(title) {
+            const player = document.getElementById('videoPlayer');
+            const playerTitle = document.getElementById('playerTitle');
+            const videoElement = document.getElementById('videoElement');
+            const noVideoMessage = document.getElementById('noVideoMessage');
+            
+            playerTitle.textContent = title;
+            
+            if (uploadedVideos.has(title)) {
+                const videoData = uploadedVideos.get(title);
+                videoElement.src = videoData.url;
+                videoElement.style.display = 'block';
+                noVideoMessage.style.display = 'none';
+            } else {
+                videoElement.style.display = 'none';
+                noVideoMessage.style.display = 'block';
+            }
+            
+            player.style.display = 'flex';
+        }
+
+        function closeVideo() {
+            const player = document.getElementById('videoPlayer');
+            const videoElement = document.getElementById('videoElement');
+            
+            player.style.display = 'none';
+            videoElement.pause();
+            videoElement.src = '';
+        }
+
+        function updateStatistics() {
+            const totalVideos = document.querySelectorAll('.video-item').length;
+            const uploadedCount = uploadedVideos.size;
+            const pendingCount = totalVideos - uploadedCount;
+            
+            document.getElementById('totalVideos').textContent = totalVideos;
+            document.getElementById('uploadedVideos').textContent = uploadedCount;
+            document.getElementById('pendingVideos').textContent = pendingCount;
+        }
+
+        // 页面加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.category-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+
+        // 键盘事件
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeVideo();
+            }
+        });
+    </script>
+</body>
+</html>

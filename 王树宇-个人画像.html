@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>王树宇 - 个人画像</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #7f8c8d;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, #3498db, #9b59b6);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            color: white;
+            font-size: 3em;
+            font-weight: bold;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .stat-item {
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+        }
+
+        .stat-item span {
+            color: #3498db;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .ability-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .ability-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .ability-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .ability-score {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .ability-label {
+            font-size: 1em;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        .radar-canvas {
+            border: 2px solid #ecf0f1;
+            border-radius: 15px;
+            background: #fafafa;
+        }
+
+        .traits-section {
+            margin: 30px 0;
+        }
+
+        .traits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .trait-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid #3498db;
+        }
+
+        .trait-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .trait-desc {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .strengths-weaknesses {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .strengths, .weaknesses {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .strengths {
+            border-left: 5px solid #2ecc71;
+        }
+
+        .weaknesses {
+            border-left: 5px solid #e74c3c;
+        }
+
+        .sw-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .strengths .sw-title {
+            color: #2ecc71;
+        }
+
+        .weaknesses .sw-title {
+            color: #e74c3c;
+        }
+
+        .sw-list {
+            list-style: none;
+        }
+
+        .sw-list li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .strengths .sw-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .weaknesses .sw-list li:before {
+            content: "!";
+            position: absolute;
+            left: 0;
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .rec-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .rec-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .rec-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .rec-item:before {
+            content: "💡";
+            position: absolute;
+            left: 15px;
+            top: 18px;
+            font-size: 1.5em;
+        }
+
+        .career-paths {
+            margin: 30px 0;
+        }
+
+        .career-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .career-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .career-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .career-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #3498db;
+        }
+
+        .career-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .career-desc {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .back-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #3498db;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.5em;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #2980b9;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-avatar {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .strengths-weaknesses {
+                grid-template-columns: 1fr;
+            }
+
+            .rec-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>个人画像分析报告</h1>
+            <p>基于能力图谱和学习表现的综合评估</p>
+        </div>
+
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar">王</div>
+                <div class="profile-info">
+                    <h2 class="profile-name">王树宇</h2>
+                    <div class="profile-stats">
+                        <div class="stat-item">综合分: <span>375分</span></div>
+                        <div class="stat-item">排名: <span>中上游</span></div>
+                        <div class="stat-item">平均分: <span>93.75分</span></div>
+                    </div>
+                    <p>王树宇同学在各项任务中表现均衡，特别在涉及人员救助的场景中表现优异，具有较强的应急处理能力和人文关怀素养。</p>
+                </div>
+            </div>
+
+            <h3 class="section-title">能力概览</h3>
+            <div class="ability-grid">
+                <div class="ability-card">
+                    <div class="ability-score">93</div>
+                    <div class="ability-label">任务一<br>外物侵限下列车故障救援应急处置</div>
+                </div>
+                <div class="ability-card">
+                    <div class="ability-score">90</div>
+                    <div class="ability-label">任务二<br>列车区间火灾下站线联动应急处置</div>
+                </div>
+                <div class="ability-card">
+                    <div class="ability-score">95</div>
+                    <div class="ability-label">任务三<br>多信号设备故障综合应急处置</div>
+                </div>
+                <div class="ability-card">
+                    <div class="ability-score">97</div>
+                    <div class="ability-label">任务四<br>多设备故障时乘客突发疾病应急处置</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="radarCanvas" width="500" height="500" class="radar-canvas"></canvas>
+            </div>
+
+            <h3 class="section-title">性格特质</h3>
+            <div class="traits-grid">
+                <div class="trait-card">
+                    <div class="trait-title">沉稳可靠</div>
+                    <div class="trait-desc">从各项任务的均衡表现可以看出，王树宇做事稳健，不急不躁，能够在各种情况下保持冷静。</div>
+                </div>
+                <div class="trait-card">
+                    <div class="trait-title">责任心强</div>
+                    <div class="trait-desc">在涉及乘客安全的任务中表现尤为突出，显示出较强的责任感和使命感。</div>
+                </div>
+                <div class="trait-card">
+                    <div class="trait-title">细心谨慎</div>
+                    <div class="trait-desc">在技术性任务中表现良好，说明做事认真细致，注重细节，不马虎。</div>
+                </div>
+                <div class="trait-card">
+                    <div class="trait-title">善于沟通</div>
+                    <div class="trait-desc">在处理乘客突发疾病的任务中表现优异，可能具备良好的沟通能力和同理心。</div>
+                </div>
+                <div class="trait-card">
+                    <div class="trait-title">学习能力强</div>
+                    <div class="trait-desc">各项任务均有良好表现，显示出较强的学习适应能力和知识迁移能力。</div>
+                </div>
+            </div>
+
+            <h3 class="section-title">优势与提升空间</h3>
+            <div class="strengths-weaknesses">
+                <div class="strengths">
+                    <div class="sw-title">💪 优势能力</div>
+                    <ul class="sw-list">
+                        <li><strong>应急处理能力突出：</strong>在任务四中得分97分，展现出优秀的应急处理能力。</li>
+                        <li><strong>技术基础扎实：</strong>在任务三中得分95分，显示出对信号设备故障有较好的理解和处理能力。</li>
+                        <li><strong>人文关怀意识强：</strong>在涉及乘客救助的任务中表现优异，体现出较强的人文关怀素养。</li>
+                        <li><strong>学习态度认真：</strong>各项任务均有良好表现，说明学习态度认真，基础知识扎实。</li>
+                        <li><strong>能力分布均衡：</strong>无明显短板，适应性强，可以胜任多种工作场景。</li>
+                    </ul>
+                </div>
+                
+                <div class="weaknesses">
+                    <div class="sw-title">🎯 提升空间</div>
+                    <ul class="sw-list">
+                        <li><strong>任务二相对薄弱：</strong>在列车区间火灾下站线联动应急处置方面得分相对较低，可以进一步加强。</li>
+                        <li><strong>专业深度可提升：</strong>虽然各方面表现均衡，但可以在某一领域进一步深入，形成专业特长。</li>
+                        <li><strong>理论与实践结合：</strong>可以通过更多实战演练，将理论知识更好地应用到实践中。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="recommendations">
+                <div class="rec-title">发展建议</div>
+                <ul class="rec-list">
+                    <li class="rec-item">继续保持在人员救助和应急处置方面的优势，可以进一步深化相关知识和技能</li>
+                    <li class="rec-item">在信号设备故障处理方面进一步深入学习，提升专业技术水平</li>
+                    <li class="rec-item">在保持现有能力的基础上，适当拓展其他相关领域的知识</li>
+                    <li class="rec-item">多参与实战演练，将理论知识更好地应用到实践中</li>
+                    <li class="rec-item">在处理乘客突发事件方面分享经验，帮助其他同学提升相关能力</li>
+                </ul>
+            </div>
+
+            <h3 class="section-title">职业发展方向</h3>
+            <div class="career-grid">
+                <div class="career-card">
+                    <div class="career-icon">🚨</div>
+                    <div class="career-title">应急处置专员</div>
+                    <div class="career-desc">特别是在涉及人员救助的应急场景，可以充分发挥在任务四中表现出的优势。</div>
+                </div>
+                <div class="career-card">
+                    <div class="career-icon">🔧</div>
+                    <div class="career-title">信号设备维护工程师</div>
+                    <div class="career-desc">利用在信号设备故障处理方面的优势，从事设备维护和故障排除工作。</div>
+                </div>
+                <div class="career-card">
+                    <div class="career-icon">👨‍🏫</div>
+                    <div class="career-title">安全培训讲师</div>
+                    <div class="career-desc">可以利用自身均衡的能力结构和实践经验，传授应急处置知识和技能。</div>
+                </div>
+                <div class="career-card">
+                    <div class="career-icon">📊</div>
+                    <div class="career-title">运营管理人员</div>
+                    <div class="career-desc">综合能力强，适合从事运营管理工作，协调各方资源，确保系统安全运行。</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="ability-maps-index.html" class="back-btn">←</a>
+
+    <script>
+        // 绘制雷达图
+        function drawRadarChart() {
+            const canvas = document.getElementById('radarCanvas');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 180;
+            const maxScore = 100;
+            
+            // 学员数据
+            const scores = [93, 90, 95, 97];
+            const labels = ['任务一', '任务二', '任务三', '任务四'];
+            const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12'];
+            
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 绘制背景网格
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 1;
+            
+            // 绘制同心圆
+            for (let i = 1; i <= 5; i++) {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, (radius * i) / 5, 0, 2 * Math.PI);
+                ctx.stroke();
+            }
+            
+            // 绘制轴线和标签
+            ctx.strokeStyle = '#bbb';
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 14px Microsoft YaHei';
+            ctx.textAlign = 'center';
+            
+            for (let i = 0; i < 4; i++) {
+                const angle = (i * Math.PI) / 2 - Math.PI / 2;
+                const x1 = centerX + Math.cos(angle) * radius;
+                const y1 = centerY + Math.sin(angle) * radius;
+                
+                // 绘制轴线
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(x1, y1);
+                ctx.stroke();
+                
+                // 绘制标签
+                const labelX = centerX + Math.cos(angle) * (radius + 30);
+                const labelY = centerY + Math.sin(angle) * (radius + 30);
+                ctx.fillText(labels[i], labelX, labelY + 5);
+                
+                // 绘制分数标签
+                ctx.fillStyle = colors[i];
+                ctx.font = 'bold 16px Microsoft YaHei';
+                const scoreX = centerX + Math.cos(angle) * (radius + 60);
+                const scoreY = centerY + Math.sin(angle) * (radius + 60);
+                ctx.fillText(scores[i], scoreX, scoreY + 5);
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = 'bold 14px Microsoft YaHei';
+            }
+            
+            // 绘制数据区域
+            ctx.fillStyle = 'rgba(52, 152, 219, 0.2)';
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 3;
+            
+            ctx.beginPath();
+            for (let i = 0; i < 4; i++) {
+                const angle = (i * Math.PI) / 2 - Math.PI / 2;
+                const score = scores[i];
+                const distance = (score / maxScore) * radius;
+                const x = centerX + Math.cos(angle) * distance;
+                const y = centerY + Math.sin(angle) * distance;
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            
+            // 绘制数据点
+            for (let i = 0; i < 4; i++) {
+                const angle = (i * Math.PI) / 2 - Math.PI / 2;
+                const score = scores[i];
+                const distance = (score / maxScore) * radius;
+                const x = centerX + Math.cos(angle) * distance;
+                const y = centerY + Math.sin(angle) * distance;
+                
+                ctx.fillStyle = colors[i];
+                ctx.beginPath();
+                ctx.arc(x, y, 8, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // 添加白色边框
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+            
+            // 绘制分数刻度
+            ctx.fillStyle = '#7f8c8d';
+            ctx.font = '12px Microsoft YaHei';
+            ctx.textAlign = 'center';
+            
+            for (let i = 1; i <= 5; i++) {
+                const score = (i * 20);
+                const y = centerY - (radius * i) / 5;
+                ctx.fillText(score, centerX - 15, y + 4);
+            }
+        }
+
+        // 页面加载时绘制雷达图
+        document.addEventListener('DOMContentLoaded', function() {
+            drawRadarChart();
+        });
+    </script>
+</body>
+</html>
