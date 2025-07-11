@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔥 火灾应急处置AI分析系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -309,35 +310,13 @@
         
         <div class="main-content">
             <div class="input-section">
-                <h2>📊 分数输入</h2>
-                <div class="score-grid">
-                    <div class="score-item">
-                        <label for="extinguisher-operation">灭火器操作分数</label>
-                        <input type="number" id="extinguisher-operation" min="0" max="100" placeholder="请输入操作分数 (0-100)">
-                    </div>
-                    <div class="score-item">
-                        <label for="extinguisher-voice">灭火器语音分数</label>
-                        <input type="number" id="extinguisher-voice" min="0" max="100" placeholder="请输入语音分数 (0-100)">
-                    </div>
-                    <div class="score-item">
-                        <label for="ventilation-operation">隧道排烟通风操作分数</label>
-                        <input type="number" id="ventilation-operation" min="0" max="100" placeholder="请输入操作分数 (0-100)">
-                    </div>
-                    <div class="score-item">
-                        <label for="ventilation-voice">隧道排烟通风语音分数</label>
-                        <input type="number" id="ventilation-voice" min="0" max="100" placeholder="请输入语音分数 (0-100)">
-                    </div>
-                    <div class="score-item">
-                        <label for="fan-direction">风机转向正确率</label>
-                        <input type="number" id="fan-direction" min="0" max="100" placeholder="请输入正确率 (0-100)">
-                    </div>
-                    <div class="score-item">
-                        <label for="emergency-response">应急响应速度分数</label>
-                        <input type="number" id="emergency-response" min="0" max="100" placeholder="请输入响应速度分数 (0-100)">
-                    </div>
-                </div>
-                <button class="analyze-btn" onclick="analyzePerformance()">🤖 开始AI分析</button>
-            </div>
+                 <h2>🚀 开始分析</h2>
+                 <p style="text-align: center; margin-bottom: 25px; font-size: 1.1em; color: #666;">请先“上传”您的评估文档，然后开始AI智能分析。</p>
+                 <div style="display: flex; justify-content: center; gap: 20px;">
+                     <button class="upload-btn" onclick="simulateUpload()" style="padding: 15px 30px; background: #28a745; color: white; border: none; border-radius: 25px; font-size: 18px; cursor: pointer; transition: all 0.3s;">📄 上传文档</button>
+                     <button id="analyze-btn" class="analyze-btn" onclick="analyzePerformance()" disabled style="padding: 15px 30px; background: #e74c3c; color: white; border: none; border-radius: 25px; font-size: 18px; cursor: not-allowed; transition: all 0.3s; opacity: 0.5;">🤖 开始AI分析</button>
+                 </div>
+             </div>
             
             <div id="analysis-result" class="analysis-section">
                 <div id="loading" class="loading">
@@ -348,8 +327,8 @@
                 <div id="analysis-content" style="display: none;">
                     <h2 class="analysis-title">📋 AI分析报告</h2>
                     
-                    <div class="score-display" id="score-summary">
-                        <!-- 分数汇总将在这里显示 -->
+                    <div style="width: 60%; margin: 0 auto 30px;">
+                        <canvas id="score-chart"></canvas>
                     </div>
                     
                     <div id="weaknesses">
@@ -369,24 +348,39 @@
     </div>
 
     <script>
+        let scoreChart = null; // 用于持有图表实例，方便更新
+
+        function simulateUpload() {
+            const uploadBtn = document.querySelector('.upload-btn');
+            const analyzeBtn = document.getElementById('analyze-btn');
+
+            // 更新上传按钮状态
+            uploadBtn.textContent = '✅ 文档已上传';
+            uploadBtn.disabled = true;
+            uploadBtn.style.background = '#6c757d';
+            uploadBtn.style.cursor = 'not-allowed';
+
+            // 激活分析按钮
+            analyzeBtn.disabled = false;
+            analyzeBtn.style.opacity = '1';
+            analyzeBtn.style.background = 'linear-gradient(45deg, #667eea, #764ba2)';
+            analyzeBtn.style.cursor = 'pointer';
+
+            // 短暂提示
+            alert('文档“演练评估报告.docx”已准备就绪，可以开始分析。');
+        }
+
         function analyzePerformance() {
-            // 获取输入值
+            // 使用预设的模拟分数，以反映特定问题
             const scores = {
-                extinguisherOperation: parseFloat(document.getElementById('extinguisher-operation').value) || 0,
-                extinguisherVoice: parseFloat(document.getElementById('extinguisher-voice').value) || 0,
-                ventilationOperation: parseFloat(document.getElementById('ventilation-operation').value) || 0,
-                ventilationVoice: parseFloat(document.getElementById('ventilation-voice').value) || 0,
-                fanDirection: parseFloat(document.getElementById('fan-direction').value) || 0,
-                emergencyResponse: parseFloat(document.getElementById('emergency-response').value) || 0
+                '应急响应速度': 90,
+                '疏散引导能力': 85,
+                '灭火器操作': 65, // 分数较低，反映使用问题
+                '消防栓使用': 88,
+                '风机启停与正反转': 55, // 分数较低，反映操作问题
+                '团队协作': 92
             };
-            
-            // 验证输入
-            const hasValidInput = Object.values(scores).some(score => score > 0);
-            if (!hasValidInput) {
-                alert('请至少输入一个有效分数！');
-                return;
-            }
-            
+
             // 显示分析区域和加载状态
             const analysisSection = document.getElementById('analysis-result');
             const loading = document.getElementById('loading');
@@ -396,195 +390,125 @@
             loading.style.display = 'block';
             content.style.display = 'none';
             
-            // 模拟AI分析过程
+            // 模拟AI分析延迟
             setTimeout(() => {
                 generateAnalysis(scores);
                 loading.style.display = 'none';
                 content.style.display = 'block';
-            }, 2000);
+            }, 1500);
         }
         
         function generateAnalysis(scores) {
-            // 计算平均分和总体表现
-            const validScores = Object.values(scores).filter(score => score > 0);
-            const averageScore = validScores.reduce((sum, score) => sum + score, 0) / validScores.length;
-            
-            // 生成分数汇总
-            generateScoreSummary(scores, averageScore);
-            
-            // 分析薄弱环节
-            generateWeaknessAnalysis(scores);
-            
-            // 分析优势项目
-            generateStrengthAnalysis(scores);
-            
-            // 生成改进建议
-            generateRecommendations(scores);
+            const analysis = {
+                strengths: [
+                    '应急响应迅速，能够在规定时间内启动应急预案。',
+                    '团队协作紧密，各岗位人员能够有效沟通。',
+                    '消防栓使用基本熟练，能够完成连接并出水。'
+                ],
+                weaknesses: [
+                    '灭火器使用不熟练，存在操作犹豫、喷射位置不准的问题。',
+                    '排烟风机未能根据火势发展正确进行正反转操作，影响了排烟和加压送风效率。'
+                ],
+                recommendations: [
+                    '针对灭火器的使用开展专项培训和实操考核，确保人人过关。',
+                    '加强对智能排烟系统和送风系统的操作培训，特别是风机正反转在不同火情下的应用场景。',
+                    '在下一次演练中，将灭火器使用和风机操作作为重点考核项目。'
+                ]
+            };
+
+            generateRadarChart(scores);
+            generateWeaknessAnalysis(analysis.weaknesses);
+            generateStrengthAnalysis(analysis.strengths);
+            generateRecommendations(analysis.recommendations);
+        }
+
+        function generateRadarChart(scores) {
+            const ctx = document.getElementById('score-chart').getContext('2d');
+            const labels = Object.keys(scores);
+            const data = Object.values(scores);
+
+            if (scoreChart) {
+                scoreChart.destroy(); // 销毁旧图表实例，防止重叠
+            }
+
+            scoreChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '能力得分',
+                        data: data,
+                        backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(102, 126, 234, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(102, 126, 234, 1)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            pointLabels: {
+                                font: {
+                                    size: 14,
+                                    family: 'Microsoft YaHei'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    }
+                }
+            });
         }
         
-        function generateScoreSummary(scores, average) {
-            const summaryDiv = document.getElementById('score-summary');
-            summaryDiv.innerHTML = `
-                <div class="score-badge">
-                    <div class="label">平均分数</div>
-                    <div class="value">${average.toFixed(1)}</div>
-                </div>
-                <div class="score-badge">
-                    <div class="label">灭火器操作</div>
-                    <div class="value">${scores.extinguisherOperation || 'N/A'}</div>
-                </div>
-                <div class="score-badge">
-                    <div class="label">通风系统操作</div>
-                    <div class="value">${scores.ventilationOperation || 'N/A'}</div>
-                </div>
-                <div class="score-badge">
-                    <div class="label">风机转向正确率</div>
-                    <div class="value">${scores.fanDirection || 'N/A'}%</div>
+
+
+        function generateWeaknessAnalysis(weaknesses) {
+            const weaknessDiv = document.getElementById('weaknesses');
+            weaknessDiv.innerHTML = `
+                <div class="weakness-card">
+                    <h3>⚠️ 薄弱环节分析</h3>
+                    <ul>
+                        ${weaknesses.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
                 </div>
             `;
         }
         
-        function generateWeaknessAnalysis(scores) {
-            const weaknessDiv = document.getElementById('weaknesses');
-            let weaknesses = [];
-            
-            // 灭火器操作分析
-            if (scores.extinguisherOperation > 0 && scores.extinguisherOperation < 70) {
-                weaknesses.push({
-                    title: '灭火器操作技能薄弱',
-                    content: `操作分数仅为${scores.extinguisherOperation}分，低于标准要求。主要问题可能包括：操作步骤不熟练、安全距离把握不当、灭火剂使用方法错误、操作时间过长等。`
-                });
-            }
-            
-            // 风机转向分析
-            if (scores.fanDirection > 0 && scores.fanDirection < 80) {
-                weaknesses.push({
-                    title: '隧道排烟通风系统操作错误率高',
-                    content: `风机转向正确率仅为${scores.fanDirection}%，存在较多操作错误。主要问题包括：对风机转向原理理解不足、应急情况下判断失误、操作面板不熟悉、缺乏系统性训练等。`
-                });
-            }
-            
-            // 语音沟通分析
-            if ((scores.extinguisherVoice > 0 && scores.extinguisherVoice < 75) || 
-                (scores.ventilationVoice > 0 && scores.ventilationVoice < 75)) {
-                weaknesses.push({
-                    title: '应急沟通能力需要提升',
-                    content: '语音沟通分数偏低，在紧急情况下的信息传递和指令下达存在问题。需要加强应急沟通技巧训练。'
-                });
-            }
-            
-            // 应急响应分析
-            if (scores.emergencyResponse > 0 && scores.emergencyResponse < 75) {
-                weaknesses.push({
-                    title: '应急响应速度有待改善',
-                    content: `应急响应分数为${scores.emergencyResponse}分，反应速度和决策能力需要提升。建议加强应急预案熟悉度和实战演练。`
-                });
-            }
-            
-            if (weaknesses.length === 0) {
-                weaknesses.push({
-                    title: '暂未发现明显薄弱环节',
-                    content: '根据当前输入的分数，学生在各项技能方面表现良好，建议继续保持并进一步提升。'
-                });
-            }
-            
-            weaknessDiv.innerHTML = weaknesses.map(weakness => `
-                <div class="weakness-card">
-                    <h3>${weakness.title}</h3>
-                    <p>${weakness.content}</p>
-                </div>
-            `).join('');
-        }
-        
-        function generateStrengthAnalysis(scores) {
+        function generateStrengthAnalysis(strengths) {
             const strengthDiv = document.getElementById('strengths');
-            let strengths = [];
-            
-            // 分析优势项目
-            if (scores.extinguisherOperation >= 85) {
-                strengths.push({
-                    title: '灭火器操作技能优秀',
-                    content: `操作分数达到${scores.extinguisherOperation}分，表现优异。操作流程熟练，安全意识强，值得其他学员学习。`
-                });
-            }
-            
-            if (scores.fanDirection >= 90) {
-                strengths.push({
-                    title: '通风系统操作精准',
-                    content: `风机转向正确率高达${scores.fanDirection}%，对系统原理理解透彻，操作准确性极高。`
-                });
-            }
-            
-            if (scores.emergencyResponse >= 85) {
-                strengths.push({
-                    title: '应急响应能力突出',
-                    content: '在紧急情况下能够快速做出正确判断和响应，具备良好的心理素质和专业技能。'
-                });
-            }
-            
-            if ((scores.extinguisherVoice >= 85) || (scores.ventilationVoice >= 85)) {
-                strengths.push({
-                    title: '沟通协调能力强',
-                    content: '语音沟通清晰准确，能够有效传递信息和协调团队行动。'
-                });
-            }
-            
-            if (strengths.length === 0) {
-                strengths.push({
-                    title: '基础技能扎实',
-                    content: '虽然没有特别突出的优势项目，但整体表现稳定，基础技能掌握良好。'
-                });
-            }
-            
-            strengthDiv.innerHTML = strengths.map(strength => `
+            strengthDiv.innerHTML = `
                 <div class="strength-card">
-                    <h3>${strength.title}</h3>
-                    <p>${strength.content}</p>
+                    <h3>✅ 优势项目分析</h3>
+                    <ul>
+                        ${strengths.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
                 </div>
-            `).join('');
+            `;
         }
-        
-        function generateRecommendations(scores) {
+
+        function generateRecommendations(recommendations) {
             const recommendationDiv = document.getElementById('recommendations');
-            let recommendations = [];
-            
-            // 针对薄弱环节的建议
-            if (scores.extinguisherOperation > 0 && scores.extinguisherOperation < 70) {
-                recommendations.push({
-                    title: '灭火器操作技能提升建议',
-                    content: '1. 加强理论学习，熟悉不同类型灭火器的使用方法\n2. 增加实操训练频次，重点练习操作流程\n3. 模拟真实火灾场景进行演练\n4. 学习正确的安全距离和灭火技巧'
-                });
-            }
-            
-            if (scores.fanDirection > 0 && scores.fanDirection < 80) {
-                recommendations.push({
-                    title: '通风系统操作改进方案',
-                    content: '1. 深入学习隧道通风系统工作原理\n2. 熟悉不同火灾场景下的风机控制策略\n3. 加强操作面板使用培训\n4. 进行故障排除和应急处置演练\n5. 建立操作检查清单，减少人为错误'
-                });
-            }
-            
-            // 通用建议
-            recommendations.push({
-                title: '综合能力提升建议',
-                content: '1. 定期参加应急演练，提高实战经验\n2. 加强团队协作和沟通技能训练\n3. 学习最新的消防安全技术和规范\n4. 建立个人技能档案，跟踪进步情况\n5. 与经验丰富的同事交流学习'
-            });
-            
-            recommendationDiv.innerHTML = recommendations.map(rec => `
+            recommendationDiv.innerHTML = `
                 <div class="recommendation-card">
-                    <h3>${rec.title}</h3>
-                    <p style="white-space: pre-line;">${rec.content}</p>
+                    <h3>💡 改进建议</h3>
+                    <ul>
+                        ${recommendations.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
                 </div>
-            `).join('');
+            `;
         }
-        
-        // 输入验证
-        document.querySelectorAll('input[type="number"]').forEach(input => {
-            input.addEventListener('input', function() {
-                const value = parseFloat(this.value);
-                if (value < 0) this.value = 0;
-                if (value > 100) this.value = 100;
-            });
-        });
     </script>
 </body>
 </html>

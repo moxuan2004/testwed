@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚦 信号系统故障AI分析</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #5dade2, #2e86c1);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .analysis-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .analysis-title {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .conclusion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .conclusion-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .conclusion-card.strengths { border-color: #28a745; }
+        .conclusion-card.weaknesses { border-color: #dc3545; }
+        .conclusion-card.recommendations { border-color: #ffc107; }
+
+        .conclusion-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .conclusion-card.strengths h3 { color: #155724; }
+        .conclusion-card.weaknesses h3 { color: #721c24; }
+        .conclusion-card.recommendations h3 { color: #856404; }
+
+        .conclusion-card h3::before {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .conclusion-card.strengths h3::before { content: '✅'; }
+        .conclusion-card.weaknesses h3::before { content: '⚠️'; }
+        .conclusion-card.recommendations h3::before { content: '💡'; }
+
+        .conclusion-card ul {
+            list-style-type: none;
+            padding-left: 5px;
+        }
+
+        .conclusion-card li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.history.back()">← 返回</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🚦 信号系统故障AI分析报告</h1>
+            <p>基于文档智能分析，可视化您的信号故障处置能力</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="input-section" style="padding: 40px; background: #fff; border-radius: 15px; margin-bottom: 30px;">
+                <h2 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">🚀 开始分析</h2>
+                <p style="text-align: center; margin-bottom: 25px; font-size: 1.1em; color: #666;">请先“上传”您的故障报告，然后开始AI智能分析。</p>
+                <div style="display: flex; justify-content: center; gap: 20px;">
+                    <button class="upload-btn" onclick="simulateUpload()" style="padding: 15px 30px; background: #28a745; color: white; border: none; border-radius: 25px; font-size: 18px; cursor: pointer; transition: all 0.3s;">📄 上传文档</button>
+                    <button id="analyze-btn" class="analyze-btn" onclick="analyzePerformance()" disabled style="padding: 15px 30px; background: linear-gradient(45deg, #5dade2, #2e86c1); color: white; border: none; border-radius: 25px; font-size: 18px; cursor: pointer; transition: all 0.3s; opacity: 0.5;">🤖 开始AI分析</button>
+                </div>
+            </div>
+
+            <div id="analysis-results" style="display: none;">
+                <div class="analysis-section">
+                    <h2 class="analysis-title">能力评估柱状图</h2>
+                    <div class="chart-container">
+                        <canvas id="abilityBarChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="analysis-section">
+                    <h2 class="analysis-title">AI分析结论</h2>
+                    <div class="conclusion-grid">
+                        <div class="conclusion-card strengths">
+                            <h3>优势领域</h3>
+                            <ul id="strengths-list"></ul>
+                        </div>
+                        <div class="conclusion-card weaknesses">
+                            <h3>待提升环节</h3>
+                            <ul id="weaknesses-list"></ul>
+                        </div>
+                        <div class="conclusion-card recommendations">
+                            <h3>改进建议</h3>
+                            <ul id="recommendations-list"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chartInstance = null;
+
+        function simulateUpload() {
+            alert('✅ 文档“信号机SJI-23故障报告.pdf”上传成功！');
+            const analyzeBtn = document.getElementById('analyze-btn');
+            analyzeBtn.disabled = false;
+            analyzeBtn.style.opacity = '1';
+            analyzeBtn.style.cursor = 'pointer';
+        }
+
+        function analyzePerformance() {
+            document.getElementById('analysis-results').style.display = 'block';
+
+            // 使用预设的模拟数据
+            const analysisData = {
+                '故障诊断准确性': 90,
+                '应急预案应用': 82,
+                '系统恢复效率': 76,
+                '团队协作': 85,
+                '记录与报告': 95,
+                '通信流程规范性': 88
+            };
+
+            renderChart(analysisData);
+            generateConclusions(analysisData);
+        }
+
+        function renderChart(analysisData) {
+            const labels = Object.keys(analysisData);
+            const scores = Object.values(analysisData);
+            const ctx = document.getElementById('abilityBarChart').getContext('2d');
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '能力得分',
+                        data: scores,
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 159, 64, 0.6)',
+                            'rgba(201, 203, 207, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(201, 203, 207, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: '信号系统故障处置各项能力得分'
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateConclusions(data) {
+            const strengthsList = document.getElementById('strengths-list');
+            const weaknessesList = document.getElementById('weaknesses-list');
+            const recommendationsList = document.getElementById('recommendations-list');
+
+            let strengths = [];
+            let weaknesses = [];
+            let recommendations = [];
+
+            if (data['记录与报告'] >= 90) strengths.push('故障处置后的记录与报告非常详尽和规范，值得表扬。');
+            if (data['故障诊断准确性'] >= 90) strengths.push('故障诊断准确率高，能快速定位问题根源。');
+
+            if (data['系统恢复效率'] < 80) {
+                weaknesses.push('系统恢复效率有待提高，可能影响了线路的正常运营。');
+                recommendations.push('复盘恢复流程，分析延误环节，尝试使用预案模板和自动化脚本缩短恢复时间。');
+            }
+            if (data['应急预案应用'] < 85) {
+                weaknesses.push('应急预案的应用不够灵活，存在照本宣科的情况。');
+                recommendations.push('加强情景模拟训练，培养在不同故障场景下灵活应用和调整预案的能力。');
+            }
+
+            if (strengths.length === 0) strengths.push('各项能力表现均衡，无特别突出的强项。');
+            if (weaknesses.length === 0) weaknesses.push('未发现明显的短板环节，整体表现良好。');
+            if (recommendations.length === 0) recommendations.push('继续保持现有训练水平，关注新技术发展，持续优化处置流程。');
+
+            strengthsList.innerHTML = strengths.map(s => `<li>${s}</li>`).join('');
+            weaknessesList.innerHTML = weaknesses.map(w => `<li>${w}</li>`).join('');
+            recommendationsList.innerHTML = recommendations.map(r => `<li>${r}</li>`).join('');
+        }
+    </script>
+</body>
+</html>
