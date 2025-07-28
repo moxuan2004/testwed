@@ -552,6 +552,7 @@
         </div>
 
         <div class="function-buttons">
+            <button onclick="generateScores()">🎲 生成随机分数</button>
             <button onclick="exportData()">📊 导出评分数据</button>
             <button onclick="printReport()">🖨️ 打印评分报告</button>
             <button onclick="resetData()">🔄 重置所有数据</button>
@@ -559,6 +560,18 @@
     </div>
 
     <script>
+        function generateScores() {
+            const scoreInputs = document.querySelectorAll('.score-input');
+            scoreInputs.forEach(input => {
+                // 生成60到100之间的随机整数
+                input.value = Math.floor(Math.random() * 41) + 60;
+            });
+            // 生成分数后自动计算并更新图表
+            calculateGroupScore1();
+            calculateGroupScore2();
+            saveData();
+        }
+
         function calculateGroupScore1() {
             const inputs = document.querySelectorAll('.group-score-1');
             let total = 0;
@@ -956,32 +969,67 @@
         function loadData() {
             const savedData = localStorage.getItem('task4_scores');
             if (savedData) {
-                const data = JSON.parse(savedData);
-                const inputs = document.querySelectorAll('.score-input');
-                inputs.forEach((input, index) => {
-                    if (data[`input_${index}`]) {
-                        input.value = data[`input_${index}`];
+                try {
+                    const data = JSON.parse(savedData);
+                    if (Object.keys(data).length > 0) {
+                        const inputs = document.querySelectorAll('.score-input');
+                        let dataLoaded = false;
+                        inputs.forEach((input, index) => {
+                            if (data[`input_${index}`]) {
+                                input.value = data[`input_${index}`];
+                                // Trigger input event to run validation and save
+                                input.dispatchEvent(new Event('input'));
+                                dataLoaded = true;
+                            }
+                        });
+
+                        if (dataLoaded) {
+                            // After loading and saving, calculate and draw
+                            calculateGroupScore1();
+                            calculateGroupScore2();
+                            drawFusedRadarCharts();
+                            return; // Exit after successful load
+                        }
                     }
-                });
+                } catch (e) {
+                    console.error("Error parsing or loading data:", e);
+                    localStorage.removeItem('task4_scores');
+                }
             }
+            
+            // If no valid data was loaded, generate new scores.
+            generateScores();
+        }
+
+        function generateScores() {
+            // 清空现有数据
+            localStorage.removeItem('task4_scores');
+            window.groupScores1 = null;
+            window.groupScores2 = null;
+
+            // 生成新的随机分数
+            const inputs = document.querySelectorAll('.score-input');
+            inputs.forEach(input => {
+                // 生成60到100之间的随机整数
+                input.value = Math.floor(Math.random() * 41) + 60;
+                // 手动触发input事件以确保数据被保存和显示
+                const event = new Event('input', { bubbles: true });
+                input.dispatchEvent(event);
+            });
+
+            // 重新计算所有分数并更新图表
+            calculateGroupScore1();
+            calculateGroupScore2();
+            drawFusedRadarCharts();
+
+            // 确保数据被保存到localStorage
+            saveData();
         }
 
         function resetData() {
             if (confirm('确定要重置所有评分数据吗？')) {
-                document.querySelectorAll('.score-input').forEach(input => {
-                    input.value = '';
-                });
-                document.querySelectorAll('.result-display').forEach(result => {
-                    result.style.display = 'none';
-                });
-                // 清空两个评分表的结果显示
-                document.getElementById('groupResult1').style.display = 'none';
-                document.getElementById('groupResult2').style.display = 'none';
-                // 清空localStorage中的数据
-                localStorage.removeItem('task4_scores');
-                // 清空全局变量
-                window.groupScores1 = null;
-                window.groupScores2 = null;
+                // 调用generateScores来处理重置和生成新分数
+                generateScores();
             }
         }
 
@@ -1000,13 +1048,10 @@
             }
         });
 
-        // 页面加载时恢复数据
-        window.addEventListener('load', function() {
-            loadData();
-        });
-
         // 页面加载动画
         document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+
             const sections = document.querySelectorAll('.scoring-section, .individual-card');
             sections.forEach((section, index) => {
                 section.style.opacity = '0';

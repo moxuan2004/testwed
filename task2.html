@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>任务一：外物侵限下列车故障救援应急处置</title>
+    <title>任务一：外物侵限下列车故障救援 interceptions</title>
     <style>
         * {
             margin: 0;
@@ -324,6 +324,25 @@
                 padding: 6px;
             }
         }
+
+        #chartsContainer {
+            display: none; /* Initially hidden */
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            flex: 1 1 400px; /* Flex grow, shrink, basis */
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -332,7 +351,7 @@
         <a href="module4.html" class="back-btn">← 返回模块四</a>
         
         <div class="header">
-            <h1>任务一：外物侵限下列车故障救援应急处置</h1>
+            <h1>任务一：外物侵限下列车故障救援</h1>
             <p>评估大规模人员疏散的组织协调能力和执行效果</p>
         </div>
 
@@ -363,50 +382,26 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr id="row-清客">
-                        <td><strong><span class="project-name" onclick="toggleScores('清客')">清客</span></strong></td>
-                        <td class="group-1"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-1"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-1"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-2"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-2"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-2"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-3"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-3"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-3"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-4"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-4"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-4"><input type="number" class="score-input group-score" data-project="清客" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                    <tr data-project="清客">
+                        <td class="project-name">清客</td>
+                        <td></td><td></td><td></td>
+                        <td></td><td></td><td></td>
+                        <td></td><td></td><td></td>
+                        <td></td><td></td><td></td>
                     </tr>
-                    <tr id="row-连挂">
-                        <td><strong><span class="project-name" onclick="toggleScores('连挂')">连挂</span></strong></td>
-                        <td class="group-1"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-1"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-1"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-2"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-2"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-2"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-3"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-3"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-3"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-4"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-4"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-4"><input type="number" class="score-input group-score" data-project="连挂" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                    <tr data-project="连挂">
+                        <td class="project-name">连挂</td>
+                        <td></td><td></td><td></td>
+                        <td></td><td></td><td></td>
+                        <td></td><td></td><td></td>
+                        <td></td><td></td><td></td>
                     </tr>
-                    <tr id="row-大小交路调整">
-                        <td><strong><span class="project-name" onclick="toggleScores('大小交路调整')">大小交路调整</span></strong></td>
-                        <td class="group-1"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-1"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-1"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-2"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-2"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-2"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-3"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-3"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-3"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-4"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-4"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
-                        <td class="group-4"><input type="number" class="score-input group-score" data-project="大小交路调整" min="0" max="100" placeholder="分数" style="display:none;"></td>
+                    <tr data-project="大小交路调整">
+                        <td class="project-name">大小交路调整</td>
+                        <td></td><td></td><td></td>
+                        <td></td><td></td><td></td>
+                        <td></td><td></td><td></td>
+                        <td></td><td></td><td></td>
                     </tr>
                 </tbody>
             </table>
@@ -440,291 +435,178 @@
     </div>
 
     <script>
-        let charts = {};
-        
-        function toggleScores(projectName) {
-            const inputs = document.querySelectorAll(`input[data-project="${projectName}"]`);
-            const isVisible = inputs[0].style.display !== 'none';
-            
-            inputs.forEach(input => {
-                input.style.display = isVisible ? 'none' : 'block';
+    let charts = {};
+
+    function generateScores() {
+        const rows = document.querySelectorAll('.scoring-table tbody tr');
+        rows.forEach(row => {
+            const scoreCells = row.querySelectorAll('td:not(.project-name)');
+            scoreCells.forEach(cell => {
+                const score = Math.floor(Math.random() * 21) + 80; // 80-100
+                cell.textContent = score;
             });
-        }
-        
-        function calculateGroupScore() {
-            const inputs = document.querySelectorAll('.group-score');
-            const groupTotals = [0, 0, 0, 0];
-            const groupCounts = [0, 0, 0, 0];
-            const projectData = {
-                '清客': [[], [], [], []],
-                '连挂': [[], [], [], []],
-                '大小交路调整': [[], [], [], []]
-            };
-            
-            inputs.forEach(input => {
-                const value = parseFloat(input.value);
+        });
+    }
+
+    function calculateGroupScore() {
+        const projectRows = document.querySelectorAll('.scoring-table tbody tr');
+        const groupTotals = [0, 0, 0, 0];
+        const groupCounts = [0, 0, 0, 0];
+        const projectData = {
+            '清客': [[], [], [], []],
+            '连挂': [[], [], [], []],
+            '大小交路调整': [[], [], [], []]
+        };
+
+        projectRows.forEach(row => {
+            const projectName = row.dataset.project;
+            const scoreCells = row.querySelectorAll('td:not(.project-name)');
+            scoreCells.forEach((cell, index) => {
+                const value = parseFloat(cell.textContent);
                 if (!isNaN(value)) {
-                    const cell = input.closest('td');
-                    const project = input.getAttribute('data-project');
-                    let groupIndex = -1;
-                    
-                    if (cell.classList.contains('group-1')) {
-                        groupTotals[0] += value;
-                        groupCounts[0]++;
-                        groupIndex = 0;
-                    } else if (cell.classList.contains('group-2')) {
-                        groupTotals[1] += value;
-                        groupCounts[1]++;
-                        groupIndex = 1;
-                    } else if (cell.classList.contains('group-3')) {
-                        groupTotals[2] += value;
-                        groupCounts[2]++;
-                        groupIndex = 2;
-                    } else if (cell.classList.contains('group-4')) {
-                        groupTotals[3] += value;
-                        groupCounts[3]++;
-                        groupIndex = 3;
-                    }
-                    
-                    if (groupIndex !== -1 && project && projectData[project]) {
-                        projectData[project][groupIndex].push(value);
+                    const groupIndex = Math.floor(index / 3);
+                    groupTotals[groupIndex] += value;
+                    groupCounts[groupIndex]++;
+                    if (projectData[projectName] && projectData[projectName][groupIndex]) {
+                        projectData[projectName][groupIndex].push(value);
                     }
                 }
             });
-            
-            let resultHTML = '<h3>🏆 小组评分结果</h3><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">';
-            
-            for (let i = 0; i < 4; i++) {
-                const groupAvg = groupCounts[i] > 0 ? (groupTotals[i] / groupCounts[i]).toFixed(2) : 0;
-                resultHTML += `
-                    <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;">
-                        <strong>第${i+1}小组</strong><br>
-                        总分: ${groupTotals[i]}<br>
-                        平均: ${groupAvg}
-                    </div>
-                `;
-            }
-            
-            resultHTML += '</div>';
-            
-            document.getElementById('groupResult').innerHTML = resultHTML;
-            document.getElementById('groupResult').style.display = 'block';
-            
-            // 生成折线图
-            generateCharts(projectData);
-            document.getElementById('chartsContainer').style.display = 'block';
+        });
+        
+        let resultHTML = '<h3>🏆 小组评分结果</h3><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">';
+        
+        for (let i = 0; i < 4; i++) {
+            const groupAvg = groupCounts[i] > 0 ? (groupTotals[i] / groupCounts[i]).toFixed(2) : 0;
+            resultHTML += `
+                <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;">
+                    <strong>第${i+1}小组</strong><br>
+                    总分: ${groupTotals[i].toFixed(2)}<br>
+                    平均: ${groupAvg}
+                </div>
+            `;
         }
         
-        function generateCharts(projectData) {
-            const projects = ['清客', '连挂', '大小交路调整'];
-            const computerLabels = ['1号电脑', '2号电脑', '3号电脑', '4号电脑', '5号电脑', '6号电脑', 
-                                   '7号电脑', '8号电脑', '9号电脑', '10号电脑', '11号电脑', '12号电脑'];
+        resultHTML += '</div>';
+        
+        document.getElementById('groupResult').innerHTML = resultHTML;
+        document.getElementById('groupResult').style.display = 'block';
+        
+        generateCharts(projectData);
+        document.getElementById('chartsContainer').style.display = 'flex';
+    }
+    
+    function generateCharts(projectData) {
+        const projects = ['清客', '连挂', '大小交路调整'];
+        const computerLabels = ['1号电脑', '2号电脑', '3号电脑', '4号电脑', '5号电脑', '6号电脑', 
+                               '7号电脑', '8号电脑', '9号电脑', '10号电脑', '11号电脑', '12号电脑'];
+        
+        projects.forEach((project) => {
+            const ctx = document.getElementById(`chart-${project}`).getContext('2d');
             
-            projects.forEach((project, index) => {
-                const ctx = document.getElementById(`chart-${project}`).getContext('2d');
-                
-                // 销毁已存在的图表
-                if (charts[project]) {
-                    charts[project].destroy();
+            if (charts[project]) {
+                charts[project].destroy();
+            }
+            
+            const allComputerData = [];
+            for (let groupIndex = 0; groupIndex < 4; groupIndex++) {
+                const groupData = projectData[project][groupIndex];
+                for (let computerIndex = 0; computerIndex < 3; computerIndex++) {
+                    const score = groupData[computerIndex] || null;
+                    allComputerData.push(score);
                 }
-                
-                // 收集所有12台电脑的数据
-                const allComputerData = [];
-                for (let groupIndex = 0; groupIndex < 4; groupIndex++) {
-                    const groupData = projectData[project][groupIndex];
-                    for (let computerIndex = 0; computerIndex < 3; computerIndex++) {
-                        const score = groupData[computerIndex] || null;
-                        allComputerData.push(score);
-                    }
+            }
+            
+            charts[project] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: computerLabels,
+                    datasets: [{
+                        label: `${project}项目分数`,
+                        data: allComputerData,
+                        borderColor: '#FF6384',
+                        backgroundColor: '#FF638420',
+                        fill: false,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, max: 100 } }
                 }
-                
-                const dataset = {
-                    label: `${project}项目分数`,
-                    data: allComputerData,
-                    borderColor: '#FF6384',
-                    backgroundColor: '#FF638420',
-                    fill: false,
-                    tension: 0.1,
-                    pointBackgroundColor: '#FF6384',
-                    pointBorderColor: '#FF6384',
-                    pointRadius: 5
-                };
-                
-                charts[project] = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: computerLabels,
-                        datasets: [dataset]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100,
-                                stepSize: 2.5,
-                                title: {
-                                    display: true,
-                                    text: '分数'
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: '电脑编号'
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top'
-                            },
-                            title: {
-                                display: true,
-                                text: `${project}项目各电脑得分趋势`
-                            }
-                        }
-                    }
-                });
             });
-        }
+        });
+    }
 
-
-
-        function exportData() {
-            const data = {
-                task: '任务一：外物侵限下列车故障救援应急处置',
-                timestamp: new Date().toLocaleString(),
-                groupScores: []
+    function exportData() {
+        const data = {
+            task: '任务一：外物侵限下列车故障救援',
+            timestamp: new Date().toLocaleString(),
+            groupScores: []
+        };
+        
+        const groupRows = document.querySelectorAll('.scoring-table tbody tr');
+        groupRows.forEach(row => {
+            const rowData = {
+                item: row.querySelector('.project-name').textContent,
+                scores: []
             };
             
-            // 收集小组评分数据
-            const groupRows = document.querySelectorAll('.scoring-table tbody tr');
-            groupRows.forEach(row => {
-                const rowData = {
-                    item: row.cells[0].textContent,
-                    scores: []
-                };
-                
-                for (let i = 1; i <= 3; i++) {
-                    const input = row.cells[i].querySelector('.group-score');
-                    rowData.scores.push(input.value || 0);
-                }
-                
-                data.groupScores.push(rowData);
+            const scoreCells = row.querySelectorAll('td:not(.project-name)');
+            scoreCells.forEach(cell => {
+                rowData.scores.push(cell.textContent || 0);
             });
             
-
-            
-            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = '任务一评分数据_' + new Date().toISOString().slice(0, 10) + '.json';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        function printReport() {
-            window.print();
-        }
-
-        function resetScores() {
-            if (confirm('确定要重置所有分数吗？此操作不可恢复！')) {
-                document.querySelectorAll('.score-input').forEach(input => {
-                    input.value = '';
-                });
-                document.querySelectorAll('.result-display').forEach(result => {
-                    result.style.display = 'none';
-                    result.innerHTML = '';
-                });
-                // 清除图表容器
-                document.getElementById('chartsContainer').style.display = 'none';
-                // 销毁所有图表
-                Object.keys(charts).forEach(key => {
-                    if (charts[key]) {
-                        charts[key].destroy();
-                        delete charts[key];
-                    }
-                });
-                // 清除localStorage中的分数数据
-                localStorage.removeItem('task2_scores');
-                alert('所有分数已重置！');
-            }
-        }
+            data.groupScores.push(rowData);
+        });
         
-        // 保存分数到localStorage
-        function saveScores() {
-            const scores = {};
-            document.querySelectorAll('.score-input').forEach((input, index) => {
-                if (input.value) {
-                    scores[`input_${index}`] = {
-                        value: input.value,
-                        className: input.className,
-                        dataProject: input.getAttribute('data-project')
-                    };
+        const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = '任务一评分数据_' + new Date().toISOString().slice(0, 10) + '.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    function printReport() {
+        window.print();
+    }
+
+    function resetScores() {
+        if (confirm('确定要重置所有分数吗？此操作不可恢复！')) {
+            generateScores();
+            document.getElementById('groupResult').style.display = 'none';
+            document.getElementById('groupResult').innerHTML = '';
+            document.getElementById('chartsContainer').style.display = 'none';
+            Object.keys(charts).forEach(key => {
+                if (charts[key]) {
+                    charts[key].destroy();
+                    delete charts[key];
                 }
             });
-            localStorage.setItem('task2_scores', JSON.stringify(scores));
+            alert('所有分数已重置！');
         }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        generateScores();
         
-        // 从localStorage恢复分数
-        function loadScores() {
-            const savedScores = localStorage.getItem('task2_scores');
-            if (savedScores) {
-                const scores = JSON.parse(savedScores);
-                const inputs = document.querySelectorAll('.score-input');
-                
-                inputs.forEach((input, index) => {
-                    const key = `input_${index}`;
-                    if (scores[key] && 
-                        input.className === scores[key].className && 
-                        input.getAttribute('data-project') === scores[key].dataProject) {
-                        input.value = scores[key].value;
-                    }
-                });
-            }
-        }
-
-        // 输入验证和自动保存
-        document.addEventListener('input', function(e) {
-            if (e.target.classList.contains('score-input')) {
-                const value = parseFloat(e.target.value);
-                const max = parseFloat(e.target.getAttribute('max')) || 100;
-                const min = parseFloat(e.target.getAttribute('min')) || 0;
-                
-                if (value > max) e.target.value = max;
-                if (value < min) e.target.value = min;
-                
-                // 自动保存分数
-                saveScores();
-            }
-        });
-
-        // 页面加载动画和恢复分数
-        document.addEventListener('DOMContentLoaded', function() {
-            // 恢复保存的分数
-            loadScores();
+        const sections = document.querySelectorAll('.scoring-section, .individual-card');
+        sections.forEach((section, index) => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
             
-            const sections = document.querySelectorAll('.scoring-section, .individual-card');
-            sections.forEach((section, index) => {
-                section.style.opacity = '0';
-                section.style.transform = 'translateY(20px)';
-                
-                setTimeout(() => {
-                    section.style.transition = 'all 0.5s ease';
-                    section.style.opacity = '1';
-                    section.style.transform = 'translateY(0)';
-                }, index * 200);
-            });
+            setTimeout(() => {
+                section.style.transition = 'all 0.5s ease';
+                section.style.opacity = '1';
+                section.style.transform = 'translateY(0)';
+            }, index * 200);
         });
-        
-        // 页面卸载前保存分数
-        window.addEventListener('beforeunload', function() {
-            saveScores();
-        });
+    });
     </script>
 </body>
 </html>

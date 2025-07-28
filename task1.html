@@ -322,8 +322,14 @@
             
             <button class="calculate-btn" onclick="calculateGroupScore()">计算小组总分</button>
             <div id="groupResult" class="result-display"></div>
-            
-            <!-- 柱状图容器 -->
+
+                    <div class="button-container">
+                        <button onclick="generateScores()" class="action-button">生成随机分数</button>
+                        <button onclick="exportData()" class="action-button">导出评分数据</button>
+                        <button onclick="printReport()" class="action-button">打印评分报告</button>
+                        <button onclick="resetData()" class="action-button reset-button">重置所有数据</button>
+                    </div>
+                </div>         <!-- 柱状图容器 -->
             <div id="chartContainer" style="display: none; margin-top: 30px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
                 <h3 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">📊 各任务评分对比图</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; justify-items: center;">
@@ -393,15 +399,15 @@
                                     <td><input type="number" class="score-input wang-score" data-task="1" min="0" max="100" placeholder="分数"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>任务二列车区间火灾下站线联动应急处置</strong></td>
+                                    <td><strong>任务二列车区间火灾下站线联动整治应急处置</strong></td>
                                     <td><input type="number" class="score-input wang-score" data-task="2" min="0" max="100" placeholder="分数"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>任务三多信号设备故障综合应急处置</strong></td>
+                                    <td><strong>任务三多信号设备故障综合整治</strong></td>
                                     <td><input type="number" class="score-input wang-score" data-task="3" min="0" max="100" placeholder="分数"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>任务四多设备故障时乘客突发疾病应急处置</strong></td>
+                                    <td><strong>任务四多设备故障时乘客突发疾病整治</strong></td>
                                     <td><input type="number" class="score-input wang-score" data-task="4" min="0" max="100" placeholder="分数"></td>
                                 </tr>
                             </tbody>
@@ -418,19 +424,19 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><strong>任务一外物侵限下列车故障救援应急处置</strong></td>
+                                    <td><strong>任务一外物侵限下列车故障救援整治应急处置</strong></td>
                                     <td><input type="number" class="score-input dong-score" data-task="1" min="0" max="100" placeholder="分数"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>任务二列车区间火灾下站线联动应急处置</strong></td>
+                                    <td><strong>任务二列车区间火灾下站线联动整治应急处置</strong></td>
                                     <td><input type="number" class="score-input dong-score" data-task="2" min="0" max="100" placeholder="分数"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>任务三多信号设备故障综合应急处置</strong></td>
+                                    <td><strong>任务三多信号设备故障综合整治</strong></td>
                                     <td><input type="number" class="score-input dong-score" data-task="3" min="0" max="100" placeholder="分数"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>任务四多设备故障时乘客突发疾病应急处置</strong></td>
+                                    <td><strong>任务四多设备故障时乘客突发疾病整治</strong></td>
                                     <td><input type="number" class="score-input dong-score" data-task="4" min="0" max="100" placeholder="分数"></td>
                                 </tr>
                             </tbody>
@@ -478,10 +484,10 @@
                     <thead>
                         <tr style="background: #34495e; color: white;">
                             <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">姓名</th>
-                            <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务一外物侵限下列车故障救援应急处置</th>
-                <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务二列车区间火灾下站线联动应急处置</th>
-                <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务三多信号设备故障综合应急处置</th>
-                <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务四多设备故障时乘客突发疾病应急处置</th>
+                            <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务一外物侵限下列车故障救援整治应急处置</th>
+                <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务二列车区间火灾下站线联动整治整治应急处置</th>
+                <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务三多信号设备故障综合整治</th>
+                <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">任务四多设备故障时乘客突发疾病整治</th>
                             <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">综合分</th>
                         </tr>
                     </thead>
@@ -493,6 +499,7 @@
         </div>
 
         <div class="function-buttons">
+            <button onclick="generateScores()">🎲 生成随机分数</button>
             <button onclick="exportData()">📊 导出评分数据</button>
             <button onclick="printReport()">🖨️ 打印评分报告</button>
             <button onclick="resetData()">🔄 重置所有数据</button>
@@ -500,6 +507,17 @@
     </div>
 
     <script>
+        function generateScores() {
+            const scoreInputs = document.querySelectorAll('.score-input');
+            scoreInputs.forEach(input => {
+                // 生成60到100之间的随机整数
+                input.value = Math.floor(Math.random() * 41) + 60;
+            });
+            // 生成分数后自动计算并更新图表
+            calculateGroupScore();
+            generateIndividualCharts();
+        }
+
         function calculateGroupScore() {
             const groupInputs = document.querySelectorAll('.group-score');
             const groupTotals = [0, 0, 0, 0];
@@ -553,9 +571,9 @@
             const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12'];
             const scenarioNames = [
                 '任务一外物侵限下列车故障救援应急处置',
-                '任务二列车区间火灾下站线联动应急处置', 
-                '任务三多信号设备故障综合应急处置',
-                '任务四多设备故障时乘客突发疾病应急处置'
+                '任务二列车区间火灾下站线联动整治应急处置', 
+                '任务三多信号设备故障综合整治',
+                '任务四多设备故障时乘客突发疾病整治'
             ];
             
             chartIds.forEach((chartId, chartIndex) => {
@@ -1065,6 +1083,19 @@
             window.print();
         }
 
+        function generateScores() {
+            const inputs = document.querySelectorAll('.score-input');
+            inputs.forEach(input => {
+                // 生成60到100之间的随机整数
+                input.value = Math.floor(Math.random() * 41) + 60;
+                // 手动触发input事件以确保数据被保存和显示
+                input.dispatchEvent(new Event('input'));
+            });
+            // 重新计算所有分数
+            calculateGroupScore();
+            generateIndividualCharts();
+        }
+
         function resetData() {
             if (confirm('确定要重置所有评分数据吗？此操作不可恢复！')) {
                 document.querySelectorAll('.score-input').forEach(input => {
@@ -1077,6 +1108,8 @@
                 // 清除localStorage中的分数数据
                 localStorage.removeItem('task1_scores');
                 alert('所有分数已重置！');
+                // 重新生成分数
+                generateScores();
             }
         }
 
@@ -1095,13 +1128,20 @@
         function loadScores() {
             const savedScores = localStorage.getItem('task1_scores');
             if (savedScores) {
-                const scores = JSON.parse(savedScores);
-                const inputs = document.querySelectorAll('.score-input');
-                Object.keys(scores).forEach(index => {
-                    if (inputs[index]) {
-                        inputs[index].value = scores[index];
-                    }
-                });
+                try {
+                    const scores = JSON.parse(savedScores);
+                    const inputs = document.querySelectorAll('.score-input');
+                    Object.keys(scores).forEach(index => {
+                        if (inputs[index]) {
+                            inputs[index].value = scores[index];
+                            // 手动触发input事件以确保数据被保存
+                            inputs[index].dispatchEvent(new Event('input'));
+                        }
+                    });
+                } catch (e) {
+                    console.error("Error parsing or loading scores:", e);
+                    localStorage.removeItem('task1_scores');
+                }
             }
         }
 
@@ -1139,6 +1179,26 @@
             
             // 恢复保存的分数
             loadScores();
+            calculateGroupScore();
+            generateIndividualCharts();
+            
+            // 如果没有保存的分数，则生成初始分数
+            let scoresExist = false;
+            const savedScores = localStorage.getItem('task1_scores');
+            if (savedScores) {
+                try {
+                    if (Object.keys(JSON.parse(savedScores)).length > 0) {
+                        scoresExist = true;
+                    }
+                } catch (e) {
+                    console.error("Error parsing saved scores from localStorage:", e);
+                    localStorage.removeItem('task1_scores'); // 清除损坏的数据
+                }
+            }
+
+            if (!scoresExist) {
+                generateScores();
+            }
         });
 
         // 页面卸载前保存分数
