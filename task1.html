@@ -426,24 +426,16 @@
             <!-- 线图区域 -->
             <div style="display: grid; grid-template-columns: 1fr; gap: 30px; margin-bottom: 30px; justify-items: center;">
                 <div style="text-align: center;">
-                    <h4 style="color: #e74c3c; margin-bottom: 15px; font-size: 1.3em;">任务四</h4>
+                    <h4 style="color: #e74c3c; margin-bottom: 15px; font-size: 1.3em;">场景一：照明故障+乘客低血糖</h4>
                     <canvas id="taskChart1" width="1000" height="800"></canvas>
                 </div>
                 <div style="text-align: center;">
-                    <h4 style="color: #3498db; margin-bottom: 15px; font-size: 1.3em;">任务二</h4>
+                    <h4 style="color: #3498db; margin-bottom: 15px; font-size: 1.3em;">场景二：空调停运+紧急制动+心搏骤停</h4>
                     <canvas id="taskChart2" width="1000" height="800"></canvas>
                 </div>
                 <div style="text-align: center;">
-                    <h4 style="color: #2ecc71; margin-bottom: 15px; font-size: 1.3em;">任务三</h4>
-                    <canvas id="taskChart3" width="1000" height="800"></canvas>
-                </div>
-                <div style="text-align: center;">
-                    <h4 style="color: #f39c12; margin-bottom: 15px; font-size: 1.3em;">任务四</h4>
-                    <canvas id="taskChart4" width="1000" height="800"></canvas>
-                </div>
-                <div style="text-align: center;">
                     <h4 style="color: #9b59b6; margin-bottom: 15px; font-size: 1.3em;">综合分</h4>
-                    <canvas id="taskChart5" width="1000" height="800"></canvas>
+                    <canvas id="taskChart3" width="1000" height="800"></canvas>
                 </div>
             </div>
             
@@ -476,11 +468,43 @@
 
     <script>
         function generateScores() {
-            const scoreInputs = document.querySelectorAll('.score-input');
-            scoreInputs.forEach(input => {
-                // 生成60到100之间的随机整数
-                input.value = Math.floor(Math.random() * 41) + 60;
+            // 固定分数，总体在90分左右
+            const fixedScores = {
+                // 小组评分 - 场景一：照明故障+乘客低血糖
+                'group-score-1-1': 92, 'group-score-1-2': 88, 'group-score-1-3': 91, 'group-score-1-4': 89,
+                // 小组评分 - 场景二：空调停运+紧急制动+心搏骤停
+                'group-score-2-1': 90, 'group-score-2-2': 93, 'group-score-2-3': 87, 'group-score-2-4': 91,
+                // 王树宇个人评分
+                'wang-score-1': 91, 'wang-score-2': 89,
+                // 董壮个人评分
+                'dong-score-1': 88, 'dong-score-2': 92
+            };
+            
+            // 设置小组评分
+            const groupInputs = document.querySelectorAll('.group-score');
+            let groupIndex = 0;
+            groupInputs.forEach(input => {
+                const scenarioIndex = Math.floor(groupIndex / 4) + 1;
+                const groupNum = (groupIndex % 4) + 1;
+                const key = `group-score-${scenarioIndex}-${groupNum}`;
+                input.value = fixedScores[key] || 90;
+                groupIndex++;
             });
+            
+            // 设置王树宇评分
+            const wangInputs = document.querySelectorAll('.wang-score');
+            wangInputs.forEach((input, index) => {
+                const key = `wang-score-${index + 1}`;
+                input.value = fixedScores[key] || 90;
+            });
+            
+            // 设置董壮评分
+            const dongInputs = document.querySelectorAll('.dong-score');
+            dongInputs.forEach((input, index) => {
+                const key = `dong-score-${index + 1}`;
+                input.value = fixedScores[key] || 90;
+            });
+            
             // 生成分数后自动计算并更新图表
             calculateGroupScore();
             generateIndividualCharts();
@@ -522,21 +546,21 @@
             // 显示图表容器
             chartContainer.style.display = 'block';
             
-            // 获取每个任务的分数（每行3个分数对应3个任务）
+            // 获取每个场景的分数（每行4个分数对应4个小组）
             const groupInputs = document.querySelectorAll('.group-score');
-            const scenarioScores = [[], [], []]; // 三个任务的分数
+            const scenarioScores = [[], []]; // 两个场景的分数
             
             groupInputs.forEach((input, index) => {
-                const scenarioIndex = Math.floor(index / 4); // 每4个输入框为一个任务
+                const scenarioIndex = Math.floor(index / 4); // 每4个输入框为一个场景
                 const groupIndex = index % 4; // 第几个小组
                 const score = parseFloat(input.value) || 0;
                 if (!scenarioScores[scenarioIndex]) scenarioScores[scenarioIndex] = [];
                 scenarioScores[scenarioIndex][groupIndex] = score;
             });
             
-            // 绘制四个柱状图
-            const chartIds = ['chart1', 'chart2', 'chart3', 'chart4'];
-            const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12'];
+            // 绘制两个柱状图
+            const chartIds = ['chart1', 'chart2'];
+            const colors = ['#e74c3c', '#3498db'];
             const scenarioNames = [
                 '场景一：照明故障+乘客低血糖',
                 '场景二：空调停运+紧急制动+心搏骤停'
@@ -639,8 +663,8 @@
             // 显示图表容器
             document.getElementById('individualChartsContainer').style.display = 'block';
             
-            // 绘制五个图表
-            for (let i = 1; i <= 5; i++) {
+            // 绘制三个图表
+            for (let i = 1; i <= 3; i++) {
                 drawTaskChart(i, luScores, dongScores, luTotal, dongTotal);
             }
             
@@ -661,9 +685,9 @@
             const chartWidth = canvas.width - 2 * padding;
             const chartHeight = canvas.height - padding - bottomPadding;
             
-            // 获取当前任务的数据
+            // 获取当前场景的数据
             let data;
-            if (taskIndex <= 4) {
+            if (taskIndex <= 2) {
                 data = [wangScores[taskIndex - 1], dongScores[taskIndex - 1]];
             } else {
                 data = [wangTotal, dongTotal];
@@ -749,36 +773,36 @@
             });
         }
         
-        // 全体学员数据（固定数据）
+        // 全体学员数据（固定数据，两个场景）
         const allStudentsData = [
-            { name: '蔡苏源', scores: [95, 80, 95, 99], total: 369 },
-            { name: '钱诗雯', scores: [96, 88, 97, 95], total: 376 },
-            { name: '董壮', scores: [94, 89, 96, 97], total: 376 },
-            { name: '耿豪', scores: [94, 94, 98, 98], total: 384 },
-            { name: '曹梦颖', scores: [93, 90, 98, 97], total: 378 },
-            { name: '陈国丹', scores: [95, 92, 97, 96], total: 380 },
-            { name: '陈娜', scores: [92, 89, 98, 97], total: 376 },
-            { name: '韩钟贵', scores: [96, 89, 97, 96], total: 378 },
-            { name: '程思佳', scores: [95, 87, 95, 98], total: 375 },
-            { name: '胡名旺', scores: [95, 93, 98, 97], total: 383 },
-            { name: '程雨瑶', scores: [94, 90, 96, 98], total: 378 },
-            { name: '李捷', scores: [93, 92, 98, 96], total: 379 },
-            { name: '丁梦语', scores: [92, 91, 96, 99], total: 378 },
-            { name: '付青青', scores: [95, 90, 96, 98], total: 379 },
-            { name: '李显阳', scores: [96, 91, 98, 97], total: 382 },
-            { name: '陆俊羽', scores: [94, 88, 98, 96], total: 376 },
-            { name: '李小凡', scores: [93, 87, 98, 97], total: 375 },
-            { name: '年浩', scores: [95, 84, 96, 95], total: 370 },
-            { name: '李卓璇', scores: [96, 86, 97, 98], total: 377 },
-            { name: '蒲发清', scores: [97, 90, 96, 97], total: 380 },
-            { name: '刘欣悦', scores: [94, 85, 98, 96], total: 373 },
-            { name: '刘阳华', scores: [95, 82, 97, 97], total: 371 },
-            { name: '沈长青', scores: [93, 89, 99, 95], total: 376 },
-            { name: '王树宇', scores: [93, 90, 95, 97], total: 375 },
-            { name: '吴良军', scores: [94, 93, 95, 98], total: 380 },
-            { name: '吕科慧', scores: [94, 93, 96, 96], total: 379 },
-            { name: '徐华剑', scores: [96, 92, 98, 95], total: 381 },
-            { name: '潘馨', scores: [96, 95, 100, 98], total: 389 }
+            { name: '蔡苏源', scores: [92, 88], total: 180 },
+            { name: '钱诗雯', scores: [91, 93], total: 184 },
+            { name: '董壮', scores: [88, 92], total: 180 },
+            { name: '耿豪', scores: [94, 89], total: 183 },
+            { name: '曹梦颖', scores: [90, 91], total: 181 },
+            { name: '陈国丹', scores: [93, 87], total: 180 },
+            { name: '陈娜', scores: [89, 92], total: 181 },
+            { name: '韩钟贵', scores: [91, 90], total: 181 },
+            { name: '程思佳', scores: [87, 94], total: 181 },
+            { name: '胡名旺', scores: [92, 89], total: 181 },
+            { name: '程雨瑶', scores: [90, 91], total: 181 },
+            { name: '李捷', scores: [88, 93], total: 181 },
+            { name: '丁梦语', scores: [91, 88], total: 179 },
+            { name: '付青青', scores: [89, 92], total: 181 },
+            { name: '李显阳', scores: [93, 89], total: 182 },
+            { name: '陆俊羽', scores: [91, 89], total: 180 },
+            { name: '李小凡', scores: [88, 91], total: 179 },
+            { name: '年浩', scores: [90, 88], total: 178 },
+            { name: '李卓璇', scores: [92, 90], total: 182 },
+            { name: '蒲发清', scores: [89, 93], total: 182 },
+            { name: '刘欣悦', scores: [87, 91], total: 178 },
+            { name: '刘阳华', scores: [90, 89], total: 179 },
+            { name: '沈长青', scores: [91, 92], total: 183 },
+            { name: '王树宇', scores: [91, 89], total: 180 },
+            { name: '吴良军', scores: [89, 94], total: 183 },
+            { name: '吕科慧', scores: [92, 88], total: 180 },
+            { name: '徐华剑', scores: [90, 91], total: 181 },
+            { name: '潘馨', scores: [94, 93], total: 187 }
         ];
 
         function generateAllStudentsTable() {
@@ -814,8 +838,8 @@
             // 显示图表容器
             document.getElementById('individualChartsContainer').style.display = 'block';
             
-            // 绘制五个图表（包含所有学生）
-            for (let i = 1; i <= 5; i++) {
+            // 绘制三个图表（包含所有学生）
+            for (let i = 1; i <= 3; i++) {
                 drawAllStudentsTaskChart(i);
             }
             
@@ -837,9 +861,9 @@
             const chartWidth = canvas.width - 2 * padding;
             const chartHeight = canvas.height - padding - bottomPadding;
             
-            // 获取当前任务的数据
+            // 获取当前场景的数据
             let taskData = [];
-            if (taskIndex <= 4) {
+            if (taskIndex <= 2) {
                 taskData = allStudentsData.map(student => ({
                     name: student.name,
                     score: student.scores[taskIndex - 1]
@@ -972,8 +996,6 @@
                     <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${student.name}</td>
                     <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${student.scores[0]}</td>
                     <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${student.scores[1]}</td>
-                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${student.scores[2]}</td>
-                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${student.scores[3]}</td>
                     <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: bold; color: #e74c3c;">${student.total}</td>
                 `;
                 
