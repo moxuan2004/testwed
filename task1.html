@@ -79,27 +79,30 @@
 
         .scoring-table {
             width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 30px;
             background: white;
-            border-radius: 10px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
         .scoring-table th {
             background: linear-gradient(45deg, #2d3436, #636e72);
             color: white;
-            padding: 15px;
+            padding: 20px 15px;
             text-align: center;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1.2em;
+            border-bottom: 3px solid #74b9ff;
         }
 
         .scoring-table td {
-            padding: 12px;
+            padding: 18px 15px;
             text-align: center;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: middle;
         }
 
         .scoring-table tr:nth-child(even) {
@@ -113,19 +116,23 @@
         }
 
         .score-input {
-            width: 80px;
-            padding: 8px;
+            width: 90px;
+            padding: 12px 8px;
             border: 2px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
             text-align: center;
-            font-size: 1em;
+            font-size: 1.1em;
+            font-weight: bold;
             transition: all 0.3s ease;
+            background: #f8f9fa;
         }
 
         .score-input:focus {
-            border-color: #e17055;
-            box-shadow: 0 0 10px rgba(225, 112, 85, 0.3);
+            border-color: #74b9ff;
+            box-shadow: 0 0 15px rgba(116, 185, 255, 0.4);
             outline: none;
+            background: white;
+            transform: scale(1.05);
         }
 
         .group-1 { background-color: #ffebee !important; }
@@ -134,17 +141,18 @@
         .group-4 { background-color: #fff3e0 !important; }
 
         .calculate-btn {
-            background: linear-gradient(45deg, #e17055, #d63031);
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1.1em;
+            padding: 18px 40px;
+            border-radius: 30px;
+            font-size: 1.2em;
             font-weight: bold;
             cursor: pointer;
-            margin: 20px auto;
+            margin: 30px auto;
             display: block;
             transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(116, 185, 255, 0.3);
         }
 
         .calculate-btn:hover {
@@ -153,15 +161,17 @@
         }
 
         .result-display {
-            margin-top: 20px;
-            padding: 20px;
-            background: linear-gradient(45deg, #e17055, #d63031);
+            margin: 40px 0;
+            padding: 30px 25px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
             color: white;
-            border-radius: 10px;
+            border-radius: 15px;
             text-align: center;
-            font-size: 1.2em;
+            font-size: 1.4em;
             font-weight: bold;
             display: none;
+            box-shadow: 0 8px 25px rgba(116, 185, 255, 0.3);
+            line-height: 1.6;
         }
 
         .individual-section {
@@ -246,6 +256,43 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
 
+        .button-container {
+            text-align: center;
+            margin: 40px 0;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 8px 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(116, 185, 255, 0.4);
+        }
+
+        .reset-button {
+            background: linear-gradient(135deg, #e17055, #d63031) !important;
+            box-shadow: 0 4px 15px rgba(225, 112, 85, 0.3) !important;
+        }
+
+        .reset-button:hover {
+            box-shadow: 0 8px 25px rgba(225, 112, 85, 0.4) !important;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -276,8 +323,8 @@
             <p>评估设备故障与乘客突发疾病复合情况下的应急响应能力和处置水平</p>
         </div>
 
-        <div class="scoring-section">
-            <div class="scoring-title">🏥 小组评分表</div>
+        <div class="scoring-section" style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); margin-bottom: 30px;">
+            <div class="scoring-title" style="background: linear-gradient(135deg, #74b9ff, #0984e3); color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; text-align: center; font-size: 1.4em; font-weight: bold; box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);">🏥 小组评分表</div>
             <table class="scoring-table">
                 <thead>
                     <tr>
@@ -290,18 +337,18 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>场景一：照明故障+乘客低血糖</strong></td>
-                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
-                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
-                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
-                        <td class="group-4"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td style="padding: 20px; font-size: 1.1em; font-weight: bold; color: #2d3436; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-left: 4px solid #74b9ff;"><strong>🔦 场景一：照明故障+乘客低血糖</strong></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="90"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="90"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="90"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" min="0" max="100" placeholder="90"></td>
                     </tr>
                     <tr>
-                        <td><strong>场景二：空调停运+紧急制动+心搏骤停</strong></td>
-                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
-                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
-                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
-                        <td class="group-4"><input type="number" class="score-input group-score" min="0" max="100" placeholder="分数"></td>
+                        <td style="padding: 20px; font-size: 1.1em; font-weight: bold; color: #2d3436; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-left: 4px solid #e17055;"><strong>❄️ 场景二：空调停运+紧急制动+心搏骤停</strong></td>
+                        <td class="group-1"><input type="number" class="score-input group-score" min="0" max="100" placeholder="90"></td>
+                        <td class="group-2"><input type="number" class="score-input group-score" min="0" max="100" placeholder="90"></td>
+                        <td class="group-3"><input type="number" class="score-input group-score" min="0" max="100" placeholder="90"></td>
+                        <td class="group-4"><input type="number" class="score-input group-score" min="0" max="100" placeholder="90"></td>
                     </tr>
                 </tbody>
             </table>
