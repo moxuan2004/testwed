@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多信号设备故障引发大客流应急处置</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a365d 0%, #2d5aa0 50%, #1a365d 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .top-header {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 20px;
+            font-size: 13px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .breadcrumb {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .breadcrumb a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: white;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            padding: 4px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-tabs {
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            padding: 0 20px;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            font-size: 14px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .nav-tab.active {
+            color: white;
+            border-bottom-color: #00d4aa;
+        }
+
+        .nav-tab:hover {
+            color: white;
+        }
+
+        .main-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .content-main {
+            flex: 1;
+        }
+
+        .course-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            border-left: 3px solid #00d4aa;
+        }
+
+        .course-title {
+            font-size: 20px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .dropdown-arrow {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .post-item {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-left: 3px solid #4a90e2;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin-right: 12px;
+            color: white;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .user-id {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+        }
+
+        .action-btn {
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .action-btn:hover {
+            color: white;
+        }
+
+        .action-btn.delete {
+            color: #ff6b6b;
+        }
+
+        .post-content {
+            margin-bottom: 12px;
+        }
+
+        .post-text {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+        }
+
+        .image-grid.grid-8 {
+            grid-template-columns: repeat(8, 1fr);
+        }
+
+        .image-grid.grid-7 {
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .image-placeholder {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        .sidebar {
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sidebar-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #00d4aa;
+        }
+
+        .participation-section {
+            text-align: center;
+        }
+
+        .progress-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(#00d4aa 0deg 51.4deg, #ff6b6b 51.4deg 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            position: relative;
+        }
+
+        .progress-circle::before {
+            content: '';
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #1a365d 0%, #2d5aa0 100%);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .progress-text {
+            position: relative;
+            z-index: 1;
+            font-size: 16px;
+            font-weight: bold;
+            color: #00d4aa;
+        }
+
+        .participation-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .participation-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+        }
+
+        .leaderboard-list {
+            list-style: none;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank-badge {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ffd700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 10px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .rank-badge.gold { background: #ffd700; }
+        .rank-badge.silver { background: #c0c0c0; }
+        .rank-badge.bronze { background: #cd7f32; }
+        .rank-badge.other { background: #666; color: white; }
+
+        .student-name {
+            flex: 1;
+            font-size: 13px;
+        }
+
+        .student-score {
+            font-size: 12px;
+            color: #00d4aa;
+            font-weight: 500;
+        }
+
+        .floating-toolbar {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .tool-button {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .tool-button:hover {
+            transform: scale(1.05);
+            background: white;
+        }
+
+        .close-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .close-button:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .floating-toolbar {
+                position: static;
+                transform: none;
+                flex-direction: row;
+                justify-content: center;
+                margin: 20px 0;
+                flex-wrap: wrap;
+            }
+
+            .image-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .image-grid.grid-8 {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .image-grid.grid-7 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-header">
+        <div class="breadcrumb">
+            <a href="#">城市轨道交通应急处置</a> > 
+            <a href="#">2020外运营管</a> > 
+            <span>2024-12-27周五的课堂教学</span>
+        </div>
+        <div class="header-actions">
+            <a href="#" class="header-btn">新增活动</a>
+            <a href="#" class="header-btn">如何签到?</a>
+        </div>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="nav-tab">课前 (3)</button>
+        <button class="nav-tab active">课中 (9)</button>
+        <button class="nav-tab">课后 (2)</button>
+    </div>
+
+    <div class="main-container">
+        <div class="content-main">
+            <div class="course-header">
+                <h1 class="course-title">
+                    多信号设备故障引发大客流应急处置
+                    <span class="dropdown-arrow">▼</span>
+                </h1>
+            </div>
+
+            <div class="post-item">
+                <div class="post-header">
+                    <div class="user-avatar">时</div>
+                    <div class="user-info">
+                        <div class="user-name">时亮 2025-08-03 15:19:53</div>
+                        <div class="user-id">2310140123</div>
+                    </div>
+                    <div class="post-actions">
+                        <span class="action-btn">👍 赞(0)</span>
+                        <span class="action-btn">💬 评论(0)</span>
+                        <span class="action-btn">⭐ 打分</span>
+                        <span class="action-btn delete">删除</span>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="post-text">1</div>
+                    <div class="image-grid">
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-item">
+                <div class="post-header">
+                    <div class="user-avatar">沈</div>
+                    <div class="user-info">
+                        <div class="user-name">沈长青 2025-08-03 15:12:57</div>
+                        <div class="user-id">2210090225</div>
+                    </div>
+                    <div class="post-actions">
+                        <span class="action-btn">👍 赞(0)</span>
+                        <span class="action-btn">💬 评论(0)</span>
+                        <span class="action-btn">⭐ 打分</span>
+                        <span class="action-btn delete">删除</span>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="image-grid grid-8">
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-item">
+                <div class="post-header">
+                    <div class="user-avatar">徐</div>
+                    <div class="user-info">
+                        <div class="user-name">徐诗雯 2025-08-03 14:30:08</div>
+                        <div class="user-id">2310140133</div>
+                    </div>
+                    <div class="post-actions">
+                        <span class="action-btn">👍 赞(0)</span>
+                        <span class="action-btn">💬 评论(0)</span>
+                        <span class="action-btn">⭐ 打分</span>
+                        <span class="action-btn delete">删除</span>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="post-text">1</div>
+                    <div class="image-grid grid-7">
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">参与率</h3>
+                <div class="participation-section">
+                    <div class="progress-circle">
+                        <div class="progress-text">14.29%</div>
+                    </div>
+                    <div class="participation-stats">
+                        <span>已参与: 4人</span>
+                        <span>未参与: 24人</span>
+                    </div>
+                    <div class="participation-label">学生参与情况</div>
+                </div>
+            </div>
+
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">排行榜</h3>
+                <ul class="leaderboard-list">
+                    <li class="leaderboard-item">
+                        <div class="rank-badge gold">🏆</div>
+                        <div class="student-name">舒雯雯</div>
+                        <div class="student-score">共计10分</div>
+                    </li>
+                    <li class="leaderboard-item">
+                        <div class="rank-badge silver">🥈</div>
+                        <div class="student-name">徐诗雯</div>
+                        <div class="student-score">共计10分</div>
+                    </li>
+                    <li class="leaderboard-item">
+                        <div class="rank-badge bronze">🥉</div>
+                        <div class="student-name">时亮</div>
+                        <div class="student-score">共计10分</div>
+                    </li>
+                    <li class="leaderboard-item">
+                        <div class="rank-badge other">4</div>
+                        <div class="student-name">沈长青</div>
+                        <div class="student-score">共计10分</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-toolbar">
+        <button class="tool-button" title="课件">📄</button>
+        <button class="tool-button" title="数字教材">📚</button>
+        <button class="tool-button" title="签到">✅</button>
+        <button class="tool-button" title="指向">👆</button>
+        <button class="tool-button" title="讨论">💬</button>
+        <button class="tool-button" title="测验">📝</button>
+        <button class="tool-button" title="作业">📋</button>
+        <button class="tool-button" title="考试">📊</button>
+        <button class="tool-button" title="问卷">📋</button>
+        <button class="tool-button" title="小组PK">🏆</button>
+        <button class="tool-button" title="投票">🗳️</button>
+        <button class="tool-button" title="实践测验">🔬</button>
+        <button class="tool-button" title="小组PK">⚡</button>
+    </div>
+
+    <button class="close-button" title="关闭">✕</button>
+
+    <script>
+        // 标签页切换
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // 点赞功能
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            if (btn.textContent.includes('赞')) {
+                btn.addEventListener('click', function() {
+                    const match = this.textContent.match(/赞\((\d+)\)/);
+                    if (match) {
+                        const count = parseInt(match[1]) + 1;
+                        this.textContent = `👍 赞(${count})`;
+                        this.style.color = '#00d4aa';
+                    }
+                });
+            }
+        });
+
+        // 工具按钮点击效果
+        document.querySelectorAll('.tool-button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.background = '#00d4aa';
+                this.style.color = 'white';
+                setTimeout(() => {
+                    this.style.background = '';
+                    this.style.color = '';
+                }, 200);
+            });
+        });
+
+        // 关闭按钮
+        document.querySelector('.close-button').addEventListener('click', function() {
+            if (confirm('确定要关闭页面吗？')) {
+                window.close();
+            }
+        });
+
+        // 课程标题下拉箭头点击
+        document.querySelector('.dropdown-arrow').addEventListener('click', function() {
+            this.style.transform = this.style.transform === 'rotate(180deg)' ? 'rotate(0deg)' : 'rotate(180deg)';
+        });
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('多信号设备故障引发大客流应急处置 - 页面加载完成');
+        });
+    </script>
+</body>
+</html>

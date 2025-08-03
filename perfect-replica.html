@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>城市轨道交通应急处置 > 2020外运营管 > 2024-12-27信五的课堂教学</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a365d 0%, #2d5aa0 50%, #1a365d 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .top-header {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 20px;
+            font-size: 13px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .breadcrumb {
+            color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .breadcrumb-icon {
+            width: 24px;
+            height: 24px;
+            background: #00d4aa;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+
+        .breadcrumb a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: white;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .header-btn {
+            padding: 6px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .header-btn.primary {
+            background: #00d4aa;
+            border-color: #00d4aa;
+        }
+
+        .nav-tabs {
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            padding: 0 20px;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            font-size: 14px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .nav-tab.active {
+            color: white;
+            border-bottom-color: #00d4aa;
+        }
+
+        .nav-tab:hover {
+            color: white;
+        }
+
+        .main-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .content-main {
+            flex: 1;
+        }
+
+        .course-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .course-title {
+            font-size: 24px;
+            font-weight: 500;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .dropdown-arrow {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .dropdown-arrow:hover {
+            transform: rotate(180deg);
+        }
+
+        .post-item {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #00d4aa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .user-id {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .action-btn.delete {
+            color: #ff6b6b;
+        }
+
+        .post-content {
+            padding: 16px;
+        }
+
+        .post-text {
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+        }
+
+        .image-grid.grid-8 {
+            grid-template-columns: repeat(8, 1fr);
+        }
+
+        .image-grid.grid-7 {
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .image-item {
+            aspect-ratio: 1;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #f0f0f0;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .sidebar {
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sidebar-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: white;
+            text-align: center;
+        }
+
+        .participation-section {
+            text-align: center;
+        }
+
+        .progress-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(#00d4aa 0deg 51.4deg, #ff6b6b 51.4deg 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            position: relative;
+        }
+
+        .progress-circle::before {
+            content: '';
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1a365d 0%, #2d5aa0 100%);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .progress-text {
+            position: relative;
+            z-index: 1;
+            font-size: 18px;
+            font-weight: bold;
+            color: #00d4aa;
+        }
+
+        .participation-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .participation-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+        }
+
+        .leaderboard-list {
+            list-style: none;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank-badge {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ffd700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 12px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .rank-badge.gold { background: #ffd700; }
+        .rank-badge.silver { background: #c0c0c0; }
+        .rank-badge.bronze { background: #cd7f32; }
+        .rank-badge.other { background: #666; color: white; }
+
+        .student-name {
+            flex: 1;
+            font-size: 13px;
+        }
+
+        .student-score {
+            font-size: 12px;
+            color: #00d4aa;
+            font-weight: 500;
+        }
+
+        .floating-toolbar {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .tool-button {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            color: #333;
+        }
+
+        .tool-button:hover {
+            transform: scale(1.05);
+            background: white;
+        }
+
+        .close-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .close-button:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.05);
+        }
+
+        .real-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .floating-toolbar {
+                right: 10px;
+            }
+
+            .close-button {
+                right: 10px;
+                bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-header">
+        <div class="breadcrumb">
+            <div class="breadcrumb-icon">🚇</div>
+            <a href="#">城市轨道交通应急处置</a> > <a href="#">2020外运营管</a> > <span>2024-12-27信五的课堂教学</span>
+        </div>
+        <div class="header-actions">
+            <a href="#" class="header-btn">新增活动</a>
+            <a href="#" class="header-btn primary">如何运营?</a>
+        </div>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="nav-tab">课前 (3)</button>
+        <button class="nav-tab active">课中 (9)</button>
+        <button class="nav-tab">课后 (2)</button>
+    </div>
+
+    <div class="main-container">
+        <div class="content-main">
+            <div class="course-header">
+                <h1 class="course-title">
+                    多信号设备故障引发大客流应急处置
+                    <span class="dropdown-arrow">▼</span>
+                </h1>
+            </div>
+
+            <div class="post-item">
+                <div class="post-header">
+                    <div class="user-avatar">时</div>
+                    <div class="user-info">
+                        <div class="user-name">时亮 2025-08-03 15:19:53</div>
+                        <div class="user-id">2310140123</div>
+                    </div>
+                    <div class="post-actions">
+                        <span class="action-btn">👍 赞(0)</span>
+                        <span class="action-btn">💬 评论(0)</span>
+                        <span class="action-btn">⭐ 打分</span>
+                        <span class="action-btn delete">删除</span>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="post-text">1</div>
+                    <div class="image-grid">
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="30" width="140" height="20" fill="#e9ecef" rx="4"/>
+                                <rect x="30" y="60" width="100" height="15" fill="#6c757d" rx="3"/>
+                                <rect x="30" y="85" width="120" height="15" fill="#6c757d" rx="3"/>
+                                <rect x="30" y="110" width="80" height="15" fill="#6c757d" rx="3"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">文档资料</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <circle cx="60" cy="60" r="15" fill="#007bff"/>
+                                <circle cx="100" cy="80" r="15" fill="#28a745"/>
+                                <circle cx="140" cy="70" r="15" fill="#ffc107"/>
+                                <circle cx="80" cy="100" r="15" fill="#dc3545"/>
+                                <circle cx="120" cy="110" r="15" fill="#6f42c1"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">会议讨论</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="40" y="40" width="30" height="60" fill="#007bff" rx="4"/>
+                                <rect x="80" y="50" width="30" height="50" fill="#28a745" rx="4"/>
+                                <rect x="120" y="45" width="30" height="55" fill="#ffc107" rx="4"/>
+                                <text x="55" y="115" font-family="Arial" font-size="10" fill="#495057" text-anchor="middle">A</text>
+                                <text x="95" y="115" font-family="Arial" font-size="10" fill="#495057" text-anchor="middle">B</text>
+                                <text x="135" y="115" font-family="Arial" font-size="10" fill="#495057" text-anchor="middle">C</text>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">培训现场</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="40" width="140" height="60" fill="#e9ecef" rx="4"/>
+                                <rect x="40" y="50" width="40" height="8" fill="#007bff" rx="2"/>
+                                <rect x="40" y="65" width="60" height="8" fill="#28a745" rx="2"/>
+                                <rect x="40" y="80" width="30" height="8" fill="#ffc107" rx="2"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">应急演练</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="30" width="140" height="80" fill="#007bff" opacity="0.1" rx="4"/>
+                                <circle cx="70" cy="60" r="8" fill="#dc3545"/>
+                                <circle cx="100" cy="70" r="8" fill="#dc3545"/>
+                                <circle cx="130" cy="80" r="8" fill="#dc3545"/>
+                                <rect x="40" y="90" width="120" height="4" fill="#28a745" rx="2"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">监控画面</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="40" width="140" height="60" fill="#e9ecef" rx="4"/>
+                                <rect x="40" y="50" width="50" height="12" fill="#007bff" rx="2"/>
+                                <rect x="40" y="70" width="80" height="12" fill="#28a745" rx="2"/>
+                                <rect x="40" y="90" width="60" height="12" fill="#ffc107" rx="2"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">客流分析</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-item">
+                <div class="post-header">
+                    <div class="user-avatar">沈</div>
+                    <div class="user-info">
+                        <div class="user-name">沈长青 2025-08-03 15:12:57</div>
+                        <div class="user-id">2210090225</div>
+                    </div>
+                    <div class="post-actions">
+                        <span class="action-btn">👍 赞(0)</span>
+                        <span class="action-btn">💬 评论(0)</span>
+                        <span class="action-btn">⭐ 打分</span>
+                        <span class="action-btn delete">删除</span>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="image-grid grid-8">
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="30" width="140" height="80" fill="#007bff" opacity="0.2" rx="4"/>
+                                <circle cx="60" cy="60" r="6" fill="#007bff"/>
+                                <circle cx="90" cy="70" r="6" fill="#007bff"/>
+                                <circle cx="120" cy="65" r="6" fill="#007bff"/>
+                                <circle cx="150" cy="75" r="6" fill="#007bff"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">控制中心</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="40" width="140" height="60" fill="#e9ecef" rx="4"/>
+                                <rect x="40" y="50" width="30" height="40" fill="#007bff" rx="2"/>
+                                <rect x="80" y="60" width="30" height="30" fill="#28a745" rx="2"/>
+                                <rect x="120" y="55" width="30" height="35" fill="#ffc107" rx="2"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">设备状态</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="30" width="140" height="80" fill="#e9ecef" rx="4"/>
+                                <rect x="40" y="40" width="120" height="8" fill="#007bff" rx="2"/>
+                                <rect x="40" y="55" width="100" height="8" fill="#28a745" rx="2"/>
+                                <rect x="40" y="70" width="80" height="8" fill="#ffc107" rx="2"/>
+                                <rect x="40" y="85" width="110" height="8" fill="#dc3545" rx="2"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">信号系统</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="40" width="140" height="60" fill="#e9ecef" rx="4"/>
+                                <circle cx="70" cy="70" r="12" fill="#007bff"/>
+                                <circle cx="130" cy="70" r="12" fill="#dc3545"/>
+                                <line x1="82" y1="70" x2="118" y2="70" stroke="#6c757d" stroke-width="2"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">故障检测</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="30" width="140" height="20" fill="#e9ecef" rx="4"/>
+                                <rect x="30" y="60" width="100" height="15" fill="#6c757d" rx="3"/>
+                                <rect x="30" y="85" width="120" height="15" fill="#6c757d" rx="3"/>
+                                <rect x="30" y="110" width="80" height="15" fill="#6c757d" rx="3"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">应急预案</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="40" width="140" height="60" fill="#e9ecef" rx="4"/>
+                                <circle cx="60" cy="60" r="8" fill="#007bff"/>
+                                <circle cx="100" cy="70" r="8" fill="#28a745"/>
+                                <circle cx="140" cy="80" r="8" fill="#ffc107"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">人员疏散</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="40" width="140" height="60" fill="#e9ecef" rx="4"/>
+                                <circle cx="70" cy="60" r="10" fill="#007bff"/>
+                                <circle cx="130" cy="80" r="10" fill="#28a745"/>
+                                <rect x="40" y="85" width="120" height="8" fill="#ffc107" rx="2"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">站台管理</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="40" width="140" height="60" fill="#e9ecef" rx="4"/>
+                                <rect x="40" y="50" width="40" height="12" fill="#007bff" rx="2"/>
+                                <rect x="40" y="70" width="60" height="12" fill="#28a745" rx="2"/>
+                                <rect x="40" y="90" width="50" height="12" fill="#ffc107" rx="2"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">运营调度</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-item">
+                <div class="post-header">
+                    <div class="user-avatar">徐</div>
+                    <div class="user-info">
+                        <div class="user-name">徐诗雯 2025-08-03 14:30:08</div>
+                        <div class="user-id">2310140133</div>
+                    </div>
+                    <div class="post-actions">
+                        <span class="action-btn">👍 赞(0)</span>
+                        <span class="action-btn">💬 评论(0)</span>
+                        <span class="action-btn">⭐ 打分</span>
+                        <span class="action-btn delete">删除</span>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="post-text">1</div>
+                    <div class="image-grid grid-7">
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="40" width="140" height="60" fill="#e9ecef" rx="4"/>
+                                <rect x="40" y="50" width="30" height="40" fill="#007bff" rx="2"/>
+                                <rect x="80" y="60" width="30" height="30" fill="#28a745" rx="2"/>
+                                <rect x="120" y="55" width="30" height="35" fill="#ffc107" rx="2"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">地铁站台</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="40" width="140" height="60" fill="#e9ecef" rx="4"/>
+                                <circle cx="60" cy="60" r="8" fill="#007bff"/>
+                                <circle cx="100" cy="70" r="8" fill="#28a745"/>
+                                <circle cx="140" cy="80" r="8" fill="#ffc107"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">列车调度</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="40" width="140" height="60" fill="#e9ecef" rx="4"/>
+                                <rect x="40" y="50" width="120" height="8" fill="#007bff" rx="2"/>
+                                <rect x="40" y="65" width="100" height="8" fill="#28a745" rx="2"/>
+                                <rect x="40" y="80" width="80" height="8" fill="#ffc107" rx="2"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">客流监控</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="30" width="140" height="20" fill="#e9ecef" rx="4"/>
+                                <rect x="30" y="60" width="100" height="15" fill="#6c757d" rx="3"/>
+                                <rect x="30" y="85" width="120" height="15" fill="#6c757d" rx="3"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">应急处置</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="40" width="140" height="60" fill="#e9ecef" rx="4"/>
+                                <circle cx="70" cy="60" r="10" fill="#dc3545"/>
+                                <circle cx="130" cy="80" r="10" fill="#dc3545"/>
+                                <rect x="40" y="85" width="120" height="8" fill="#28a745" rx="2"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">安全管理</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="40" width="140" height="60" fill="#e9ecef" rx="4"/>
+                                <rect x="40" y="50" width="50" height="12" fill="#007bff" rx="2"/>
+                                <rect x="40" y="70" width="80" height="12" fill="#28a745" rx="2"/>
+                                <rect x="40" y="90" width="60" height="12" fill="#ffc107" rx="2"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">人员培训</text>
+                            </svg>
+                        </div>
+                        <div class="image-item">
+                            <svg class="real-image" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#f8f9fa"/>
+                                <rect x="20" y="20" width="160" height="120" fill="white" stroke="#dee2e6" stroke-width="2" rx="8"/>
+                                <rect x="30" y="40" width="140" height="60" fill="#e9ecef" rx="4"/>
+                                <circle cx="60" cy="60" r="8" fill="#007bff"/>
+                                <circle cx="100" cy="70" r="8" fill="#28a745"/>
+                                <circle cx="140" cy="80" r="8" fill="#ffc107"/>
+                                <line x1="68" y1="60" x2="92" y2="70" stroke="#6c757d" stroke-width="2"/>
+                                <line x1="108" y1="70" x2="132" y2="80" stroke="#6c757d" stroke-width="2"/>
+                                <text x="100" y="170" font-family="Arial" font-size="12" fill="#495057" text-anchor="middle">协调联动</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">参与率</h3>
+                <div class="participation-section">
+                    <div class="progress-circle">
+                        <div class="progress-text">14.29%</div>
+                    </div>
+                    <div class="participation-stats">
+                        <span>已参与: 4人</span>
+                        <span>未参与: 24人</span>
+                    </div>
+                    <div class="participation-label">学生参与情况</div>
+                </div>
+            </div>
+
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">排行榜</h3>
+                <ul class="leaderboard-list">
+                    <li class="leaderboard-item">
+                        <div class="rank-badge gold">🏆</div>
+                        <div class="student-name">舒雯雯</div>
+                        <div class="student-score">共计10分</div>
+                    </li>
+                    <li class="leaderboard-item">
+                        <div class="rank-badge silver">🥈</div>
+                        <div class="student-name">徐诗雯</div>
+                        <div class="student-score">共计10分</div>
+                    </li>
+                    <li class="leaderboard-item">
+                        <div class="rank-badge bronze">🥉</div>
+                        <div class="student-name">时亮</div>
+                        <div class="student-score">共计10分</div>
+                    </li>
+                    <li class="leaderboard-item">
+                        <div class="rank-badge other">4</div>
+                        <div class="student-name">沈长青</div>
+                        <div class="student-score">共计10分</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-toolbar">
+        <button class="tool-button" title="课件">📄</button>
+        <button class="tool-button" title="数字教材">📚</button>
+        <button class="tool-button" title="签到">✅</button>
+        <button class="tool-button" title="指向">👆</button>
+        <button class="tool-button" title="讨论">💬</button>
+        <button class="tool-button" title="测验">📝</button>
+        <button class="tool-button" title="作业">📋</button>
+        <button class="tool-button" title="考试">📊</button>
+        <button class="tool-button" title="问卷">📋</button>
+        <button class="tool-button" title="投票">🗳️</button>
+        <button class="tool-button" title="抢答">⚡</button>
+        <button class="tool-button" title="分组">👥</button>
+        <button class="tool-button" title="更多">⋯</button>
+    </div>
+
+    <button class="close-button" title="关闭">×</button>
+
+    <script>
+        // 标签页切换功能
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // 点赞功能
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            if (btn.textContent.includes('赞')) {
+                btn.addEventListener('click', function() {
+                    const currentCount = parseInt(this.textContent.match(/\d+/)[0]);
+                    this.textContent = `👍 赞(${currentCount + 1})`;
+                });
+            }
+        });
+
+        // 工具按钮点击效果
+        document.querySelectorAll('.tool-button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+
+        // 下拉箭头旋转
+        document.querySelector('.dropdown-arrow').addEventListener('click', function() {
+            this.style.transform = this.style.transform === 'rotate(180deg)' ? 'rotate(0deg)' : 'rotate(180deg)';
+        });
+
+        // 关闭按钮
+        document.querySelector('.close-button').addEventListener('click', function() {
+            if (confirm('确定要关闭页面吗？')) {
+                window.close();
+            }
+        });
+    </script>
+</body>
+</html>

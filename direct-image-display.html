@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>直接图片展示</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .img-container {
+            max-width: 100%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        img {
+            width: 1200px;
+            height: 800px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="img-container">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...完整Base64数据..."/>
+    </div>
+</body>
+</html>
